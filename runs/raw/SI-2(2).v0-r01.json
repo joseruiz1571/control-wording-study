@@ -1,0 +1,114 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:26:38.312Z",
+  "results": [
+    {
+      "controlId": "SI-2(2).v0",
+      "controlIntent": "Determine if system components have applicable security-relevant software and firmware updates installed using [Assignment: organization-defined automated mechanisms] [Assignment: organization-defined frequency].\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "SI-2(2).v0",
+        "status": "not-satisfied",
+        "confidence": "medium",
+        "rationale": "Control SI-2(2).v0 requires that security-relevant software/firmware updates be installed using automated mechanisms at an organization-defined frequency. The evidence reveals two significant failures:\n\n1. **No automated update mechanism**: Both the initial endpoint creation (2025-12-01T11:00Z, evidence 2d4d53b6) and the subsequent hotfix update (2026-03-15T14:22Z, evidence 01965e55) were performed manually by an IAM user ('data-scientist-jdoe'). There is no indication of an automated pipeline, CI/CD system, EventBridge rule, or Systems Manager automation triggering these deployments.\n\n2. **Hotfix bypassed the model registry entirely**: The UpdateEndpoint event (evidence 01965e55) references a config named 'churn-predictor-v1-hotfix' with no corresponding model registry entry (evidence cc2b105a only shows version 1 with the original approval). This means a production update was applied outside of any formal approval or lineage-tracking process, directly contradicting the automated governance gate that SI-2(2).v0 requires.\n\n3. **No defined update frequency**: There is no evidence of a scheduled or frequency-based mechanism for scanning and applying security-relevant updates to the model container, underlying infrastructure, or firmware components.\n\nThe model registry entry (cc2b105a) confirms a formal approval workflow exists for the initial deployment, but it is not being consistently enforced, and the deployment actor is human rather than automated in both cases.",
+        "evidenceCited": [
+          "cc2b105a-6be5-406b-b50c-f377cecd4c58",
+          "2d4d53b6-6b2c-4e72-af21-fcfd33793528",
+          "01965e55-fe46-4783-a505-d1459b30a693"
+        ],
+        "gaps": [
+          "No evidence of an automated CI/CD pipeline or Systems Manager automation acting as the deployment actor — human attestation needed to confirm whether automation exists upstream of these CloudTrail events.",
+          "No patch management or vulnerability scanning records (e.g., AWS Inspector, ECR image scan results) to assess whether security-relevant container/OS updates are being tracked.",
+          "No organization-defined update frequency policy document to compare against actual update cadence.",
+          "No registry entry for the 'churn-predictor-v1-hotfix' config — human review needed to determine whether this was an emergency exception or a systemic gap.",
+          "No evidence of firmware-level update controls for the underlying SageMaker compute infrastructure."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "cc2b105a-6be5-406b-b50c-f377cecd4c58",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T10:26:16.273Z"
+        },
+        {
+          "id": "2d4d53b6-6b2c-4e72-af21-fcfd33793528",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T10:26:16.274Z"
+        },
+        {
+          "id": "01965e55-fe46-4783-a505-d1459b30a693",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T10:26:16.274Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "cc2b105a-6be5-406b-b50c-f377cecd4c58",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T10:26:16.273Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "2d4d53b6-6b2c-4e72-af21-fcfd33793528",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T10:26:16.274Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "01965e55-fe46-4783-a505-d1459b30a693",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T10:26:16.274Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

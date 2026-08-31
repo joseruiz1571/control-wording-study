@@ -1,0 +1,62 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T19:32:08.856Z",
+  "results": [
+    {
+      "controlId": "SA-4(8).r2",
+      "controlIntent": "Require the developer of the system, system component, or system service to produce a continuous-monitoring plan for control effectiveness; that plan is consistent with the organization's continuous monitoring program.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-4(8).r2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SA-4(8).r2 requires a substantive, operational continuous-monitoring plan for control effectiveness that is consistent with the organization's continuous monitoring program. The evidence reveals two critical deficiencies:\n\n1. **Incomplete coverage**: Only a single DataQuality monitoring schedule (`churn-predictor-data-quality`) exists. There are no schedules for ModelQuality, ModelBias, or ModelExplainability. A substantive continuous-monitoring plan for a production ML model should cover model performance drift, bias, and explainability — not just data quality. The absence of these monitor types means the plan is not comprehensive enough to constitute an adequate continuous-monitoring posture.\n\n2. **Non-functional monitoring**: The sole existing schedule is actively failing. Its last run (2026-06-02) returned status `Failed` with the reason \"No capture data found — data capture is disabled.\" This means data capture on the endpoint is turned off, so the DataQuality monitor cannot collect or evaluate any inference data. A monitoring schedule that cannot execute is not an operational continuous-monitoring plan — it is a configuration artifact with no practical effect.\n\nTogether, these findings demonstrate that the continuous-monitoring configuration is neither substantive (missing three of four standard monitor types) nor effective (the one schedule that exists is broken due to disabled data capture). The control is therefore not satisfied.",
+        "evidenceCited": [
+          "9f4cc220-20eb-44cd-9780-61d4a9e210b9"
+        ],
+        "gaps": [
+          "Data capture configuration for the endpoint (enabled/disabled, sampling rate) — not directly retrievable via available tools but implied by the failure reason",
+          "ModelQuality, ModelBias, and ModelExplainability monitoring schedules — none returned, indicating they do not exist",
+          "Organization's continuous monitoring program policy document — needed to verify whether the existing (broken) DataQuality-only schedule would even be consistent with organizational requirements if it were functional",
+          "Human attestation on whether compensating controls or out-of-band monitoring processes exist outside SageMaker Model Monitor"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "9f4cc220-20eb-44cd-9780-61d4a9e210b9",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T19:31:54.507Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "9f4cc220-20eb-44cd-9780-61d4a9e210b9",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T19:31:54.507Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

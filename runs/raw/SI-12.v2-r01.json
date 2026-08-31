@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:24:15.910Z",
+  "results": [
+    {
+      "controlId": "SI-12.v2",
+      "controlIntent": "In accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements, manage and retain information within the system and information output from the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SI-12.v2 requires that information within the system and information output from the system be managed and retained in accordance with applicable laws, regulations, policies, and operational requirements. For an ML inference endpoint, this means capturing and retaining model inputs and outputs (inference data) so that records are available for audit, compliance, drift monitoring, and accountability purposes.\n\nThe retrieved evidence for endpoint \"churn-predictor-endpoint\" shows that data capture is entirely disabled: `dataCaptureEnabled = false`, `capturePercentage = 0`, and `captureDestination = null`. This means:\n1. **No inference inputs or outputs are being recorded** — there is no retention of system output whatsoever.\n2. **No destination S3 path is configured** — even if capture were toggled on, there is no storage target defined.\n3. **0% capture rate** — even a partial/sampling approach is not in place.\n\nThis configuration is substantively inadequate. Without any data capture, the organization cannot demonstrate compliance with information retention obligations, cannot reconstruct model decisions for audit or legal purposes, and cannot support downstream quality or drift monitoring. The control is not satisfied.",
+        "evidenceCited": [
+          "9ea21913-ed30-4d4b-86d1-d1c26c84bbf0"
+        ],
+        "gaps": [
+          "No evidence of an alternative retention mechanism (e.g., application-layer logging, external data pipeline) that might compensate for the absence of SageMaker data capture — human attestation would be needed to rule this out.",
+          "Applicable organizational retention policies and legal/regulatory requirements (e.g., specific retention periods mandated by law) were not available for review, so the exact gap between current state and required state cannot be fully quantified.",
+          "No S3 bucket lifecycle policies or archival configurations could be assessed since no capture destination is defined."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "9ea21913-ed30-4d4b-86d1-d1c26c84bbf0",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:24:02.265Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "9ea21913-ed30-4d4b-86d1-d1c26c84bbf0",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:24:02.265Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

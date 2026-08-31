@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant SA-8(32).v3"
+controls:
+  - id: "SA-8(32).v3"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Put the security design principle of sufficient documentation into effect in [Assignment: organization-defined systems or system components].
+    collectors:
+      - getModelCard

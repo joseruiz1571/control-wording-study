@@ -1,0 +1,86 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:52:34.441Z",
+  "results": [
+    {
+      "controlId": "CM-2.v1",
+      "controlIntent": "a. Develop, document, and keep under configuration control a current baseline configuration of the system; and b. Review and update the baseline configuration of the system: 1. [Assignment: organization-defined frequency]; 2. When required due to [Assignment: organization-defined circumstances]; and 3. When system components are installed or upgraded.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-2.v1",
+        "status": "insufficient-evidence",
+        "confidence": "medium",
+        "rationale": "CM-2.v1 requires: (a) a documented, configuration-controlled baseline, and (b) periodic review and update of that baseline under defined circumstances and upon component changes. The two evidence items retrieved provide only partial signals:\n\n1. **Model Registry Entry** (637aab7e): Version 1 of the model package is registered with an ARN, approval status \"Approved,\" and an approval timestamp (2025-12-01). This demonstrates that a versioned artifact exists and passed an approval gate — a weak proxy for baseline documentation. However, only a single version (v1) is present, so there is no evidence of baseline updates over time, periodic review cycles, or change-triggered updates.\n\n2. **Endpoint Config** (d7c4ca35): The endpoint is InService on `ml.m5.large`. The configuration is recorded, but data capture is disabled and network isolation is off — these gaps themselves may indicate configuration drift from a hardened baseline, but more critically, there is no evidence of a formal baseline document, a review schedule, or a change-management process governing this configuration.\n\n**What is missing to satisfy CM-2.v1:**\n- A formal baseline configuration document (or equivalent artifact) covering both the model and endpoint\n- Evidence of a defined review frequency (e.g., quarterly review records)\n- Evidence that the baseline is updated when circumstances change or components are upgraded (e.g., version history, change logs, or approval records for subsequent versions)\n- Evidence of configuration control mechanisms (e.g., IaC templates, SCM history, or change-management tickets)\n\nThe available evidence is insufficient to confirm or deny full conformance; human attestation and additional artifact review are required.",
+        "evidenceCited": [
+          "637aab7e-b933-4141-95a8-2a1e92fc5e35",
+          "d7c4ca35-ce14-4788-9ea2-8013f011f27f"
+        ],
+        "gaps": [
+          "No formal baseline configuration document or equivalent artifact was surfaced",
+          "No evidence of a defined review frequency or periodic review records",
+          "No version history beyond v1 — cannot confirm baseline is updated when components change or are upgraded",
+          "No change-management logs, IaC templates, or SCM history to demonstrate configuration control",
+          "Data capture is disabled (captureEnabled: false) — cannot confirm whether this is an intentional, reviewed baseline decision or an oversight",
+          "Network isolation is disabled — same concern as above; no policy rationale is documented in the evidence",
+          "Human attestation needed: Does the organization maintain a separate CMDB or configuration baseline document outside of SageMaker?"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "637aab7e-b933-4141-95a8-2a1e92fc5e35",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T08:52:13.357Z"
+        },
+        {
+          "id": "d7c4ca35-ce14-4788-9ea2-8013f011f27f",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T08:52:13.357Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "637aab7e-b933-4141-95a8-2a1e92fc5e35",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T08:52:13.357Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "d7c4ca35-ce14-4788-9ea2-8013f011f27f",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T08:52:13.357Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

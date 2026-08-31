@@ -1,0 +1,45 @@
+--- a/src/runner/assessment-runner.ts
++++ b/src/runner/assessment-runner.ts
+@@ -22,6 +22,12 @@
+ export type ControlResult = {
+   controlId: string;
+   /**
++   * Exact control intent text from the loaded control set — the wording
++   * the agent was given. Optional so hand-built test results stay valid;
++   * runAssessment always populates it.
++   */
++  controlIntent?: string;
++  /**
+    * The control's declared pattern, copied at construction time. Verified
+    * (M3c) to always match the pattern actually used to produce `judgment` —
+    * `agent.ts` has exactly one pattern-runtime-branch (the attestation
+@@ -110,6 +116,21 @@
+   controlSetVersion: string;
+   runAt: string;
+   results: ControlResult[];
++  /**
++   * LLM alias requested for this run (e.g. claude-sonnet-4-6). Filled by
++   * the CLI from AnthropicProvider.model — not by runAssessment, which
++   * only sees the LlmProvider interface. Optional so unit tests stay valid.
++   */
++  llmModel?: string;
++  /**
++   * Temperature actually configured on the provider for this run. 0 is a
++   * valid value. Filled by the CLI; optional for the same reason as llmModel.
++   */
++  llmTemperature?: number;
++  /**
++   * 1-based replica index when --repeat N is used. Absent on single runs.
++   */
++  replica?: number;
+ };
+ 
+ export async function runAssessment(
+@@ -159,6 +180,7 @@
+ 
+     results.push({
+       controlId: control.id,
++      controlIntent: control.intent,
+       pattern: control.pattern,
+       judgment,
+       evidenceCount: store.size(),

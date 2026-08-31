@@ -1,0 +1,34 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:39:25.644Z",
+  "results": [
+    {
+      "controlId": "RA-3.v0",
+      "controlIntent": "a. Conduct a risk assessment, including: 1. Identifying threats to and vulnerabilities in the system; 2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and 3. Determining the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information; b. Integrate risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments; c. Document risk assessment results in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]]; d. Review risk assessment results [Assignment: organization-defined frequency]; e. Disseminate risk assessment results to [Assignment: organization-defined personnel or roles]; and f. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "RA-3.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The only available evidence collector — getModelCard — returned null for model \"churn-predictor-v1\" (endpoint: \"churn-predictor-endpoint\"). This means no model card exists for this model. A model card is the primary artifact expected to document risk assessment results, including: (a) identified threats and vulnerabilities, likelihood and magnitude of harm from unauthorized access/use/disclosure, and adverse effects on individuals from PII processing; (b) integration of organizational risk management decisions; (c) documented risk assessment results; (d) review cadence; (e) dissemination to relevant personnel; and (f) update frequency tied to significant system changes. With no model card present, there is no evidence that any of these RA-3 sub-requirements have been addressed. The control is not satisfied.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 — the getModelCard collector returned null. The following evidence would be needed to satisfy RA-3: (1) Documentation of identified threats and vulnerabilities to the system; (2) Likelihood and magnitude of harm analysis from unauthorized access, use, disclosure, disruption, modification, or destruction; (3) Analysis of adverse effects on individuals from PII processing; (4) Evidence that risk assessment results are integrated with organizational/mission-level risk management decisions; (5) A risk assessment report or equivalent documented artifact; (6) A defined review frequency and evidence of periodic reviews; (7) Evidence of dissemination to defined personnel or roles; (8) A defined update frequency and evidence of updates upon significant system changes. Human attestation or alternative documentation (e.g., a separate risk assessment report, security plan, or privacy impact assessment) would be required to close these gaps."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

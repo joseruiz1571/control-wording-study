@@ -1,0 +1,85 @@
+{
+  "modelName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "registry": {
+    "modelPackageGroupName": "churn-predictor",
+    "modelPackageVersion": 1,
+    "modelApprovalStatus": "Approved",
+    "approvalTime": "2025-12-01T09:00:00Z",
+    "creationTime": "2025-11-30T18:00:00Z",
+    "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+  },
+  "modelCard": null,
+  "endpoint": {
+    "endpointName": "churn-predictor-endpoint",
+    "endpointStatus": "InService",
+    "instanceType": "ml.m5.large",
+    "dataCaptureEnabled": false,
+    "capturePercentage": 0,
+    "captureDestination": null,
+    "enableNetworkIsolation": false
+  },
+  "monitors": [
+    {
+      "monitoringScheduleName": "churn-predictor-data-quality",
+      "monitorType": "DataQuality",
+      "scheduleStatus": "Scheduled",
+      "scheduleExpression": "cron(0 6 ? * MON *)",
+      "lastRunStatus": "Failed",
+      "lastRunTime": "2026-06-02T06:00:00Z",
+      "failureReason": "No capture data found — data capture is disabled"
+    }
+  ],
+  "kms": {
+    "volumeKmsKeyId": null,
+    "artifactKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker",
+    "keyEnabled": true,
+    "keyManager": "AWS"
+  },
+  "network": {
+    "vpcId": null,
+    "vpcSubnetIds": [],
+    "securityGroupIds": [],
+    "enableNetworkIsolation": false
+  },
+  "executionRole": {
+    "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+    "policies": [
+      {
+        "policyName": "OverlyBroadS3",
+        "effect": "Allow",
+        "actions": ["s3:*"],
+        "resources": ["*"],
+        "note": "Overly broad — training bucket writes and cross-account access not scoped"
+      },
+      {
+        "policyName": "SageMakerFull",
+        "effect": "Allow",
+        "actions": ["sagemaker:*"],
+        "resources": ["*"]
+      }
+    ]
+  },
+  "cloudtrailEvents": [
+    {
+      "eventName": "CreateEndpoint",
+      "eventTime": "2025-12-01T11:00:00Z",
+      "userIdentity": { "type": "IAMUser", "userName": "data-scientist-jdoe" },
+      "requestParameters": {
+        "endpointName": "churn-predictor-endpoint",
+        "endpointConfigName": "churn-predictor-v1-config"
+      },
+      "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+    },
+    {
+      "eventName": "UpdateEndpoint",
+      "eventTime": "2026-03-15T14:22:00Z",
+      "userIdentity": { "type": "IAMUser", "userName": "data-scientist-jdoe" },
+      "requestParameters": {
+        "endpointName": "churn-predictor-endpoint",
+        "endpointConfigName": "churn-predictor-v1-hotfix"
+      },
+      "note": "Hotfix deploy — no corresponding registry entry found"
+    }
+  ]
+}

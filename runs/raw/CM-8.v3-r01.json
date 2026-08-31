@@ -1,0 +1,84 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:36:51.521Z",
+  "results": [
+    {
+      "controlId": "CM-8.v3",
+      "controlIntent": "a. An inventory of system components is developed and documented that: 1. Accurately reflects the system; 2. Includes all components within the system; 3. Does not include duplicate accounting of components or components assigned to any other system; 4. Is at the level of granularity deemed necessary for tracking and reporting; and 5. Includes the following information to achieve system component accountability: [Assignment: organization-defined information deemed necessary to achieve effective system component accountability]; and b. The system component inventory is reviewed and updated [Assignment: organization-defined frequency].\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-8.v3",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "The evidence retrieved shows that key inventory attributes exist for the model component: a unique ARN (arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1), version number (v1), approval status (Approved), approval timestamp (2025-12-01T09:00:00Z), creation timestamp (2025-11-30T18:00:00Z), and deployment details (endpoint \"churn-predictor-endpoint\", instance type ml.m5.large, status InService). These fields satisfy the granularity and accountability requirements for the model package and endpoint components individually.\n\nHowever, several CM-8.v3 sub-requirements are not demonstrably met:\n1. **Inventory completeness**: Only two components (model registry entry and endpoint config) are visible. There is no evidence of a broader system component inventory that includes all associated components (e.g., training pipelines, data sources, IAM roles, VPC/network resources, preprocessing containers). The control requires the inventory to include *all* components within the system.\n2. **Review and update cadence**: No evidence of a defined or enforced inventory review frequency was returned by either collector.\n3. **Data capture disabled**: With dataCaptureEnabled=false and capturePercentage=0, inference traffic is not logged, reducing the ability to maintain an accurate, up-to-date picture of the deployed component's runtime behavior.\n4. **Network isolation disabled**: enableNetworkIsolation=false means the endpoint boundary is not enforced, which complicates accurate component scoping in the inventory.\n5. **No duplicate-accounting controls**: No metadata was returned to confirm this component is not duplicated or cross-assigned to another system inventory.",
+        "evidenceCited": [
+          "876ef485-4b08-445f-ac28-f6bd44a2f50e",
+          "3a956cb2-86f6-41b7-981c-b563bc3695bd"
+        ],
+        "gaps": [
+          "No evidence of a comprehensive system component inventory document covering all sub-components (training pipelines, data sources, IAM roles, VPC/network configs, preprocessing containers).",
+          "No evidence of a defined inventory review and update frequency (organization-defined frequency per CM-8.v3.b).",
+          "Data capture is disabled (dataCaptureEnabled=false), limiting runtime observability and inventory accuracy for the deployed endpoint.",
+          "No metadata confirming the component is not duplicated or assigned to another system inventory.",
+          "Human attestation needed to confirm whether an out-of-band inventory management process (e.g., CMDB, spreadsheet, or IaC manifest) exists and is kept current."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "876ef485-4b08-445f-ac28-f6bd44a2f50e",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:36:29.451Z"
+        },
+        {
+          "id": "3a956cb2-86f6-41b7-981c-b563bc3695bd",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T09:36:29.452Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "876ef485-4b08-445f-ac28-f6bd44a2f50e",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:36:29.451Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "3a956cb2-86f6-41b7-981c-b563bc3695bd",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T09:36:29.452Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

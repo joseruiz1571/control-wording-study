@@ -1,0 +1,112 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:30:22.182Z",
+  "results": [
+    {
+      "controlId": "CM-8(1).v2",
+      "controlIntent": "The inventory of system components is updated as part of component installations, removals, and system updates.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-8(1).v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "CM-8(1).v2 requires that the system component inventory be updated as an integral part of component installations, removals, and system updates. Evidence from two sources reveals a critical gap:\n\n**Initial deployment (partially conformant):** The model package (v1) was registered and approved in the SageMaker Model Registry at 2025-12-01T09:00:00Z (evidence: 8aee868b). The endpoint `churn-predictor-endpoint` was then created at 2025-12-01T11:00:00Z (evidence: 76359362) — two hours *after* registry approval. This sequence is acceptable: the inventory (registry) was updated before the component was deployed.\n\n**Hotfix update (non-conformant):** A subsequent `UpdateEndpoint` event on 2026-03-15T14:22:00Z deployed a new endpoint configuration (`churn-predictor-v1-hotfix`) to the same endpoint (evidence: d36440d1). No corresponding model registry entry or updated inventory record exists for this change. The component inventory was not updated to reflect this system update, directly violating the control requirement.\n\nBecause a real production change (the hotfix) was made without a corresponding inventory update, the control is not satisfied. The temporal correlation between the UpdateEndpoint event and the absence of any registry entry for `churn-predictor-v1-hotfix` is the decisive finding.",
+        "evidenceCited": [
+          "8aee868b-a93c-4698-8728-0ff39af5ad4d",
+          "76359362-f081-4114-8bdb-b27cf89f18b1",
+          "d36440d1-34b6-4d47-89cc-7cc2da980f15"
+        ],
+        "gaps": [
+          "No registry entry or inventory record exists for the 'churn-predictor-v1-hotfix' endpoint configuration deployed on 2026-03-15 — human attestation would be needed to determine whether an out-of-band inventory update occurred in a separate system (e.g., CMDB, ITSM ticket) not captured by these collectors.",
+          "It is unknown whether a change-control ticket or approval was raised for the hotfix outside of SageMaker Model Registry.",
+          "The collectors do not surface endpoint configuration details (e.g., model artifact, container image) that would allow full inventory reconciliation for either deployment."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "8aee868b-a93c-4698-8728-0ff39af5ad4d",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:30:04.726Z"
+        },
+        {
+          "id": "76359362-f081-4114-8bdb-b27cf89f18b1",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:30:04.727Z"
+        },
+        {
+          "id": "d36440d1-34b6-4d47-89cc-7cc2da980f15",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:30:04.727Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "8aee868b-a93c-4698-8728-0ff39af5ad4d",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:30:04.726Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "76359362-f081-4114-8bdb-b27cf89f18b1",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:30:04.727Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "d36440d1-34b6-4d47-89cc-7cc2da980f15",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:30:04.727Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

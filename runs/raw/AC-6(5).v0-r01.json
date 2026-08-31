@@ -1,0 +1,78 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:45:48.228Z",
+  "results": [
+    {
+      "controlId": "AC-6(5).v0",
+      "controlIntent": "Restrict privileged accounts on the system to [Assignment: organization-defined personnel or roles].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(5).v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "AC-6(5) requires that privileged access be restricted to only organization-defined personnel or roles, embodying the principle of least privilege for privileged accounts. The evidence retrieved shows that the SageMaker endpoint \"churn-predictor-endpoint\" uses the execution role `arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic`, which has two critically over-privileged policy statements:\n\n1. **OverlyBroadS3** — grants `s3:*` (all S3 actions) on `*` (all resources). This is explicitly noted as overly broad, permitting write access to training buckets and potential cross-account access with no resource scoping. A least-privilege role should be restricted to specific S3 buckets and only the actions required (e.g., `s3:GetObject` on a named bucket).\n\n2. **SageMakerFull** — grants `sagemaker:*` on `*` (all resources). This gives the endpoint execution role full administrative control over all SageMaker resources in the account — far beyond what an inference endpoint requires. A properly scoped role would allow only the specific SageMaker actions needed for inference (e.g., `sagemaker:InvokeEndpoint`) on the specific endpoint resource.\n\nBoth policies violate the spirit and letter of AC-6(5): privileged capabilities (broad write/admin actions across all resources) are not restricted to defined, justified roles — instead they are granted wholesale to a generic execution role. There is no evidence of resource-level scoping, condition keys, or permission boundaries that would constrain this privilege. The role name (\"Generic\") further suggests it is not purpose-built for this specific model/endpoint.",
+        "evidenceCited": [
+          "18431136-4a7d-4966-9cf6-adcdb5640336"
+        ],
+        "gaps": [
+          "No evidence was available regarding whether an organizational policy document defines which personnel/roles are authorized to hold these privileges — human attestation would be needed to confirm whether this role assignment was intentionally approved.",
+          "No SCP (Service Control Policy) or permission boundary evidence was available that might further constrain the role at the organization level.",
+          "No evidence of periodic access reviews or role recertification processes that would demonstrate ongoing restriction of privileged access."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "18431136-4a7d-4966-9cf6-adcdb5640336",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:45:33.985Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "18431136-4a7d-4966-9cf6-adcdb5640336",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:45:33.985Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,84 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:51:20.489Z",
+  "results": [
+    {
+      "controlId": "CM-2.v0",
+      "controlIntent": "a. Develop, document, and maintain under configuration control, a current baseline configuration of the system; and b. Review and update the baseline configuration of the system: 1. [Assignment: organization-defined frequency]; 2. When required due to [Assignment: organization-defined circumstances]; and 3. When system components are installed or upgraded.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-2.v0",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CM-2 requires: (a) a documented, configuration-controlled baseline, and (b) periodic/triggered reviews and updates of that baseline.\n\n**What is satisfied:**\n- A baseline configuration *exists* and is documented in the SageMaker Model Registry (model package ARN, version 1, approval status \"Approved\", approval timestamp 2025-12-01). The endpoint configuration is also recorded (instance type ml.m5.large, network isolation off, data capture off). Together these constitute a point-in-time baseline configuration artifact.\n\n**What is not satisfied or cannot be confirmed:**\n1. **No evidence of baseline update cadence (CM-2.b.1):** Only version 1 of the model package exists. There is no evidence of periodic reviews or updates to the baseline at any defined frequency.\n2. **No drift/event detection mechanism (CM-2.b.2 & b.3):** Data capture is disabled (`dataCaptureEnabled: false`, `capturePercentage: 0`). Without data capture or monitoring, there is no automated mechanism to detect circumstances (e.g., data drift, model degradation, component upgrades) that would trigger a baseline review or update.\n3. **No configuration change history visible:** The registry shows only a single version with no prior revisions, making it impossible to confirm that the baseline is maintained \"under configuration control\" with a documented change history.\n\nThe baseline exists in a minimal form, but the absence of data capture, a single version with no update history, and no visible review cadence indicate that the ongoing maintenance and review requirements of CM-2 are not being met.",
+        "evidenceCited": [
+          "a97d60a2-3214-4d5f-bb54-6675a4e4c538",
+          "35f2d7c3-cf65-489a-9360-146171d56896"
+        ],
+        "gaps": [
+          "No evidence of a defined baseline review frequency (CM-2.b.1) — would require organizational policy documents or a review log",
+          "No model monitoring or data capture configured, removing the automated trigger for circumstance-based reviews (CM-2.b.2)",
+          "No version history beyond v1 — cannot confirm baseline is updated when components are installed or upgraded (CM-2.b.3)",
+          "No change management records (e.g., change tickets, audit logs) to confirm configuration-controlled updates",
+          "Human attestation needed to confirm whether out-of-band review processes exist that are not reflected in the registry"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "a97d60a2-3214-4d5f-bb54-6675a4e4c538",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T08:50:59.665Z"
+        },
+        {
+          "id": "35f2d7c3-cf65-489a-9360-146171d56896",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T08:50:59.665Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "a97d60a2-3214-4d5f-bb54-6675a4e4c538",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T08:50:59.665Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "35f2d7c3-cf65-489a-9360-146171d56896",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T08:50:59.665Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

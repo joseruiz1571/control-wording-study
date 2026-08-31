@@ -1,0 +1,31 @@
+diff --git a/.env.example b/.env.example
+index 3b81ef2..1ab5084 100644
+--- a/.env.example
++++ b/.env.example
+@@ -4,3 +4,7 @@ ANTHROPIC_API_KEY=sk-ant-...
+ 
+ # Optional: override the model (defaults to claude-sonnet-4-6)
+ # MLASSURE_MODEL=claude-sonnet-4-6
++
++# Required only for identity-linked / multi-workspace API keys.
++# Single-workspace keys can omit this. Console: Settings → Workspaces.
++# ANTHROPIC_WORKSPACE_ID=wrkspc_...
+diff --git a/src/llm/anthropic-provider.ts b/src/llm/anthropic-provider.ts
+index c823531..f60c842 100644
+--- a/src/llm/anthropic-provider.ts
++++ b/src/llm/anthropic-provider.ts
+@@ -27,7 +27,13 @@ export class AnthropicProvider implements LlmProvider {
+         "ANTHROPIC_API_KEY is required. Set it in .env, pass it to AnthropicProvider, or (in Docker) run with -e ANTHROPIC_API_KEY."
+       );
+     }
+-    this.client = new Anthropic({ apiKey });
++    const workspaceId = process.env["ANTHROPIC_WORKSPACE_ID"];
++    this.client = new Anthropic({
++      apiKey,
++      ...(workspaceId
++        ? { defaultHeaders: { "anthropic-workspace-id": workspaceId } }
++        : {}),
++    });
+     // MLASSURE_MODEL is documented in .env.example but was previously unread.
+     this.model = options.model ?? process.env["MLASSURE_MODEL"] ?? "claude-sonnet-4-6";
+     this.temperature = options.temperature ?? 0.1;

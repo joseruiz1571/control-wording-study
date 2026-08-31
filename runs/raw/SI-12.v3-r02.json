@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:25:11.023Z",
+  "results": [
+    {
+      "controlId": "SI-12.v3",
+      "controlIntent": "Manage and retain both information residing in the system and information output from the system in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-12.v3 requires that information residing in or output from the system be managed and retained in accordance with applicable laws, regulations, policies, and operational requirements. For an ML inference endpoint, this means inference inputs and outputs (predictions) must be captured and stored.\n\nEvidence retrieved (ID: 4d1caf53-05aa-4957-bd42-dd4b4f183209) shows that for the \"churn-predictor-endpoint\":\n- **dataCaptureEnabled: false** — Data capture is explicitly disabled.\n- **capturePercentage: 0** — Zero percent of inference traffic is being captured.\n- **captureDestination: null** — No S3 destination is configured for storing captured data.\n\nThis configuration is entirely non-substantive: no inference inputs or outputs are being retained. Without data capture, there is no mechanism to preserve the system's information output (predictions) for audit, compliance, drift monitoring, or any other retention requirement. This directly violates the intent of SI-12.v3, which mandates that output information be managed and retained per applicable requirements.",
+        "evidenceCited": [
+          "4d1caf53-05aa-4957-bd42-dd4b4f183209"
+        ],
+        "gaps": [
+          "Applicable retention policies, regulations, or operational requirements specific to this model's domain (e.g., financial, healthcare) were not available — these would determine the required retention period and scope.",
+          "No evidence was available regarding whether an alternative off-endpoint logging mechanism (e.g., application-layer logging, API Gateway logs) might be capturing inference I/O outside of SageMaker's native data capture.",
+          "Human attestation would be needed to confirm whether any compensating controls exist for retaining model inputs and outputs."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "4d1caf53-05aa-4957-bd42-dd4b4f183209",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:25:00.117Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "4d1caf53-05aa-4957-bd42-dd4b4f183209",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:25:00.117Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

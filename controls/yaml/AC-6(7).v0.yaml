@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-6(7).v0"
+controls:
+  - id: "AC-6(7).v0"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      (a) Review [Assignment: organization-defined frequency] the privileges assigned to [Assignment: organization-defined roles or classes of users] to validate the need for such privileges; and (b) Reassign or remove privileges, if necessary, to correctly reflect organizational mission and business needs.
+    collectors:
+      - getEndpointExecutionRole

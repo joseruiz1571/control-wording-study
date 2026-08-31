@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AU-3.v2"
+controls:
+  - id: "AU-3.v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Audit records contain information that establishes: a. What type of event occurred; b. When the event occurred; c. Where the event occurred; d. Source of the event; e. Outcome of the event; and f. Identity of any individuals, subjects, or objects/entities associated with the event.
+    collectors:
+      - getCloudTrailEvents

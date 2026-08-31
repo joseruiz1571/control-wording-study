@@ -1,0 +1,36 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:12:54.890Z",
+  "results": [
+    {
+      "controlId": "SA-8(32).v3",
+      "controlIntent": "Put the security design principle of sufficient documentation into effect in [Assignment: organization-defined systems or system components].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-8(32).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The control SA-8(32).v3 requires that the security design principle of **sufficient documentation** be put into effect for organization-defined systems or system components. For ML models and endpoints, the primary artifact embodying this principle is a model card, which should document intended use, limitations, risk ratings, and evaluation details.\n\nWhen `getModelCard` was called for model \"churn-predictor-v1\" / endpoint \"churn-predictor-endpoint\", the tool returned **null** — meaning no model card exists whatsoever. There is no documentation of:\n- Intended use cases or scope\n- Known limitations or failure modes\n- Risk rating or threat considerations\n- Evaluation methodology or performance metrics\n\nWithout any model card or equivalent documentation artifact, the system component entirely fails the sufficiency-of-documentation requirement. The control is **not satisfied**.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 — the getModelCard collector returned null. A substantive model card covering intended use, limitations, risk rating, and evaluation details is required to satisfy this control.",
+          "Human attestation would be needed to confirm whether equivalent documentation exists in an external system (e.g., Confluence, SharePoint, or a separate document repository) that was not captured by the collector.",
+          "Additional evidence about security design documentation (architecture diagrams, threat models, data flow diagrams) was not retrievable via available tools and would require human review."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

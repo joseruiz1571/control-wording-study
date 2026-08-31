@@ -1,0 +1,131 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:04:39.830Z",
+  "results": [
+    {
+      "controlId": "AC-2(7).v1",
+      "controlIntent": "(a) Set up and administer privileged user accounts in accordance with [Selection: a role-based access scheme; an attribute-based access scheme]; (b) Monitor assignments of privileged roles or attributes; (c) Monitor changes to roles or attributes; and (d) Revoke access when privileged role or attribute assignments are no longer appropriate.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "AC-2(7).v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Evidence from both the IAM execution role and CloudTrail events reveals multiple failures against AC-2(7).v1:\n\n**Part (a) — Role/attribute-based privilege administration:** The endpoint's execution role (`SageMakerExecutionRole-Generic`) carries two wildcard policies — `s3:*` on `*` and `sagemaker:*` on `*`. These are not scoped to the specific resources needed by the churn-predictor endpoint. There is no evidence of a role-based or attribute-based access scheme being applied; the role name (\"Generic\") and its policies indicate a shared, over-privileged role rather than a purpose-built one.\n\n**Part (b) — Monitor privileged role assignments:** The `CreateEndpoint` event (2025-12-01T11:00:00Z) was executed by `data-scientist-jdoe` two hours *before* the model registry approval at 09:00 (per the CloudTrail note). This means the privileged deployment action was not gated by or monitored against an approval workflow at the time of execution.\n\n**Part (c) — Monitor changes to roles/attributes:** The `UpdateEndpoint` hotfix event (2026-03-15T14:22:00Z) has no corresponding registry entry, indicating that changes to the endpoint's privileged configuration are not being tracked through a controlled change-management process.\n\n**Part (d) — Revoke access when no longer appropriate:** There is no evidence of any access review, revocation mechanism, or time-bound privilege assignment. The over-broad permissions on the execution role have not been scoped down or revoked despite the noted cross-account S3 risk.\n\nTaken together, the privileged accounts are not administered under a least-privilege scheme, privileged actions are not monitored against an approval gate, and there is no evidence of revocation controls.",
+        "evidenceCited": [
+          "e782625f-ad1f-4472-8f8b-6831ee749851",
+          "7f90f8fd-830c-4967-8587-2a92c77801f9",
+          "df880414-a999-4db9-90dc-eff91eb4abb4"
+        ],
+        "gaps": [
+          "No IAM Access Analyzer or AWS Config rule findings were available to confirm whether over-broad permissions have been flagged and remediated",
+          "No evidence of periodic access reviews (e.g., IAM credential reports, access advisor data) to confirm Part (d) revocation processes",
+          "No SageMaker Model Registry approval records were retrievable to fully corroborate the pre-approval deployment timeline",
+          "No evidence of SCPs or permission boundaries that might compensate for the wildcard IAM policies at the organization level"
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "e782625f-ad1f-4472-8f8b-6831ee749851",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:04:18.560Z"
+        },
+        {
+          "id": "7f90f8fd-830c-4967-8587-2a92c77801f9",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T07:04:18.561Z"
+        },
+        {
+          "id": "df880414-a999-4db9-90dc-eff91eb4abb4",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T07:04:18.561Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "e782625f-ad1f-4472-8f8b-6831ee749851",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:04:18.560Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        },
+        {
+          "id": "7f90f8fd-830c-4967-8587-2a92c77801f9",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:04:18.561Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "df880414-a999-4db9-90dc-eff91eb4abb4",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:04:18.561Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

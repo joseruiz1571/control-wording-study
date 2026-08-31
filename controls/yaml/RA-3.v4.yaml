@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant RA-3.v4"
+controls:
+  - id: "RA-3.v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      a. Conduct a risk assessment, including: 1. Identifying threats to and vulnerabilities in the system; 2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and 3. Determining the likelihood and impact of adverse effects on individuals arising from processing of personally identifiable information; b. Integrate risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments; c. Document the results of the risk assessment in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]]; d. Review the risk assessment results [Assignment: organization-defined frequency]; e. Disseminate the risk assessment results to [Assignment: organization-defined personnel or roles]; and f. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.
+    collectors:
+      - getModelCard

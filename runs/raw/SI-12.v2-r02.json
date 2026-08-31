@@ -1,0 +1,58 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:24:28.659Z",
+  "results": [
+    {
+      "controlId": "SI-12.v2",
+      "controlIntent": "In accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements, manage and retain information within the system and information output from the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SI-12.v2 requires that information within the system and information output from the system be managed and retained in accordance with applicable laws, regulations, policies, and operational requirements. For an ML inference endpoint, a foundational mechanism for retaining system output (i.e., inference inputs and predictions) is data capture configuration.\n\nEvidence retrieved for the \"churn-predictor-endpoint\" shows that data capture is explicitly **disabled** (`dataCaptureEnabled: false`), the capture percentage is **0%**, and no destination S3 path is configured (`captureDestination: null`). This means inference inputs and outputs are not being captured or retained at all.\n\nWithout any data capture in place, the endpoint produces no retained record of its information outputs, making it impossible to satisfy the information management and retention requirements of SI-12.v2. There is no substantive configuration in place to manage or preserve system output data.",
+        "evidenceCited": [
+          "cc933106-784d-4df4-a1ed-449f141f5de7"
+        ],
+        "gaps": [
+          "Data capture is fully disabled — no inference inputs or outputs are being retained. A destination S3 path for captured data has not been configured.",
+          "No evidence of alternative retention mechanisms (e.g., application-layer logging, downstream storage pipelines) was available through the collector tools.",
+          "Applicable organizational retention policies or regulatory requirements (e.g., specific retention periods mandated by law or policy) were not available for comparison.",
+          "Human attestation would be needed to confirm whether any out-of-band retention controls exist outside of SageMaker's data capture feature."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "cc933106-784d-4df4-a1ed-449f141f5de7",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:24:18.391Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "cc933106-784d-4df4-a1ed-449f141f5de7",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:24:18.391Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

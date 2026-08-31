@@ -1,0 +1,100 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:43:43.932Z",
+  "results": [
+    {
+      "controlId": "SI-4.v0",
+      "controlIntent": "a. Monitor the system to detect: 1. Attacks and indicators of potential attacks in accordance with the following monitoring objectives: [Assignment: organization-defined monitoring objectives]; and 2. Unauthorized local, network, and remote connections; b. Identify unauthorized use of the system through the following techniques and methods: [Assignment: organization-defined techniques and methods]; c. Invoke internal monitoring capabilities or deploy monitoring devices: 1. Strategically within the system to collect organization-determined essential information; and 2. At ad hoc locations within the system to track specific types of transactions of interest to the organization; d. Analyze detected events and anomalies; e. Adjust the level of system monitoring activity when there is a change in risk to organizational operations and assets, individuals, other organizations, or the Nation; f. Obtain legal opinion regarding system monitoring activities; and g. Provide [Assignment: organization-defined system monitoring information] to [Assignment: organization-defined personnel or roles] [Selection (one or more): as needed; [Assignment: organization-defined frequency]].\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "SI-4.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-4.v0 requires continuous system monitoring to detect attacks, anomalies, unauthorized connections, and behavioral drift, with analysis of detected events and reporting to designated personnel. The evidence reveals multiple critical failures across all monitoring dimensions:\n\n1. **Data Capture Disabled (SI-4a/c):** Data capture is explicitly disabled (`dataCaptureEnabled: false`, `capturePercentage: 0`, `captureDestination: null`). This means no inference traffic is being recorded, making it impossible to collect the \"essential information\" required by SI-4(c) for strategic monitoring of model inputs/outputs.\n\n2. **Model Monitor Failing (SI-4a/d):** A DataQuality monitoring schedule exists (`churn-predictor-data-quality`, weekly on Mondays), but its last run **Failed** with the reason \"No capture data found — data capture is disabled.\" This means the monitoring pipeline is entirely non-functional — no events are being detected or analyzed (SI-4d). There are no schedules for ModelQuality, ModelBias, or ModelExplainability monitoring.\n\n3. **No Network Isolation or Network Monitoring (SI-4a-2):** The endpoint has no VPC configuration (vpcId: null, no subnets, no security groups) and network isolation is disabled. There are no network-level controls to detect or prevent unauthorized local, network, or remote connections.\n\n4. **No Evidence of Anomaly Detection, Legal Review, or Reporting (SI-4b/e/f/g):** There is no evidence of techniques for identifying unauthorized use, risk-based adjustment of monitoring levels, legal opinion on monitoring activities, or reporting of monitoring information to designated personnel or roles.\n\nIn summary, the sole monitoring mechanism in place (a DataQuality schedule) is broken due to the upstream failure of data capture being disabled. The endpoint is effectively unmonitored at every layer required by SI-4.",
+        "evidenceCited": [
+          "a5336b34-4680-48b4-aa70-c563a0aa6e66",
+          "30cf64ca-502d-4bf6-a074-fffb94840db2",
+          "322657e0-611c-48ba-8a57-d90cf6457335"
+        ],
+        "gaps": [
+          "Evidence of application-level or SIEM-based monitoring (e.g., CloudWatch alarms, GuardDuty, CloudTrail) was not retrievable via available tools — human attestation needed",
+          "Legal opinion documentation regarding monitoring activities (SI-4f) cannot be assessed via infrastructure tooling",
+          "Evidence of risk-based adjustment of monitoring levels (SI-4e) requires policy/process documentation not available here",
+          "Evidence of monitoring information reporting to designated personnel (SI-4g) requires organizational process review",
+          "ModelQuality, ModelBias, and ModelExplainability monitor schedules are absent — no coverage beyond (failed) DataQuality"
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "a5336b34-4680-48b4-aa70-c563a0aa6e66",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:43:24.240Z"
+        },
+        {
+          "id": "30cf64ca-502d-4bf6-a074-fffb94840db2",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:43:24.240Z"
+        },
+        {
+          "id": "322657e0-611c-48ba-8a57-d90cf6457335",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T10:43:24.240Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 3,
+      "collectorsCalled": 3,
+      "collectorsCited": 3,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "a5336b34-4680-48b4-aa70-c563a0aa6e66",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:43:24.240Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        },
+        {
+          "id": "30cf64ca-502d-4bf6-a074-fffb94840db2",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:43:24.240Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        },
+        {
+          "id": "322657e0-611c-48ba-8a57-d90cf6457335",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T10:43:24.240Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-6.v3"
+controls:
+  - id: "AC-6.v3"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Use least privilege: grant users (or processes acting on behalf of users) solely the authorized accesses necessary to accomplish assigned organizational tasks.
+    collectors:
+      - getEndpointExecutionRole

@@ -1,0 +1,58 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:25:56.375Z",
+  "results": [
+    {
+      "controlId": "SI-12.v4",
+      "controlIntent": "Applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements govern the management and retention of information within the system and information output from the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SI-12.v4 requires that applicable laws, regulations, policies, and operational requirements govern the management and retention of information within the system and information output from the system. For an ML inference endpoint, data capture is the primary mechanism for retaining system output (predictions and inputs) in compliance with such requirements.\n\nThe evidence retrieved for endpoint \"churn-predictor-endpoint\" shows that data capture is explicitly **disabled** (`dataCaptureEnabled: false`), the capture percentage is **0%**, and there is **no destination S3 path configured** (`captureDestination: null`). This means:\n\n1. **No inference inputs or outputs are being retained** — the system produces information output (churn predictions) but captures none of it.\n2. **No retention destination exists** — there is nowhere for captured data to be stored, making any future compliance with retention mandates impossible without reconfiguration.\n3. **The configuration is not substantively adequate** — a capture rate of 0% with no destination fails the sufficiency/adequacy threshold required by this control.\n\nWithout data capture enabled, the organization cannot demonstrate that information output from the model is managed and retained in accordance with applicable laws, regulations, or policies (e.g., data governance policies, audit requirements, model monitoring obligations). This is a clear gap against the control intent.",
+        "evidenceCited": [
+          "6715661f-24a9-442f-a127-dddccf722227"
+        ],
+        "gaps": [
+          "Data capture is fully disabled — no inference inputs or outputs are being retained for the churn-predictor-endpoint.",
+          "No S3 destination is configured, meaning there is no retention store for model output.",
+          "Human attestation would be needed to determine whether any compensating controls exist outside of SageMaker (e.g., application-layer logging, downstream data pipelines) that capture and retain inference data in compliance with applicable policies.",
+          "Documentation of applicable retention policies, regulations, or legal requirements governing this model's output was not available through the collector tools and would require human review."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "6715661f-24a9-442f-a127-dddccf722227",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:25:43.783Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "6715661f-24a9-442f-a127-dddccf722227",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:25:43.783Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

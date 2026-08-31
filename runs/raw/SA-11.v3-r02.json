@@ -1,0 +1,66 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:04:49.251Z",
+  "results": [
+    {
+      "controlId": "SA-11.v3",
+      "controlIntent": "Require the developer of the system, system component, or system service, at all post-design stages of the system development life cycle, to: a. Create and put into effect a plan for ongoing security and privacy control assessments; b. Perform [Selection (one or more): unit; integration; system; regression] testing/evaluation [Assignment: organization-defined frequency] at [Assignment: organization-defined depth and coverage]; c. Produce evidence that the assessment plan was executed and of the results of the testing and evaluation; d. Implement a verifiable flaw remediation process; and e. Correct flaws identified during testing and evaluation.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-11.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The evidence retrieved for endpoint \"churn-predictor-endpoint\" reveals significant deficiencies across all five sub-requirements of SA-11.v3:\n\n(a) **Assessment plan adequacy**: Only a single DataQuality monitoring schedule (\"churn-predictor-data-quality\") was found. No ModelQuality, ModelBias, or ModelExplainability schedules exist. This is not a substantively adequate assessment plan for a production ML model — it covers only one dimension of model health and omits fairness, explainability, and predictive performance monitoring entirely.\n\n(b) **Testing/evaluation execution**: Although a weekly schedule is configured (cron every Monday at 06:00), the last run **failed** with the reason \"No capture data found — data capture is disabled.\" This means no actual evaluation is occurring despite the schedule being in place. The frequency is defined but not being honored in practice.\n\n(c) **Evidence of plan execution and results**: The last run status is \"Failed\" (as of 2026-06-02). There is no evidence of any successful monitoring run producing usable assessment results. The control requires production of evidence that the assessment plan was executed — this requirement is unmet.\n\n(d) **Verifiable flaw remediation process**: The root cause of the monitoring failure — data capture being disabled on the endpoint — is a known, identifiable flaw. There is no evidence of a remediation process being in place or triggered in response to this failure.\n\n(e) **Correction of identified flaws**: Data capture remains disabled (evidenced by the repeated failure reason), indicating that the identified flaw has not been corrected.\n\nIn summary, the single monitoring schedule that exists is non-functional due to a misconfiguration (disabled data capture), coverage is incomplete (only one of four monitor types), and there is no evidence of successful test execution, results production, or flaw remediation. The control is not satisfied.",
+        "evidenceCited": [
+          "d3c9a6f0-1b24-4f7f-8643-340198581db1"
+        ],
+        "gaps": [
+          "No ModelQuality monitoring schedule found — predictive performance drift is not assessed",
+          "No ModelBias monitoring schedule found — fairness assessments are absent",
+          "No ModelExplainability monitoring schedule found — explainability assessments are absent",
+          "No baseline creation timestamp available — unclear whether a valid monitoring baseline was ever established",
+          "No evidence of a formal, documented security/privacy control assessment plan (outside of automated monitors)",
+          "No evidence of a flaw remediation ticket, change record, or corrective action for the disabled data capture configuration",
+          "No historical successful monitoring run results available to demonstrate prior execution of the assessment plan",
+          "Human attestation needed to confirm whether any out-of-band (manual) testing or evaluation is performed to compensate for the failed automated monitors"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "d3c9a6f0-1b24-4f7f-8643-340198581db1",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:04:28.603Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "d3c9a6f0-1b24-4f7f-8643-340198581db1",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:04:28.603Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

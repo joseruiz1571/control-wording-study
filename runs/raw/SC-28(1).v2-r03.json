@@ -1,0 +1,60 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:16:34.544Z",
+  "results": [
+    {
+      "controlId": "SC-28(1).v2",
+      "controlIntent": "Cryptographic mechanisms are implemented to prevent unauthorized disclosure and modification of the following information at rest on [Assignment: organization-defined system components or media]: [Assignment: organization-defined information].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-28(1).v2",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "The retrieved KMS configuration (evidence ID: 8e51d9c5-b046-496a-8402-cae117901a49) shows the following for the churn-predictor-v1 model / churn-predictor-endpoint:\n\n1. **Artifact encryption (artifactKmsKeyId):** An AWS-managed KMS key (`arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker`) is in use and enabled (`keyEnabled: true`). This means model artifacts at rest are encrypted using a cryptographic mechanism — satisfying the baseline requirement of SC-28(1).\n\n2. **Volume encryption (volumeKmsKeyId):** The endpoint volume KMS key ID is **null**, meaning the endpoint's attached storage volumes (e.g., ML instance storage) are **not encrypted with a KMS key**. This is a gap — data processed or cached on endpoint volumes may not be protected by cryptographic mechanisms at rest.\n\n3. **Key manager is AWS (not CUSTOMER):** The key in use is an AWS-managed key, not a Customer-Managed Key (CMK). Many organizational policies and SP 800-53 implementations require customer-managed keys to ensure the organization retains control over key material, rotation schedules, and access policies. With an AWS-managed key, the organization cannot enforce fine-grained key policies, audit key usage independently, or rotate on demand.\n\n**Summary:** Encryption is partially implemented — model artifacts are encrypted, but endpoint volumes lack KMS encryption entirely. Additionally, the use of an AWS-managed key rather than a customer-managed key may not meet the \"organization-defined\" cryptographic control sufficiency standard under SC-28(1).v2.",
+        "evidenceCited": [
+          "8e51d9c5-b046-496a-8402-cae117901a49"
+        ],
+        "gaps": [
+          "volumeKmsKeyId is null — endpoint storage volumes appear to lack KMS-based encryption at rest, which is a direct gap against SC-28(1).",
+          "Key manager is AWS (not CUSTOMER) — the organization may require customer-managed KMS keys (CMKs) for full control over key lifecycle, rotation, and access policies; this cannot be confirmed without reviewing the organization's key management policy.",
+          "No evidence was available on S3 bucket-level encryption for model artifacts (server-side encryption settings on the underlying S3 bucket).",
+          "No evidence on whether data in transit to/from the endpoint is separately scoped — SC-28(1) focuses on at-rest, but completeness of the encryption posture could not be fully assessed.",
+          "Human attestation needed: confirmation of whether the organization's defined information types and system components require CMKs vs. AWS-managed keys per their SC-28(1) assignment."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "8e51d9c5-b046-496a-8402-cae117901a49",
+          "source": "sagemaker:kms:config",
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e",
+          "retrievedAt": "2026-08-30T10:16:18.823Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "8e51d9c5-b046-496a-8402-cae117901a49",
+          "source": "sagemaker:kms:config",
+          "retrievedAt": "2026-08-30T10:16:18.823Z",
+          "payload": {
+            "volumeKmsKeyId": null,
+            "artifactKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker",
+            "keyEnabled": true,
+            "keyManager": "AWS"
+          },
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

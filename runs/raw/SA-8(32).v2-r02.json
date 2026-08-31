@@ -1,0 +1,36 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:12:15.518Z",
+  "results": [
+    {
+      "controlId": "SA-8(32).v2",
+      "controlIntent": "The security design principle of sufficient documentation is implemented in [Assignment: organization-defined systems or system components].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-8(32).v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The control SA-8(32).v2 requires sufficient documentation as a security design principle. The only available evidence collector — getModelCard — returned null, indicating that no model card exists for \"churn-predictor-v1\" (endpoint: \"churn-predictor-endpoint\"). Without a model card or any equivalent documentation artifact, there is no intended use statement, no limitations disclosure, no risk rating, and no evaluation details. The absence of any documentation means the sufficiency standard cannot be met — the control is clearly not satisfied.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 — intended use, limitations, risk rating, and evaluation details are all absent.",
+          "Human attestation would be needed to confirm whether documentation exists in an out-of-band system (e.g., Confluence, SharePoint, or internal wiki) not accessible via the available collector tools.",
+          "Additional collectors (e.g., endpoint configuration, IAM policies, CloudTrail logs) were not available in this environment and could not be used to corroborate or supplement documentation evidence."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

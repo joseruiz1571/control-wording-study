@@ -1,0 +1,36 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:11:50.068Z",
+  "results": [
+    {
+      "controlId": "SA-8(32).v1",
+      "controlIntent": "Apply the security design principle of sufficient documentation in [Assignment: organization-defined systems or system components].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-8(32).v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The control SA-8(32).v1 requires applying the security design principle of sufficient documentation to the assessed system or system component. The primary evidence source for this control — the model card for \"churn-predictor-v1\" / endpoint \"churn-predictor-endpoint\" — was retrieved and returned null. No model card exists. A model card is the standard artifact that captures intended use, limitations, risk rating, and evaluation details for an ML model. Without it, there is no documentation of the model's design, intended use cases, known limitations, risk posture, or evaluation methodology. This constitutes a clear failure to meet the sufficiency-of-documentation principle required by this control.",
+        "evidenceCited": [],
+        "gaps": [
+          "Model card for churn-predictor-v1 is entirely absent — no intended use, limitations, risk rating, or evaluation details are documented.",
+          "No alternative documentation artifacts (e.g., system security plan entries, design documents, data sheets) were available through the collector tools to partially satisfy the documentation requirement.",
+          "Human attestation would be needed to confirm whether any offline/external documentation exists outside the assessed environment."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

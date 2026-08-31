@@ -1,0 +1,89 @@
+{
+  "mlassure_clone_path": "/workspace/src/mlassure",
+  "mltrack_clone_path": "/workspace/src/mltrack",
+  "mlassure_sha": "c9cda3a3f8bd87051d7b31f99c7ddf36db7acfcc",
+  "mltrack_sha": "dbf197df24c54eb389cbeb2b06352f69936055fb",
+  "control_load": {
+    "cli": "mlassure assess --controls <path> --target <path>",
+    "entry": "src/cli/index.ts runLive/runScaffoldOnly",
+    "loader": "src/loaders/control-loader.ts loadControlSet",
+    "formats": [
+      "yaml",
+      "yml",
+      "json"
+    ],
+    "schema": "ControlSet { version, description?, controls: ControlItem[] }; ControlItem { id, framework, pattern, intent, collectors[], note?, tagProvenance? }",
+    "fixture": "fixtures/controls/nist-subset.yaml",
+    "config_file": null,
+    "wording_field": "ControlItem.intent"
+  },
+  "evidence_retrieval": {
+    "from_mltrack_bundle": false,
+    "provider": "FixtureProvider (src/providers/fixture-provider.ts) implementing AwsProvider",
+    "dispatch": "src/tools/executor.ts executeCollector from assessControl (src/agent/agent.ts) or DETERMINISTIC_CHECKS",
+    "input": "--target SageMaker-shaped JSON (fixtures/targets/model-clean.json | model-stale.json)",
+    "live_aws": "not implemented (M4)",
+    "mltrack_card": "mltrack card export writes evidence: [] ; mlassure does not read it"
+  },
+  "output_format": {
+    "stdout": "human table in runLive (STATUS_ICON); scaffold listing without --live",
+    "oscal": "--oscal <path> via toOscalAssessmentResults (5-value to binary fail-closed)",
+    "narrative": "--narrative <path> via toNarrativeMarkdown",
+    "bundle": "--bundle <dir> writeEvidenceBundle: report.json, evidence/<uuid>.json, optional oscal.json/narrative.md, manifest.json (BUNDLE_FORMAT_VERSION=1)",
+    "report_json_schema": "AssessmentReport { targetName, endpointName, controlSetVersion, runAt, results: ControlResult[] }",
+    "json_stdout_flag": false
+  },
+  "three_way_verdict": {
+    "supported": false,
+    "notes": "Judgment.status is 5-valued: satisfied | partially-satisfied | not-satisfied | not-applicable | insufficient-evidence (src/types.ts JUDGMENT_STATUSES). OSCAL toObjectiveState maps only satisfied to OSCAL satisfied; all others to not-satisfied. Closest native analog of undetermined is insufficient-evidence. Do not change the enum for the study."
+  },
+  "machine_readable_logs": {
+    "supported": false,
+    "gap_list": [
+      "exact control text (ControlItem.intent) not copied onto ControlResult / report.json",
+      "LLM model name/version not written anywhere (alias local to AnthropicProvider; response.model discarded)",
+      "temperature not logged and not CLI-settable; agent never passes it so every run is 0.1",
+      "no --report/JSONL flag; machine-readable output only if operator passes --oscal and/or --bundle",
+      "--oscal omits uncited retrieved evidence and control intent; projects verdict to binary",
+      "stdout-only --live runs leave no file log",
+      "no replica/repeat index"
+    ]
+  },
+  "default_model": "claude-sonnet-4-6",
+  "default_temperature": 0.1,
+  "model_pinning": {
+    "alias": "claude-sonnet-4-6",
+    "dated_snapshot": null,
+    "sdk": "@anthropic-ai/sdk ^0.104.1 (lockfile 0.104.1)",
+    "MLASSURE_MODEL_env_wired": false,
+    "max_tokens_default": 4096,
+    "max_iterations": 10
+  },
+  "sample_bundle_path": null,
+  "mlassure_fixture_targets": [
+    "/workspace/src/mlassure/fixtures/targets/model-clean.json",
+    "/workspace/src/mlassure/fixtures/targets/model-stale.json"
+  ],
+  "diffs_needed": true,
+  "diff_paths": [
+    "/workspace/control-wording-study/proposals/01-provider-model-temperature.diff",
+    "/workspace/control-wording-study/proposals/02-report-control-intent.diff",
+    "/workspace/control-wording-study/proposals/03-cli-flags-report-repeat.diff",
+    "/workspace/control-wording-study/proposals/04-capture-api-model-usage.diff"
+  ],
+  "diffs_required": [
+    "/workspace/control-wording-study/proposals/01-provider-model-temperature.diff",
+    "/workspace/control-wording-study/proposals/02-report-control-intent.diff",
+    "/workspace/control-wording-study/proposals/03-cli-flags-report-repeat.diff"
+  ],
+  "diffs_optional": [
+    "/workspace/control-wording-study/proposals/04-capture-api-model-usage.diff"
+  ],
+  "blockers": [],
+  "notes": {
+    "gh_auth": "gh token for joseruiz1571 is invalid; public HTTPS clone succeeded",
+    "clones_unmodified": true,
+    "no_push": true,
+    "no_live_llm": true
+  }
+}

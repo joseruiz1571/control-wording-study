@@ -1,0 +1,2513 @@
+{
+  "hash": "bded936ec0b5c1c46c091d73e23952e5503e8e2dfe213acdba69711fc50e12de",
+  "expected_hash": "bded936ec0b5c1c46c091d73e23952e5503e8e2dfe213acdba69711fc50e12de",
+  "hash_ok": true,
+  "exclude_variant": "SI-4.v1",
+  "model": "claude-sonnet-4-6",
+  "temperature": 0,
+  "jsonl": {
+    "n_lines": 1193,
+    "n_fail": 593,
+    "n_credit": 593,
+    "n_raw_checked": 600
+  },
+  "x": {
+    "n_flipped": 10,
+    "n_controls": 40,
+    "rate": 0.25,
+    "percent": 25.0,
+    "label": "5-way majority; SI-4 scored on v0,v2,v3,v4 only",
+    "flipped_ids": [
+      "AC-6(9)",
+      "AU-8",
+      "CM-2",
+      "CM-3",
+      "CM-3(1)",
+      "CM-3(2)",
+      "CM-8(1)",
+      "SA-10",
+      "SA-4(8)",
+      "SI-2"
+    ]
+  },
+  "x_39": {
+    "n_flipped": 10,
+    "n_controls": 39,
+    "rate": 0.2564102564102564,
+    "percent": 25.6,
+    "label": "5-way majority; SI-4 dropped entirely"
+  },
+  "y": {
+    "status": "run",
+    "n_treated": 10,
+    "n_flipped_before": 10,
+    "n_flipped_after": 3,
+    "n_reduced": 7,
+    "rate_reduction": 0.7,
+    "percent": 70.0,
+    "flipped_after_ids": [
+      "AU-8",
+      "CM-2",
+      "CM-3"
+    ],
+    "no_longer_flip_ids": [
+      "AC-6(9)",
+      "CM-3(1)",
+      "CM-3(2)",
+      "CM-8(1)",
+      "SA-10",
+      "SA-4(8)",
+      "SI-2"
+    ],
+    "unsure_excluded": [
+      "AC-6(9).r4",
+      "AU-8.r4",
+      "CM-2.r4"
+    ],
+    "note": "Y = (10 - n_flipped_after)/10 on the 10 treated controls; unsure rows excluded"
+  },
+  "noise": {
+    "n_variants": 200,
+    "n_unanimous": 168,
+    "n_noisy": 32,
+    "n_two_one": 31,
+    "n_split": 1,
+    "rate": 0.16,
+    "percent": 16.0,
+    "noisy_variants": [
+      {
+        "variant_id": "AC-6(9).v0",
+        "replicas": [
+          "satisfied",
+          "satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "satisfied"
+      },
+      {
+        "variant_id": "AU-12(1).v4",
+        "replicas": [
+          "not-satisfied",
+          "partially-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "AU-12.v2",
+        "replicas": [
+          "partially-satisfied",
+          "insufficient-evidence",
+          "partially-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "AU-2.v3",
+        "replicas": [
+          "not-satisfied",
+          "not-satisfied",
+          "insufficient-evidence"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "AU-8.v0",
+        "replicas": [
+          "partially-satisfied",
+          "partially-satisfied",
+          "satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "AU-8.v1",
+        "replicas": [
+          "partially-satisfied",
+          "partially-satisfied",
+          "satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "AU-8.v2",
+        "replicas": [
+          "partially-satisfied",
+          "satisfied",
+          "satisfied"
+        ],
+        "majority": "satisfied"
+      },
+      {
+        "variant_id": "AU-8.v4",
+        "replicas": [
+          "satisfied",
+          "partially-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-2.v0",
+        "replicas": [
+          "partially-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-2.v1",
+        "replicas": [
+          "insufficient-evidence",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-2.v2",
+        "replicas": [
+          "partially-satisfied",
+          "partially-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-2.v3",
+        "replicas": [
+          "partially-satisfied",
+          "partially-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-2.v4",
+        "replicas": [
+          "partially-satisfied",
+          "insufficient-evidence",
+          "not-satisfied"
+        ],
+        "majority": "split"
+      },
+      {
+        "variant_id": "CM-3(1).v2",
+        "replicas": [
+          "not-satisfied",
+          "partially-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-3(2).v0",
+        "replicas": [
+          "partially-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-3(2).v1",
+        "replicas": [
+          "not-satisfied",
+          "not-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-3(2).v2",
+        "replicas": [
+          "partially-satisfied",
+          "partially-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-3(2).v3",
+        "replicas": [
+          "not-satisfied",
+          "not-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-3.v0",
+        "replicas": [
+          "partially-satisfied",
+          "partially-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-3.v2",
+        "replicas": [
+          "partially-satisfied",
+          "partially-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-3.v3",
+        "replicas": [
+          "not-satisfied",
+          "partially-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-8(1).v0",
+        "replicas": [
+          "not-satisfied",
+          "not-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-8(1).v1",
+        "replicas": [
+          "not-satisfied",
+          "partially-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-8(1).v2",
+        "replicas": [
+          "partially-satisfied",
+          "not-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-8(1).v4",
+        "replicas": [
+          "partially-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SA-10.v0",
+        "replicas": [
+          "not-satisfied",
+          "partially-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "SA-10.v3",
+        "replicas": [
+          "partially-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SA-4(8).v1",
+        "replicas": [
+          "not-satisfied",
+          "not-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SI-2.v0",
+        "replicas": [
+          "partially-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SI-2.v1",
+        "replicas": [
+          "not-satisfied",
+          "partially-satisfied",
+          "partially-satisfied"
+        ],
+        "majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "SI-2.v2",
+        "replicas": [
+          "partially-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SI-7.v0",
+        "replicas": [
+          "not-satisfied",
+          "partially-satisfied",
+          "not-satisfied"
+        ],
+        "majority": "not-satisfied"
+      }
+    ]
+  },
+  "verdict_census": {
+    "n": 600,
+    "counts": {
+      "not-satisfied": 454,
+      "satisfied": 10,
+      "partially-satisfied": 132,
+      "insufficient-evidence": 4,
+      "not-applicable": 0
+    }
+  },
+  "flip_by_vocab_pattern": {
+    "vague-qualifier": {
+      "n_controls": 4,
+      "n_flipped": 0,
+      "flipped_ids": []
+    },
+    "specific": {
+      "n_controls": 23,
+      "n_flipped": 8,
+      "flipped_ids": [
+        "AC-6(9)",
+        "AU-8",
+        "CM-3",
+        "CM-3(1)",
+        "CM-3(2)",
+        "CM-8(1)",
+        "SA-10",
+        "SI-2"
+      ]
+    },
+    "mixed": {
+      "n_controls": 13,
+      "n_flipped": 2,
+      "flipped_ids": [
+        "CM-2",
+        "SA-4(8)"
+      ]
+    }
+  },
+  "qualifier_present_vs_specific": {
+    "qualifier_present": {
+      "n_controls": 17,
+      "n_flipped": 2,
+      "percent": 11.8,
+      "control_ids": [
+        "AC-3",
+        "AC-2(7)",
+        "AC-6",
+        "AC-6(7)",
+        "AU-2",
+        "AU-6",
+        "CM-2",
+        "CM-6",
+        "CM-7(1)",
+        "CM-8",
+        "RA-7",
+        "SA-8(32)",
+        "SA-4(8)",
+        "SI-2(2)",
+        "SI-4",
+        "SI-6",
+        "SI-12"
+      ],
+      "flipped_ids": [
+        "CM-2",
+        "SA-4(8)"
+      ]
+    },
+    "specific": {
+      "n_controls": 23,
+      "n_flipped": 8,
+      "percent": 34.8,
+      "control_ids": [
+        "AC-5",
+        "AC-6(5)",
+        "AC-6(9)",
+        "AC-6(10)",
+        "AU-3",
+        "AU-6(3)",
+        "AU-8",
+        "AU-12",
+        "AU-12(1)",
+        "CM-3",
+        "CM-3(1)",
+        "CM-3(2)",
+        "CM-8(1)",
+        "RA-3",
+        "SA-10",
+        "SA-10(5)",
+        "SA-11",
+        "SI-2",
+        "SI-4(2)",
+        "SI-7",
+        "SC-28(1)",
+        "SC-7(5)",
+        "CA-7"
+      ],
+      "flipped_ids": [
+        "AC-6(9)",
+        "AU-8",
+        "CM-3",
+        "CM-3(1)",
+        "CM-3(2)",
+        "CM-8(1)",
+        "SA-10",
+        "SI-2"
+      ]
+    }
+  },
+  "paraphrase_vs_v0": {
+    "n_paraphrases": 159,
+    "n_differ": 22,
+    "rate": 0.13836477987421383,
+    "percent": 13.8,
+    "differing": [
+      {
+        "variant_id": "AC-6(9).v1",
+        "v0_majority": "satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "AC-6(9).v2",
+        "v0_majority": "satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "AC-6(9).v3",
+        "v0_majority": "satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "AC-6(9).v4",
+        "v0_majority": "satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "AU-8.v2",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "satisfied"
+      },
+      {
+        "variant_id": "AU-8.v3",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "satisfied"
+      },
+      {
+        "variant_id": "CM-2.v2",
+        "v0_majority": "not-satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-2.v3",
+        "v0_majority": "not-satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-2.v4",
+        "v0_majority": "not-satisfied",
+        "paraphrase_majority": "split"
+      },
+      {
+        "variant_id": "CM-3.v1",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-3.v4",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "CM-3(1).v2",
+        "v0_majority": "not-satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-3(2).v2",
+        "v0_majority": "not-satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "CM-8(1).v2",
+        "v0_majority": "not-satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      },
+      {
+        "variant_id": "SA-10.v1",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SA-10.v2",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SA-10.v3",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SA-10.v4",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SA-4(8).v1",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SA-4(8).v2",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SA-4(8).v4",
+        "v0_majority": "partially-satisfied",
+        "paraphrase_majority": "not-satisfied"
+      },
+      {
+        "variant_id": "SI-2.v1",
+        "v0_majority": "not-satisfied",
+        "paraphrase_majority": "partially-satisfied"
+      }
+    ],
+    "note": "meaning_preserved=yes only; SI-4.v1 skipped"
+  },
+  "flipped_controls": [
+    {
+      "control_id": "AC-6(9)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "AC-6(9).v0",
+        "AC-6(9).v1",
+        "AC-6(9).v2",
+        "AC-6(9).v3",
+        "AC-6(9).v4"
+      ],
+      "majority_verdicts": [
+        "satisfied",
+        "partially-satisfied",
+        "partially-satisfied",
+        "partially-satisfied",
+        "partially-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "AU-8",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "AU-8.v0",
+        "AU-8.v1",
+        "AU-8.v2",
+        "AU-8.v3",
+        "AU-8.v4"
+      ],
+      "majority_verdicts": [
+        "partially-satisfied",
+        "partially-satisfied",
+        "satisfied",
+        "satisfied",
+        "partially-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "satisfied",
+        "v3": "satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "CM-2",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "CM-2.v0",
+        "CM-2.v1",
+        "CM-2.v2",
+        "CM-2.v3",
+        "CM-2.v4"
+      ],
+      "majority_verdicts": [
+        "not-satisfied",
+        "not-satisfied",
+        "partially-satisfied",
+        "partially-satisfied",
+        "split"
+      ],
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "split"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "CM-3",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "CM-3.v0",
+        "CM-3.v1",
+        "CM-3.v2",
+        "CM-3.v3",
+        "CM-3.v4"
+      ],
+      "majority_verdicts": [
+        "partially-satisfied",
+        "not-satisfied",
+        "partially-satisfied",
+        "partially-satisfied",
+        "not-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "CM-3(1)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "CM-3(1).v0",
+        "CM-3(1).v1",
+        "CM-3(1).v2",
+        "CM-3(1).v3",
+        "CM-3(1).v4"
+      ],
+      "majority_verdicts": [
+        "not-satisfied",
+        "not-satisfied",
+        "partially-satisfied",
+        "not-satisfied",
+        "not-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "CM-3(2)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "CM-3(2).v0",
+        "CM-3(2).v1",
+        "CM-3(2).v2",
+        "CM-3(2).v3",
+        "CM-3(2).v4"
+      ],
+      "majority_verdicts": [
+        "not-satisfied",
+        "not-satisfied",
+        "partially-satisfied",
+        "not-satisfied",
+        "not-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "CM-8(1)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "CM-8(1).v0",
+        "CM-8(1).v1",
+        "CM-8(1).v2",
+        "CM-8(1).v3",
+        "CM-8(1).v4"
+      ],
+      "majority_verdicts": [
+        "not-satisfied",
+        "not-satisfied",
+        "partially-satisfied",
+        "not-satisfied",
+        "not-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "SA-10",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "SA-10.v0",
+        "SA-10.v1",
+        "SA-10.v2",
+        "SA-10.v3",
+        "SA-10.v4"
+      ],
+      "majority_verdicts": [
+        "partially-satisfied",
+        "not-satisfied",
+        "not-satisfied",
+        "not-satisfied",
+        "not-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "SA-4(8)",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "SA-4(8).v0",
+        "SA-4(8).v1",
+        "SA-4(8).v2",
+        "SA-4(8).v3",
+        "SA-4(8).v4"
+      ],
+      "majority_verdicts": [
+        "partially-satisfied",
+        "not-satisfied",
+        "not-satisfied",
+        "partially-satisfied",
+        "not-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips": true
+    },
+    {
+      "control_id": "SI-2",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "variant_ids": [
+        "SI-2.v0",
+        "SI-2.v1",
+        "SI-2.v2",
+        "SI-2.v3",
+        "SI-2.v4"
+      ],
+      "majority_verdicts": [
+        "not-satisfied",
+        "partially-satisfied",
+        "not-satisfied",
+        "not-satisfied",
+        "not-satisfied"
+      ],
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips": true
+    }
+  ],
+  "all_controls": [
+    {
+      "control_id": "AC-3",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AC-2(7)",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AC-5",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AC-6",
+      "vocab_pattern": "vague-qualifier",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AC-6(5)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AC-6(7)",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AC-6(9)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": true
+    },
+    {
+      "control_id": "AC-6(10)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AU-2",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AU-3",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AU-6",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AU-6(3)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AU-8",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "satisfied",
+        "v3": "satisfied",
+        "v4": "partially-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "satisfied",
+        "v3": "satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": true
+    },
+    {
+      "control_id": "AU-12",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "AU-12(1)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CM-2",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "split"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CM-3",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CM-3(1)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CM-3(2)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CM-6",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CM-7(1)",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CM-8",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CM-8(1)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": false
+    },
+    {
+      "control_id": "RA-3",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "RA-7",
+      "vocab_pattern": "vague-qualifier",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SA-10",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SA-10(5)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SA-8(32)",
+      "vocab_pattern": "vague-qualifier",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SA-4(8)",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SA-11",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SI-2",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": true,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SI-2(2)",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SI-4",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 4,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SI-4(2)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SI-6",
+      "vocab_pattern": "mixed",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SI-7",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SI-12",
+      "vocab_pattern": "vague-qualifier",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SC-28(1)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "SC-7(5)",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    },
+    {
+      "control_id": "CA-7",
+      "vocab_pattern": "specific",
+      "n_variants_scored": 5,
+      "majority_by_variant": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "majority_by_variant_3way": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flips_5way": false,
+      "flips_3way": false
+    }
+  ],
+  "sensitivity_3way": {
+    "map": {
+      "satisfied": "satisfied",
+      "not-satisfied": "not-satisfied",
+      "insufficient-evidence": "undetermined",
+      "partially-satisfied": "not-satisfied",
+      "not-applicable": "not-satisfied"
+    },
+    "x": {
+      "n_flipped": 2,
+      "n_controls": 40,
+      "rate": 0.05,
+      "percent": 5.0,
+      "flipped_ids": [
+        "AC-6(9)",
+        "AU-8"
+      ]
+    },
+    "x_39": {
+      "n_flipped": 2,
+      "n_controls": 39,
+      "rate": 0.05128205128205128,
+      "percent": 5.1
+    },
+    "noise": {
+      "n_variants": 200,
+      "n_unanimous": 191,
+      "n_noisy": 9,
+      "n_split": 0,
+      "rate": 0.045,
+      "percent": 4.5,
+      "noisy_variants": [
+        {
+          "variant_id": "AC-6(9).v0",
+          "replicas": [
+            "satisfied",
+            "satisfied",
+            "not-satisfied"
+          ],
+          "majority": "satisfied"
+        },
+        {
+          "variant_id": "AU-12.v2",
+          "replicas": [
+            "not-satisfied",
+            "undetermined",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "AU-2.v3",
+          "replicas": [
+            "not-satisfied",
+            "not-satisfied",
+            "undetermined"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "AU-8.v0",
+          "replicas": [
+            "not-satisfied",
+            "not-satisfied",
+            "satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "AU-8.v1",
+          "replicas": [
+            "not-satisfied",
+            "not-satisfied",
+            "satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "AU-8.v2",
+          "replicas": [
+            "not-satisfied",
+            "satisfied",
+            "satisfied"
+          ],
+          "majority": "satisfied"
+        },
+        {
+          "variant_id": "AU-8.v4",
+          "replicas": [
+            "satisfied",
+            "not-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "CM-2.v1",
+          "replicas": [
+            "undetermined",
+            "not-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "CM-2.v4",
+          "replicas": [
+            "not-satisfied",
+            "undetermined",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        }
+      ]
+    },
+    "replica_census": {
+      "n": 600,
+      "counts": {
+        "not-satisfied": 586,
+        "satisfied": 10,
+        "undetermined": 4
+      }
+    },
+    "flip_by_vocab_pattern": {
+      "vague-qualifier": {
+        "n_controls": 4,
+        "n_flipped": 0,
+        "flipped_ids": []
+      },
+      "specific": {
+        "n_controls": 23,
+        "n_flipped": 2,
+        "flipped_ids": [
+          "AC-6(9)",
+          "AU-8"
+        ]
+      },
+      "mixed": {
+        "n_controls": 13,
+        "n_flipped": 0,
+        "flipped_ids": []
+      }
+    },
+    "qualifier_present_vs_specific": {
+      "qualifier_present": {
+        "n_controls": 17,
+        "n_flipped": 0,
+        "percent": 0.0,
+        "flipped_ids": []
+      },
+      "specific": {
+        "n_controls": 23,
+        "n_flipped": 2,
+        "percent": 8.7,
+        "flipped_ids": [
+          "AC-6(9)",
+          "AU-8"
+        ]
+      }
+    },
+    "paraphrase_vs_v0": {
+      "n_paraphrases": 159,
+      "n_differ": 6,
+      "percent": 3.8,
+      "differing": [
+        {
+          "variant_id": "AC-6(9).v1",
+          "v0_majority": "satisfied",
+          "paraphrase_majority": "not-satisfied"
+        },
+        {
+          "variant_id": "AC-6(9).v2",
+          "v0_majority": "satisfied",
+          "paraphrase_majority": "not-satisfied"
+        },
+        {
+          "variant_id": "AC-6(9).v3",
+          "v0_majority": "satisfied",
+          "paraphrase_majority": "not-satisfied"
+        },
+        {
+          "variant_id": "AC-6(9).v4",
+          "v0_majority": "satisfied",
+          "paraphrase_majority": "not-satisfied"
+        },
+        {
+          "variant_id": "AU-8.v2",
+          "v0_majority": "not-satisfied",
+          "paraphrase_majority": "satisfied"
+        },
+        {
+          "variant_id": "AU-8.v3",
+          "v0_majority": "not-satisfied",
+          "paraphrase_majority": "satisfied"
+        }
+      ]
+    },
+    "flipped_controls": [
+      {
+        "control_id": "AC-6(9)",
+        "vocab_pattern": "specific",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "AC-6(9).v0",
+          "AC-6(9).v1",
+          "AC-6(9).v2",
+          "AC-6(9).v3",
+          "AC-6(9).v4"
+        ],
+        "majority_verdicts": [
+          "satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "v0": "satisfied",
+          "v1": "not-satisfied",
+          "v2": "not-satisfied",
+          "v3": "not-satisfied",
+          "v4": "not-satisfied"
+        },
+        "flips": true
+      },
+      {
+        "control_id": "AU-8",
+        "vocab_pattern": "specific",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "AU-8.v0",
+          "AU-8.v1",
+          "AU-8.v2",
+          "AU-8.v3",
+          "AU-8.v4"
+        ],
+        "majority_verdicts": [
+          "not-satisfied",
+          "not-satisfied",
+          "satisfied",
+          "satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "v0": "not-satisfied",
+          "v1": "not-satisfied",
+          "v2": "satisfied",
+          "v3": "satisfied",
+          "v4": "not-satisfied"
+        },
+        "flips": true
+      }
+    ]
+  },
+  "si4": {
+    "excluded_variant": "SI-4.v1",
+    "scored_variants": [
+      "SI-4.v0",
+      "SI-4.v2",
+      "SI-4.v3",
+      "SI-4.v4"
+    ],
+    "majority_5way": {
+      "v0": "not-satisfied",
+      "v2": "not-satisfied",
+      "v3": "not-satisfied",
+      "v4": "not-satisfied"
+    },
+    "v1_replicas": [
+      "not-satisfied",
+      "not-satisfied",
+      "not-satisfied"
+    ],
+    "v1_majority": "not-satisfied",
+    "flips": false
+  },
+  "x2": {
+    "n_flipped": 3,
+    "n_controls": 40,
+    "rate": 0.075,
+    "percent": 7.5,
+    "note": "n_flipped_after / 40; 30 untreated counted as still non-flipping"
+  },
+  "phase5": {
+    "jsonl": {
+      "n_lines": 141,
+      "n_fail": 0,
+      "n_credit": 0,
+      "n_raw_checked": 141
+    },
+    "unsure_excluded": [
+      "AC-6(9).r4",
+      "AU-8.r4",
+      "CM-2.r4"
+    ],
+    "n_yes_variants": 47,
+    "n_success": 141,
+    "y": {
+      "status": "run",
+      "n_treated": 10,
+      "n_flipped_before": 10,
+      "n_flipped_after": 3,
+      "n_reduced": 7,
+      "rate_reduction": 0.7,
+      "percent": 70.0,
+      "flipped_after_ids": [
+        "AU-8",
+        "CM-2",
+        "CM-3"
+      ],
+      "no_longer_flip_ids": [
+        "AC-6(9)",
+        "CM-3(1)",
+        "CM-3(2)",
+        "CM-8(1)",
+        "SA-10",
+        "SA-4(8)",
+        "SI-2"
+      ],
+      "unsure_excluded": [
+        "AC-6(9).r4",
+        "AU-8.r4",
+        "CM-2.r4"
+      ],
+      "note": "Y = (10 - n_flipped_after)/10 on the 10 treated controls; unsure rows excluded"
+    },
+    "x2": {
+      "n_flipped": 3,
+      "n_controls": 40,
+      "rate": 0.075,
+      "percent": 7.5,
+      "note": "n_flipped_after / 40; 30 untreated counted as still non-flipping"
+    },
+    "noise": {
+      "n_variants": 47,
+      "n_unanimous": 28,
+      "n_noisy": 19,
+      "n_two_one": 17,
+      "n_split": 2,
+      "rate": 0.40425531914893614,
+      "percent": 40.4,
+      "split_ids": [
+        "CM-2.r1",
+        "CM-2.r3"
+      ],
+      "noisy_variants": [
+        {
+          "variant_id": "AU-8.r1",
+          "replicas": [
+            "partially-satisfied",
+            "satisfied",
+            "partially-satisfied"
+          ],
+          "majority": "partially-satisfied"
+        },
+        {
+          "variant_id": "AU-8.r2",
+          "replicas": [
+            "satisfied",
+            "partially-satisfied",
+            "partially-satisfied"
+          ],
+          "majority": "partially-satisfied"
+        },
+        {
+          "variant_id": "CM-2.r1",
+          "replicas": [
+            "partially-satisfied",
+            "insufficient-evidence",
+            "not-satisfied"
+          ],
+          "majority": "split"
+        },
+        {
+          "variant_id": "CM-2.r2",
+          "replicas": [
+            "insufficient-evidence",
+            "partially-satisfied",
+            "partially-satisfied"
+          ],
+          "majority": "partially-satisfied"
+        },
+        {
+          "variant_id": "CM-2.r3",
+          "replicas": [
+            "partially-satisfied",
+            "insufficient-evidence",
+            "not-satisfied"
+          ],
+          "majority": "split"
+        },
+        {
+          "variant_id": "CM-3.r3",
+          "replicas": [
+            "not-satisfied",
+            "partially-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "CM-3.r4",
+          "replicas": [
+            "partially-satisfied",
+            "not-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "CM-3(1).r0",
+          "replicas": [
+            "not-satisfied",
+            "not-satisfied",
+            "partially-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "CM-3(1).r3",
+          "replicas": [
+            "not-satisfied",
+            "partially-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "CM-3(2).r0",
+          "replicas": [
+            "not-satisfied",
+            "partially-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "CM-3(2).r2",
+          "replicas": [
+            "not-satisfied",
+            "not-satisfied",
+            "partially-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "SA-10.r1",
+          "replicas": [
+            "not-satisfied",
+            "partially-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "SA-10.r2",
+          "replicas": [
+            "not-satisfied",
+            "partially-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "SA-10.r3",
+          "replicas": [
+            "partially-satisfied",
+            "not-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "SA-10.r4",
+          "replicas": [
+            "not-satisfied",
+            "partially-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "SA-4(8).r0",
+          "replicas": [
+            "partially-satisfied",
+            "not-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "SA-4(8).r1",
+          "replicas": [
+            "partially-satisfied",
+            "not-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "SA-4(8).r2",
+          "replicas": [
+            "not-satisfied",
+            "partially-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        },
+        {
+          "variant_id": "SI-2.r3",
+          "replicas": [
+            "not-satisfied",
+            "partially-satisfied",
+            "not-satisfied"
+          ],
+          "majority": "not-satisfied"
+        }
+      ]
+    },
+    "verdict_census": {
+      "n": 141,
+      "counts": {
+        "partially-satisfied": 40,
+        "satisfied": 8,
+        "insufficient-evidence": 3,
+        "not-satisfied": 90,
+        "not-applicable": 0
+      }
+    },
+    "per_control": [
+      {
+        "control_id": "AC-6(9)",
+        "n_variants_scored": 4,
+        "variant_ids": [
+          "AC-6(9).r0",
+          "AC-6(9).r1",
+          "AC-6(9).r2",
+          "AC-6(9).r3"
+        ],
+        "majority_verdicts": [
+          "partially-satisfied",
+          "partially-satisfied",
+          "partially-satisfied",
+          "partially-satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "partially-satisfied",
+          "r1": "partially-satisfied",
+          "r2": "partially-satisfied",
+          "r3": "partially-satisfied"
+        },
+        "majority_cell": "4\u00d7 partially-satisfied",
+        "flips": false
+      },
+      {
+        "control_id": "AU-8",
+        "n_variants_scored": 4,
+        "variant_ids": [
+          "AU-8.r0",
+          "AU-8.r1",
+          "AU-8.r2",
+          "AU-8.r3"
+        ],
+        "majority_verdicts": [
+          "satisfied",
+          "partially-satisfied",
+          "partially-satisfied",
+          "satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "satisfied",
+          "r1": "partially-satisfied",
+          "r2": "partially-satisfied",
+          "r3": "satisfied"
+        },
+        "majority_cell": "satisfied / partially-satisfied / partially-satisfied / satisfied",
+        "flips": true
+      },
+      {
+        "control_id": "CM-2",
+        "n_variants_scored": 4,
+        "variant_ids": [
+          "CM-2.r0",
+          "CM-2.r1",
+          "CM-2.r2",
+          "CM-2.r3"
+        ],
+        "majority_verdicts": [
+          "partially-satisfied",
+          "split",
+          "partially-satisfied",
+          "split"
+        ],
+        "majority_by_variant": {
+          "r0": "partially-satisfied",
+          "r1": "split",
+          "r2": "partially-satisfied",
+          "r3": "split"
+        },
+        "majority_cell": "partially-satisfied / split / partially-satisfied / split",
+        "flips": true
+      },
+      {
+        "control_id": "CM-3",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "CM-3.r0",
+          "CM-3.r1",
+          "CM-3.r2",
+          "CM-3.r3",
+          "CM-3.r4"
+        ],
+        "majority_verdicts": [
+          "not-satisfied",
+          "not-satisfied",
+          "partially-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "not-satisfied",
+          "r1": "not-satisfied",
+          "r2": "partially-satisfied",
+          "r3": "not-satisfied",
+          "r4": "not-satisfied"
+        },
+        "majority_cell": "not-satisfied / not-satisfied / partially-satisfied / not-satisfied / not-satisfied",
+        "flips": true
+      },
+      {
+        "control_id": "CM-3(1)",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "CM-3(1).r0",
+          "CM-3(1).r1",
+          "CM-3(1).r2",
+          "CM-3(1).r3",
+          "CM-3(1).r4"
+        ],
+        "majority_verdicts": [
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "not-satisfied",
+          "r1": "not-satisfied",
+          "r2": "not-satisfied",
+          "r3": "not-satisfied",
+          "r4": "not-satisfied"
+        },
+        "majority_cell": "5\u00d7 not-satisfied",
+        "flips": false
+      },
+      {
+        "control_id": "CM-3(2)",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "CM-3(2).r0",
+          "CM-3(2).r1",
+          "CM-3(2).r2",
+          "CM-3(2).r3",
+          "CM-3(2).r4"
+        ],
+        "majority_verdicts": [
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "not-satisfied",
+          "r1": "not-satisfied",
+          "r2": "not-satisfied",
+          "r3": "not-satisfied",
+          "r4": "not-satisfied"
+        },
+        "majority_cell": "5\u00d7 not-satisfied",
+        "flips": false
+      },
+      {
+        "control_id": "CM-8(1)",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "CM-8(1).r0",
+          "CM-8(1).r1",
+          "CM-8(1).r2",
+          "CM-8(1).r3",
+          "CM-8(1).r4"
+        ],
+        "majority_verdicts": [
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "not-satisfied",
+          "r1": "not-satisfied",
+          "r2": "not-satisfied",
+          "r3": "not-satisfied",
+          "r4": "not-satisfied"
+        },
+        "majority_cell": "5\u00d7 not-satisfied",
+        "flips": false
+      },
+      {
+        "control_id": "SA-10",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "SA-10.r0",
+          "SA-10.r1",
+          "SA-10.r2",
+          "SA-10.r3",
+          "SA-10.r4"
+        ],
+        "majority_verdicts": [
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "not-satisfied",
+          "r1": "not-satisfied",
+          "r2": "not-satisfied",
+          "r3": "not-satisfied",
+          "r4": "not-satisfied"
+        },
+        "majority_cell": "5\u00d7 not-satisfied",
+        "flips": false
+      },
+      {
+        "control_id": "SA-4(8)",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "SA-4(8).r0",
+          "SA-4(8).r1",
+          "SA-4(8).r2",
+          "SA-4(8).r3",
+          "SA-4(8).r4"
+        ],
+        "majority_verdicts": [
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "not-satisfied",
+          "r1": "not-satisfied",
+          "r2": "not-satisfied",
+          "r3": "not-satisfied",
+          "r4": "not-satisfied"
+        },
+        "majority_cell": "5\u00d7 not-satisfied",
+        "flips": false
+      },
+      {
+        "control_id": "SI-2",
+        "n_variants_scored": 5,
+        "variant_ids": [
+          "SI-2.r0",
+          "SI-2.r1",
+          "SI-2.r2",
+          "SI-2.r3",
+          "SI-2.r4"
+        ],
+        "majority_verdicts": [
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied",
+          "not-satisfied"
+        ],
+        "majority_by_variant": {
+          "r0": "not-satisfied",
+          "r1": "not-satisfied",
+          "r2": "not-satisfied",
+          "r3": "not-satisfied",
+          "r4": "not-satisfied"
+        },
+        "majority_cell": "5\u00d7 not-satisfied",
+        "flips": false
+      }
+    ],
+    "treated_ids": [
+      "AC-6(9)",
+      "AU-8",
+      "CM-2",
+      "CM-3",
+      "CM-3(1)",
+      "CM-3(2)",
+      "CM-8(1)",
+      "SA-10",
+      "SA-4(8)",
+      "SI-2"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:39:12.080Z",
+  "results": [
+    {
+      "controlId": "RA-3.v0",
+      "controlIntent": "a. Conduct a risk assessment, including: 1. Identifying threats to and vulnerabilities in the system; 2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and 3. Determining the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information; b. Integrate risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments; c. Document risk assessment results in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]]; d. Review risk assessment results [Assignment: organization-defined frequency]; e. Disseminate risk assessment results to [Assignment: organization-defined personnel or roles]; and f. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "RA-3.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The only available evidence collector — getModelCard — returned null for model \"churn-predictor-v1\" / endpoint \"churn-predictor-endpoint\". This means no model card exists for this model. A model card is the primary artifact expected to document risk assessment results (threats, vulnerabilities, likelihood/magnitude of harm, PII impact, intended use, and limitations) as required by RA-3. Without any such documentation:\n\n1. **RA-3(a)**: There is no evidence that a risk assessment was conducted identifying threats, vulnerabilities, likelihood/magnitude of harm, or adverse effects on individuals from PII processing.\n2. **RA-3(c)**: Risk assessment results have not been documented in any retrievable artifact (security/privacy plan, risk assessment report, or equivalent).\n3. **RA-3(d/e/f)**: With no documented risk assessment, there is no basis to conclude results have been reviewed, disseminated, or updated.\n\nThe absence of a model card — the sole retrievable governance artifact — constitutes a clear gap against all sub-requirements of RA-3.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 (getModelCard returned null) — the primary artifact for documenting risk assessment results is entirely absent.",
+          "No evidence of a risk assessment report, security plan, or privacy plan identifying threats and vulnerabilities to the system.",
+          "No evidence of likelihood/magnitude-of-harm analysis or PII adverse-effects determination (RA-3(a)(2) and (3)).",
+          "No evidence of risk assessment review cadence or update history (RA-3(d) and (f)).",
+          "No evidence of dissemination of risk assessment results to defined personnel or roles (RA-3(e)).",
+          "Human attestation would be needed to confirm whether any offline/out-of-band risk assessment documentation exists outside the retrievable environment."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

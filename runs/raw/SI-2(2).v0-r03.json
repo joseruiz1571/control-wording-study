@@ -1,0 +1,113 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:27:25.781Z",
+  "results": [
+    {
+      "controlId": "SI-2(2).v0",
+      "controlIntent": "Determine if system components have applicable security-relevant software and firmware updates installed using [Assignment: organization-defined automated mechanisms] [Assignment: organization-defined frequency].\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "SI-2(2).v0",
+        "status": "not-satisfied",
+        "confidence": "medium",
+        "rationale": "Control SI-2(2).v0 requires that security-relevant software/firmware updates be installed using automated mechanisms at a defined frequency. The evidence collected reveals two significant deficiencies:\n\n1. **Manual deployment mechanism**: The CloudTrail record for CreateEndpoint (edec685a) shows the endpoint was created by an IAM user ('data-scientist-jdoe') via a direct API call — not through an automated pipeline or orchestration mechanism. There is no evidence of EventBridge rules, Lambda triggers, CI/CD pipelines, or any other automated mechanism driving updates.\n\n2. **Hotfix bypassed change control and registry**: The UpdateEndpoint event (72b63393) on 2026-03-15 was also performed manually by the same IAM user, and critically, has no corresponding model registry entry. This means a production update was applied without formal approval, without an automated mechanism, and without any recorded frequency or schedule — directly violating the control's requirements.\n\n3. **No defined update frequency**: Neither the registry entry (b00a5d27) nor the CloudTrail events provide any evidence of a scheduled or frequency-based update process for security-relevant patches.\n\nThe combination of manual-only deployment actions, a registry-bypassing hotfix, and the complete absence of automated update mechanisms means this control is not satisfied.",
+        "evidenceCited": [
+          "b00a5d27-ae81-4507-a2b7-a0b8d04d5e09",
+          "edec685a-f859-4e74-81ed-5f05a5f11191",
+          "72b63393-c74f-44a4-9c9d-1d332af9467e"
+        ],
+        "gaps": [
+          "No evidence of automated update mechanisms (e.g., EventBridge, Lambda, CI/CD pipelines) was available from the collectors — human attestation or pipeline configuration review would be needed to confirm or rule out automation.",
+          "No vulnerability scanning or patch management records were retrievable — it is unknown whether security-relevant updates are being identified and tracked.",
+          "The hotfix update (UpdateEndpoint, 2026-03-15) has no registry entry; a human review of the change-control process for this event is required.",
+          "No organization-defined update frequency policy document was available for comparison against actual update cadence."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "b00a5d27-ae81-4507-a2b7-a0b8d04d5e09",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T10:27:05.636Z"
+        },
+        {
+          "id": "edec685a-f859-4e74-81ed-5f05a5f11191",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T10:27:05.637Z"
+        },
+        {
+          "id": "72b63393-c74f-44a4-9c9d-1d332af9467e",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T10:27:05.637Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "b00a5d27-ae81-4507-a2b7-a0b8d04d5e09",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T10:27:05.636Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "edec685a-f859-4e74-81ed-5f05a5f11191",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T10:27:05.637Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "72b63393-c74f-44a4-9c9d-1d332af9467e",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T10:27:05.637Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

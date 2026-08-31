@@ -1,0 +1,92 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:45:46.048Z",
+  "results": [
+    {
+      "controlId": "AU-8.v4",
+      "controlIntent": "a. Use internal system clocks to generate time stamps for audit records; and b. Audit-record time stamps meet [Assignment: organization-defined granularity of time measurement] and use Coordinated Universal Time, have a fixed local time offset from Coordinated Universal Time, or include the local time offset as part of the time stamp.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-8.v4",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "The two CloudTrail events retrieved for the churn-predictor-endpoint (CreateEndpoint: 2025-12-01T11:00:00Z, evidence ID 4c4d6210; UpdateEndpoint: 2026-03-15T14:22:00Z, evidence ID 7cca3f27) both carry ISO 8601 timestamps with the 'Z' suffix, confirming they are expressed in Coordinated Universal Time (UTC) — satisfying AU-8.v4(b)'s UTC requirement. AWS CloudTrail uses AWS internal system clocks to generate these timestamps, satisfying AU-8.v4(a) for the events that were captured.\n\nHowever, several gaps prevent a full 'satisfied' verdict:\n1. **Granularity policy**: No organization-defined granularity requirement was found in the evidence. Both timestamps are at second-level precision, but it cannot be confirmed this meets the organization's defined standard without a policy document.\n2. **Clock synchronization evidence**: There is no retrieved evidence of NTP or AWS Time Sync Service configuration to confirm the underlying system clocks are authoritative and synchronized.\n3. **Incomplete audit trail**: The notes embedded in the evidence flag that the CreateEndpoint event occurred 2 hours before registry approval, and the UpdateEndpoint hotfix has no corresponding registry entry. This suggests audit records may not be complete or consistently generated for all relevant events, undermining the sufficiency of the audit record set.\n4. **No registry approval events**: No model-registry approval events were returned, meaning a category of expected audit events is absent from the evidence.",
+        "evidenceCited": [
+          "4c4d6210-5ffa-4ff9-b433-7eef87fcf598",
+          "7cca3f27-4e72-4ddf-8236-820457e68d6a"
+        ],
+        "gaps": [
+          "Organization-defined granularity policy for audit record timestamps (e.g., millisecond vs. second precision requirement) — not available in retrieved evidence",
+          "NTP / AWS Time Sync Service configuration evidence to confirm internal system clock synchronization and accuracy",
+          "Model registry approval events (expected for change-control audit trail) — absent from CloudTrail results, suggesting incomplete audit coverage",
+          "Formal audit logging policy or AWS Config rule confirming CloudTrail is enabled and comprehensive across all relevant services for this endpoint"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "4c4d6210-5ffa-4ff9-b433-7eef87fcf598",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:45:28.216Z"
+        },
+        {
+          "id": "7cca3f27-4e72-4ddf-8236-820457e68d6a",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:45:28.216Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "4c4d6210-5ffa-4ff9-b433-7eef87fcf598",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:45:28.216Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "7cca3f27-4e72-4ddf-8236-820457e68d6a",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:45:28.216Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

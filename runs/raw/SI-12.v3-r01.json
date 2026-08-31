@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:24:57.407Z",
+  "results": [
+    {
+      "controlId": "SI-12.v3",
+      "controlIntent": "Manage and retain both information residing in the system and information output from the system in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-12.v3 requires that information residing in or output from the system be managed and retained in accordance with applicable laws, regulations, policies, and operational requirements. For an ML inference endpoint, this means inference inputs and outputs (model predictions) must be captured and stored for auditability, drift monitoring, and compliance purposes.\n\nThe evidence retrieved shows that data capture is **completely disabled** for the \"churn-predictor-endpoint\":\n- `dataCaptureEnabled`: false\n- `capturePercentage`: 0%\n- `captureDestination`: null\n\nWith data capture turned off and no destination S3 path configured, inference requests and responses are not being retained at all. This means there is no record of the model's outputs, making it impossible to satisfy information retention requirements under SI-12. The configuration is not merely insufficient in degree — it is entirely absent. No inference data is being preserved, which directly violates the control's intent to manage and retain system output in accordance with applicable requirements.",
+        "evidenceCited": [
+          "368ba36d-81ee-4dd2-9ff7-2b5de7dedcae"
+        ],
+        "gaps": [
+          "Data retention policy documents (laws, regulations, or internal policies specifying required retention periods and scope) were not available for review — human attestation needed to confirm applicable requirements.",
+          "S3 bucket lifecycle policies or alternative logging mechanisms (e.g., CloudWatch Logs, Kinesis streams) that might capture inference data outside of SageMaker's native data capture were not assessed.",
+          "Model monitoring schedules and any compensating controls for output retention could not be evaluated with available tools."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "368ba36d-81ee-4dd2-9ff7-2b5de7dedcae",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:24:45.922Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "368ba36d-81ee-4dd2-9ff7-2b5de7dedcae",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:24:45.922Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-3(2).v4"
+controls:
+  - id: "CM-3(2).v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      Testing, validation, and documentation of changes to the system occur before the implementation of those changes is finalized.
+    collectors:
+      - getCloudTrailEvents
+      - getModelRegistryEntry

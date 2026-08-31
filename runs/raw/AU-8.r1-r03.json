@@ -1,0 +1,92 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:53:38.144Z",
+  "results": [
+    {
+      "controlId": "AU-8.r1",
+      "controlIntent": "a. Generate time stamps for audit records using internal system clocks; and b. Record those time stamps for audit records such that the time stamps meet [Assignment: organization-defined granularity of time measurement] and satisfy one or more of the following: use Coordinated Universal Time; have a fixed local time offset from Coordinated Universal Time; include the local time offset as part of the time stamp.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-8.r1",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "AU-8.r1 requires that audit records include timestamps generated from internal system clocks, recorded at an organization-defined granularity, and expressed in UTC (or with a fixed/included UTC offset).\n\n**What the evidence shows:**\n\n1. **Timestamps are present and in UTC:** Both retrieved CloudTrail events contain `eventTime` fields with full ISO 8601 timestamps in Coordinated Universal Time (UTC), indicated by the trailing \"Z\":\n   - `CreateEndpoint` event: `2025-12-01T11:00:00Z` (evidence ID: 930fd3d1-4b72-489f-b8fb-f8b7c4f0d419)\n   - `UpdateEndpoint` event: `2026-03-15T14:22:00Z` (evidence ID: 13a77791-d707-43ba-a069-472356eac80a)\n\n2. **Granularity:** Both timestamps are recorded to one-second granularity, which is a common and generally acceptable level of precision for audit records. However, the organization's specific required granularity (e.g., millisecond vs. second) is not documented in the retrieved evidence, so full conformance to the \"organization-defined granularity\" sub-requirement cannot be confirmed.\n\n3. **Source of timestamps:** CloudTrail uses AWS internal system clocks to generate `eventTime` values, which satisfies the \"internal system clocks\" requirement. However, no explicit configuration evidence (e.g., NTP/PTP synchronization settings, AWS Config rules enforcing clock sync) was retrieved to confirm the underlying clock discipline.\n\n**Gaps preventing a \"satisfied\" verdict:**\n- No evidence of the organization's defined granularity requirement was retrieved, so it cannot be confirmed that second-level precision meets the stated requirement.\n- No explicit clock synchronization configuration (NTP/AWS Time Sync Service settings) was retrieved to confirm the integrity of the internal clock source.\n- Only two audit events were sampled; broader coverage of audit record types (e.g., model registry approvals, data access logs) was not available in the retrieved evidence.",
+        "evidenceCited": [
+          "930fd3d1-4b72-489f-b8fb-f8b7c4f0d419",
+          "13a77791-d707-43ba-a069-472356eac80a"
+        ],
+        "gaps": [
+          "Organization-defined granularity of time measurement (e.g., millisecond vs. second) not documented in retrieved evidence — cannot confirm second-level precision satisfies the requirement.",
+          "No clock synchronization configuration evidence retrieved (e.g., NTP/AWS Time Sync Service settings, AWS Config rules) to confirm internal system clock integrity.",
+          "Only CloudTrail events were available; audit records from other sources (model registry, data access logs, inference logs) were not retrieved, limiting coverage of the timestamp conformance assessment.",
+          "Human attestation needed to confirm whether AWS CloudTrail's default second-granularity timestamps meet the organization's defined granularity standard."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "930fd3d1-4b72-489f-b8fb-f8b7c4f0d419",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T18:53:21.677Z"
+        },
+        {
+          "id": "13a77791-d707-43ba-a069-472356eac80a",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T18:53:21.677Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "930fd3d1-4b72-489f-b8fb-f8b7c4f0d419",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T18:53:21.677Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "13a77791-d707-43ba-a069-472356eac80a",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T18:53:21.677Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

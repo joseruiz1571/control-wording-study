@@ -1,0 +1,36 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:12:42.016Z",
+  "results": [
+    {
+      "controlId": "SA-8(32).v3",
+      "controlIntent": "Put the security design principle of sufficient documentation into effect in [Assignment: organization-defined systems or system components].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-8(32).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The control SA-8(32).v3 requires that the security design principle of \"sufficient documentation\" be put into effect for organization-defined systems or system components. For ML models and endpoints, a model card is the primary artifact that captures intended use, limitations, risk ratings, and evaluation details — all of which constitute the substantive documentation required by this principle.\n\nWhen getModelCard was called for the model \"churn-predictor-v1\" / endpoint \"churn-predictor-endpoint\", the tool returned null, indicating that no model card exists. Without a model card (or equivalent documentation artifact), there is no evidence of:\n- Documented intended use cases\n- Documented limitations and out-of-scope uses\n- A risk rating or risk assessment\n- Evaluation details (performance metrics, fairness assessments, etc.)\n\nThe complete absence of a model card means the documentation is not merely insufficient — it is entirely missing. This directly fails the \"sufficient documentation\" principle embedded in SA-8(32).v3.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 — the getModelCard collector returned null. A model card (or equivalent documentation) covering intended use, limitations, risk rating, and evaluation details is required to satisfy this control.",
+          "Human attestation would be needed to determine whether any alternative documentation (e.g., design documents, system security plans, or architecture records) exists outside the model registry that could partially satisfy the sufficient-documentation requirement.",
+          "Evidence of any compensating controls or documentation stored in external systems (e.g., Confluence, SharePoint, or a GRC tool) was not retrievable via available collector tools."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

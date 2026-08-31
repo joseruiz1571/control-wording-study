@@ -1,0 +1,63 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:06:12.352Z",
+  "results": [
+    {
+      "controlId": "SA-11.v4",
+      "controlIntent": "The developer of the system, system component, or system service is required, at all post-design stages of the system development life cycle, to: a. Develop and implement a plan for ongoing security and privacy control assessments; b. Perform [Selection (one or more): unit; integration; system; regression] testing/evaluation [Assignment: organization-defined frequency] at [Assignment: organization-defined depth and coverage]; c. Produce evidence of the execution of the assessment plan and the results of the testing and evaluation; d. Implement a verifiable flaw remediation process; and e. Correct flaws identified during testing and evaluation.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-11.v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SA-11.v4 requires ongoing security and privacy control assessments, substantive testing/evaluation at defined frequencies, evidence of execution, and a verifiable flaw remediation process.\n\nThe evidence retrieved reveals the following critical deficiencies for the \"churn-predictor-endpoint\":\n\n1. **Only one monitor type configured**: A single DataQuality monitoring schedule (\"churn-predictor-data-quality\") exists. No ModelQuality, ModelBias, or ModelExplainability monitors are present. This represents a severely incomplete assessment posture — model quality drift, bias, and explainability are not being evaluated at all.\n\n2. **The sole monitor is non-functional**: The last run status is \"Failed\" with the reason \"No capture data found — data capture is disabled.\" This means data capture on the endpoint is turned off, so the DataQuality monitor cannot collect or analyze any inference data. The schedule is technically \"Scheduled\" but produces no useful output.\n\n3. **No evidence of assessment plan execution**: Because the only monitor fails on every run, there is no evidence of successful test/evaluation execution, no results being produced, and no baseline comparisons being made.\n\n4. **No flaw remediation evidence**: The monitor has been failing (data capture disabled) with no indication that the identified failure has been corrected, which directly contradicts the requirement to correct flaws identified during testing and evaluation.\n\nIn aggregate, the monitoring configuration is not substantive enough to satisfy SA-11.v4. The control requires adequacy — a functioning, multi-dimensional assessment regime — and what exists is a single broken monitor covering only one dimension of model health.",
+        "evidenceCited": [
+          "9433e34c-62b3-48ca-88a1-848cbf5d0cb2"
+        ],
+        "gaps": [
+          "Data capture configuration for the endpoint (enabled/disabled status, capture percentage) — needed to confirm root cause and whether it has since been remediated",
+          "ModelQuality, ModelBias, and ModelExplainability monitor schedules — absent entirely; human attestation needed to confirm whether equivalent assessments are performed outside SageMaker Model Monitor",
+          "Assessment plan documentation — no artifact retrieved showing a formal plan for ongoing security/privacy control assessments",
+          "Flaw remediation records — no ticket, change record, or remediation log was available to assess whether the data-capture failure has been actioned",
+          "Baseline creation artifacts — no baseline statistics or constraints were returned, indicating baseline setup may also be incomplete"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "9433e34c-62b3-48ca-88a1-848cbf5d0cb2",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:05:55.252Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "9433e34c-62b3-48ca-88a1-848cbf5d0cb2",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:05:55.252Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

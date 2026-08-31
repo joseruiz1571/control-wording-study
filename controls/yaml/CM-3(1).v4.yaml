@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-3(1).v4"
+controls:
+  - id: "CM-3(1).v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      [Assignment: organization-defined automated mechanisms] are used to: (a) Document proposed changes to the system; (b) Notify [Assignment: organization-defined approval authorities] of proposed changes to the system and request change approval; (c) Highlight proposed changes to the system that have not been approved or disapproved within [Assignment: organization-defined time period]; (d) Prohibit changes to the system until designated approvals are received; (e) Document all changes to the system; and (f) Notify [Assignment: organization-defined personnel] when approved changes to the system are completed.
+    collectors:
+      - getCloudTrailEvents
+      - getModelRegistryEntry

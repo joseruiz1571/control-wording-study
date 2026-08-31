@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-2.r2"
+controls:
+  - id: "CM-2.r2"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      a. A current baseline configuration of the system is developed; that baseline configuration is documented; and that baseline configuration is maintained under configuration control; and b. The baseline configuration of the system is reviewed and updated: 1. [Assignment: organization-defined frequency]; 2. When [Assignment: organization-defined circumstances] require a review and update; and 3. When system components are installed or upgraded.
+    collectors:
+      - getModelRegistryEntry
+      - getEndpointConfig

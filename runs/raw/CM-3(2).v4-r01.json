@@ -1,0 +1,112 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:07:59.239Z",
+  "results": [
+    {
+      "controlId": "CM-3(2).v4",
+      "controlIntent": "Testing, validation, and documentation of changes to the system occur before the implementation of those changes is finalized.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-3(2).v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "CM-3(2).v4 requires that testing, validation, and documentation of changes occur *before* those changes are finalized and implemented.\n\n**Initial deployment (CreateEndpoint, 2025-12-01T11:00:00Z):** The model package was created on 2025-11-30T18:00:00Z and formally approved in the registry at 2025-12-01T09:00:00Z — two hours *before* the endpoint was created at 11:00. For this specific event, the temporal ordering is correct: approval preceded deployment, which is consistent with the control intent.\n\n**Hotfix deployment (UpdateEndpoint, 2026-03-15T14:22:00Z):** This change was deployed using config \"churn-predictor-v1-hotfix\" with no corresponding model registry entry found. There is no evidence of a formal approval, validation record, or documented testing phase preceding this change. This means a production change was finalized and implemented without satisfying the pre-implementation testing and documentation requirement.\n\nBecause at least one change (the hotfix) was deployed without any traceable validation or approval record, the control is not satisfied overall. The absence of a registry entry for the hotfix is a material gap in the change-control chain.",
+        "evidenceCited": [
+          "119120b4-bafa-486c-904b-be83da9585ae",
+          "2d26564a-504a-42e7-8b4f-ff571820014d",
+          "30f14425-9c55-4c06-bcfd-6831d5b20283"
+        ],
+        "gaps": [
+          "No model registry entry exists for the hotfix config 'churn-predictor-v1-hotfix' — human attestation or a separate change-management ticket would be needed to determine whether any offline testing/approval occurred outside the registry.",
+          "The CloudTrail note on the CreateEndpoint event claims deployment was '2h BEFORE registry approval,' but the retrieved timestamps show the opposite (approval at 09:00, deployment at 11:00). A human reviewer should reconcile this discrepancy — it may indicate a data quality issue in the audit log annotations.",
+          "No test execution records, validation reports, or staging environment logs were available to confirm the depth of pre-deployment testing for either change."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "119120b4-bafa-486c-904b-be83da9585ae",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:07:40.695Z"
+        },
+        {
+          "id": "2d26564a-504a-42e7-8b4f-ff571820014d",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:07:40.695Z"
+        },
+        {
+          "id": "30f14425-9c55-4c06-bcfd-6831d5b20283",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:07:40.695Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "119120b4-bafa-486c-904b-be83da9585ae",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:07:40.695Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "2d26564a-504a-42e7-8b4f-ff571820014d",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:07:40.695Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        },
+        {
+          "id": "30f14425-9c55-4c06-bcfd-6831d5b20283",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:07:40.695Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

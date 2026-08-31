@@ -1,0 +1,58 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:21:12.343Z",
+  "results": [
+    {
+      "controlId": "SC-7(5).v3",
+      "controlIntent": "Deny network communications traffic by default, allowing network communications traffic only by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-7(5).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SC-7(5).v3 requires that network communications traffic be denied by default, with traffic permitted only by exception at managed interfaces. The evidence retrieved for the \"churn-predictor-endpoint\" shows a complete absence of the controls necessary to enforce this posture:\n\n1. **No VPC deployment** (`vpcId: null`): The endpoint is not placed inside a Virtual Private Cloud. Without VPC placement, there are no managed network boundaries (security groups, NACLs, route tables) that could enforce a deny-by-default policy.\n\n2. **No subnets configured** (`vpcSubnetIds: []`): Confirms the endpoint is not associated with any VPC subnet, meaning traffic is not routed through any controlled network segment.\n\n3. **No security groups attached** (`securityGroupIds: []`): Security groups are the primary mechanism in AWS for implementing allow-by-exception rules at managed interfaces. Their absence means no explicit allow/deny rules are in place.\n\n4. **Network isolation disabled** (`enableNetworkIsolation: false`): SageMaker's network isolation feature, which prevents the endpoint from making outbound network calls, is explicitly turned off. This further confirms there is no deny-by-default posture.\n\nCollectively, these findings indicate that the endpoint has no deny-by-default network boundary controls in place. All four indicators must be remediated: the endpoint must be deployed in a VPC with appropriate subnets, security groups enforcing least-privilege allow rules, and network isolation enabled where applicable.",
+        "evidenceCited": [
+          "25cf8f5d-e926-449f-9f34-a0dc9d9fc8ac"
+        ],
+        "gaps": [
+          "Security group rule details (inbound/outbound rules) could not be assessed because no security groups are attached — this is itself a finding rather than a gap.",
+          "Network ACL configurations for subnets are not assessable because no subnets are configured.",
+          "Whether compensating controls exist outside AWS (e.g., upstream API gateway, WAF, or network firewall) cannot be determined from the available collector tools and would require human attestation."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "25cf8f5d-e926-449f-9f34-a0dc9d9fc8ac",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T10:20:57.516Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "25cf8f5d-e926-449f-9f34-a0dc9d9fc8ac",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T10:20:57.516Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

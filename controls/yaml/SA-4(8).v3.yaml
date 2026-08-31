@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant SA-4(8).v3"
+controls:
+  - id: "SA-4(8).v3"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Require a plan for continuous monitoring of control effectiveness, consistent with the continuous monitoring program of the organization, from the developer of the system, system component, or system service.
+    collectors:
+      - getModelMonitorSchedules

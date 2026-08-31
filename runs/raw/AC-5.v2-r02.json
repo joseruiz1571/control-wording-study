@@ -1,0 +1,79 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:37:27.266Z",
+  "results": [
+    {
+      "controlId": "AC-5.v2",
+      "controlIntent": "a. Identify [Assignment: organization-defined duties of individuals requiring separation] and record them; and b. Specify system access authorizations to support separation of duties.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-5.v2",
+        "status": "not-satisfied",
+        "confidence": "medium",
+        "rationale": "AC-5 requires that (a) duties requiring separation are identified and recorded, and (b) system access authorizations are specified to *support* separation of duties — meaning access should be scoped to only what each role/principal needs, preventing any single identity from performing conflicting privileged actions end-to-end.\n\nThe evidence retrieved shows the endpoint's IAM execution role (`SageMakerExecutionRole-Generic`) has two critically over-permissive policies:\n\n1. **OverlyBroadS3** — grants `s3:*` on `*` (all resources), explicitly noted as overly broad with unrestricted write access to training buckets and potential cross-account access. This means the inference endpoint role can read, write, delete, and manage any S3 bucket — including training data, model artifacts, and audit logs — collapsing what should be distinct duties (data engineering, model training, inference serving) into a single identity.\n\n2. **SageMakerFull** — grants `sagemaker:*` on `*`, giving the endpoint role the ability to create, modify, or delete any SageMaker resource (training jobs, models, endpoints, pipelines, etc.). An inference endpoint should only need narrow permissions to load its model artifact and serve predictions; it should not be able to retrain models, deploy new endpoints, or alter other resources.\n\nTogether, these policies mean a single execution role can perform the full ML lifecycle — data access, training, deployment, and inference — with no access boundaries enforcing separation between those duties. This directly violates AC-5(b), which requires access authorizations to *support* separation of duties rather than undermine it.\n\nAdditionally, there is no evidence of documented duty separation assignments (AC-5(a)) — no records of which duties are defined as requiring separation, nor any mapping of those duties to scoped IAM policies or roles.",
+        "evidenceCited": [
+          "34f4faef-a577-44ee-84e9-c885a85e1110"
+        ],
+        "gaps": [
+          "No documentation retrieved identifying which ML lifecycle duties are formally designated as requiring separation (AC-5(a) — duty identification and recording).",
+          "No evidence of additional IAM roles for distinct personas (e.g., data engineer, model trainer, model deployer, inference runtime) that would demonstrate role-based separation.",
+          "No SCP (Service Control Policy) or permission boundary evidence that could compensate for the broad role policies.",
+          "Human attestation needed to confirm whether organizational policy documents or RACI matrices exist outside the AWS environment that define duty separation for this model."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "34f4faef-a577-44ee-84e9-c885a85e1110",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:37:12.496Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "34f4faef-a577-44ee-84e9-c885a85e1110",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:37:12.496Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

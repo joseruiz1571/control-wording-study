@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant SI-12.v4"
+controls:
+  - id: "SI-12.v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements govern the management and retention of information within the system and information output from the system.
+    collectors:
+      - getDataCaptureConfig

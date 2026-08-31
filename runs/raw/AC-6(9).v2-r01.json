@@ -1,0 +1,93 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:57:03.159Z",
+  "results": [
+    {
+      "controlId": "AC-6(9).v2",
+      "controlIntent": "Privileged-function execution is logged.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(9).v2",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "AC-6(9).v2 requires that privileged-function execution is logged. The CloudTrail evidence confirms that two privileged operations against the \"churn-predictor-endpoint\" were captured in logs:\n\n1. **CreateEndpoint** (2025-12-01T11:00:00Z, event ID f85c0d42): The initial deployment of the endpoint was logged, including the user identity (data-scientist-jdoe), the endpoint name, and the config name. This demonstrates that the privileged action of creating a production endpoint was recorded.\n\n2. **UpdateEndpoint** (2026-03-15T14:22:00Z, event ID f36284ba): A hotfix deployment was also logged, again capturing the user identity, endpoint name, and updated config name.\n\n**Why only partially satisfied:**\n- The logging mechanism itself is functioning — privileged actions (endpoint creation and update) are being captured in CloudTrail, satisfying the core logging requirement.\n- However, the evidence reveals substantive governance gaps that undermine the *sufficiency* of the control as a whole:\n  - The **CreateEndpoint** event occurred **2 hours before** the model registry approval, meaning a privileged deployment was executed outside of an approved change-control window. Logging captured the event, but the pre-approval deployment itself indicates the logging is not coupled with preventive controls or timely review.\n  - The **UpdateEndpoint** (hotfix) has **no corresponding registry entry**, meaning a privileged deployment was made with no traceability to an approved model version. While the action was logged, the absence of a registry record means the log alone is insufficient to reconstruct a complete audit trail of what was deployed and why.\n\nIn summary: the logging infrastructure is active and capturing privileged events, but the logged events themselves reveal that privileged functions are being executed outside of sanctioned processes, and the audit trail is incomplete (missing registry linkage for the hotfix). This makes the control only partially satisfied — logging exists but lacks the completeness and integration needed to fully meet the intent of AC-6(9).v2.",
+        "evidenceCited": [
+          "f85c0d42-8629-4109-aaf4-032d50c69df0",
+          "f36284ba-20ec-46fe-b940-710eb5ffaf80"
+        ],
+        "gaps": [
+          "No evidence of CloudTrail log integrity controls (e.g., log file validation, CloudTrail log encryption, or S3 bucket access controls) — cannot confirm logs are tamper-evident.",
+          "No evidence of alerting or monitoring on privileged CloudTrail events (e.g., CloudWatch alarms or GuardDuty rules) — logging may exist but not be actively reviewed.",
+          "No model registry approval event was retrieved for the CreateEndpoint action, preventing confirmation that the full lifecycle of privileged actions is logged end-to-end.",
+          "The hotfix UpdateEndpoint has no corresponding registry entry — the audit trail for what model artifact was deployed is incomplete and requires human attestation.",
+          "Scope of CloudTrail coverage is unknown — it is unclear whether all privileged SageMaker API calls (e.g., DeleteEndpoint, CreateEndpointConfig, InvokeEndpoint with elevated permissions) are captured in the same trail."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "f85c0d42-8629-4109-aaf4-032d50c69df0",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T07:56:44.846Z"
+        },
+        {
+          "id": "f36284ba-20ec-46fe-b940-710eb5ffaf80",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T07:56:44.846Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "f85c0d42-8629-4109-aaf4-032d50c69df0",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:56:44.846Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "f36284ba-20ec-46fe-b940-710eb5ffaf80",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:56:44.846Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

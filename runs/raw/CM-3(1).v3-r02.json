@@ -1,0 +1,112 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:01:31.819Z",
+  "results": [
+    {
+      "controlId": "CM-3(1).v3",
+      "controlIntent": "Use [Assignment: organization-defined automated mechanisms] so as to: (a) Document proposed changes to the system; (b) Inform [Assignment: organization-defined approval authorities] of proposed changes to the system and request change approval; (c) Highlight proposed changes to the system that have not been approved or disapproved within [Assignment: organization-defined time period]; (d) Bar changes to the system until designated approvals are received; (e) Document all changes to the system; and (f) Inform [Assignment: organization-defined personnel] when approved changes to the system are completed.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-3(1).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Evidence from two sources reveals a critical temporal ordering violation and a missing approval record:\n\n1. **Initial deployment (partially conformant):** The model package (evidence 3372e098) was created on 2025-11-30T18:00Z and approved at 2025-12-01T09:00Z. The CreateEndpoint event (evidence 4e1e6aea) occurred at 2025-12-01T11:00Z — two hours *after* registry approval. This ordering is consistent with an automated approval gate (CM-3(1)(d)) being respected for the initial deployment.\n\n2. **Hotfix deployment (non-conformant):** The UpdateEndpoint event (evidence 38b7810c) on 2026-03-15T14:22Z deployed config \"churn-predictor-v1-hotfix\" with no corresponding model registry entry. This means:\n   - **(a)** The proposed change was never documented in the registry.\n   - **(b)** No approval authority was informed via the automated mechanism.\n   - **(c)** No highlighting of an unapproved change occurred.\n   - **(d)** The change was not barred pending approval — it was deployed directly by an IAM user without any approval record.\n   - **(e)** The change is not documented in the model registry.\n   - **(f)** No evidence of automated notification upon completion.\n\nThe hotfix deployment demonstrates that the automated change control mechanism can be bypassed by a direct IAM user action, violating the core intent of CM-3(1) sub-requirements (a) through (f). A single bypass is sufficient to render the control not-satisfied.",
+        "evidenceCited": [
+          "4e1e6aea-108b-4518-a849-46214a96b41a",
+          "38b7810c-0f58-4a5b-9c14-8b8e103bb034",
+          "3372e098-3e38-4422-a8cd-87e7d6cee44f"
+        ],
+        "gaps": [
+          "No evidence of an automated notification mechanism (e.g., SNS, EventBridge rules) that would alert approval authorities of proposed changes or flag unapproved changes — human attestation needed to confirm whether such a mechanism exists outside CloudTrail scope.",
+          "No evidence of a registry entry or change ticket for the 'churn-predictor-v1-hotfix' config — it is possible a separate ticketing system (e.g., Jira, ServiceNow) was used but was not retrievable by the available collectors.",
+          "No evidence of IAM/SCP policies that would enforce registry approval as a hard gate on all endpoint update operations — a policy review would be needed to confirm whether the hotfix bypass was a policy gap or a misconfiguration."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "4e1e6aea-108b-4518-a849-46214a96b41a",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:01:09.701Z"
+        },
+        {
+          "id": "38b7810c-0f58-4a5b-9c14-8b8e103bb034",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:01:09.701Z"
+        },
+        {
+          "id": "3372e098-3e38-4422-a8cd-87e7d6cee44f",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:01:09.701Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "4e1e6aea-108b-4518-a849-46214a96b41a",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:01:09.701Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "38b7810c-0f58-4a5b-9c14-8b8e103bb034",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:01:09.701Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        },
+        {
+          "id": "3372e098-3e38-4422-a8cd-87e7d6cee44f",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:01:09.701Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

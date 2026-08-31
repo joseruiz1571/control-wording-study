@@ -1,0 +1,87 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:58:32.739Z",
+  "results": [
+    {
+      "controlId": "CM-2.r2",
+      "controlIntent": "a. A current baseline configuration of the system is developed; that baseline configuration is documented; and that baseline configuration is maintained under configuration control; and b. The baseline configuration of the system is reviewed and updated: 1. [Assignment: organization-defined frequency]; 2. When [Assignment: organization-defined circumstances] require a review and update; and 3. When system components are installed or upgraded.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-2.r2",
+        "status": "insufficient-evidence",
+        "confidence": "medium",
+        "rationale": "CM-2.r2 requires: (a) a documented, current baseline configuration maintained under configuration control, and (b) periodic review and update of that baseline at defined frequencies, under defined circumstances, and when components are installed or upgraded.\n\nThe two evidence items retrieved show: (1) a single approved model package version (v1, approved 2025-12-01) in the SageMaker Model Registry, and (2) an endpoint configuration specifying ml.m5.large instances, with network isolation disabled and data capture disabled.\n\nWhile the model registry entry demonstrates that a formal approval workflow exists and the endpoint configuration is documented in AWS, the evidence is insufficient to assess full CM-2.r2 conformance for the following reasons:\n\n1. **Baseline documentation**: There is no evidence of a formal baseline configuration document that consolidates all system component settings (model artifact, inference container, instance type, network posture, IAM roles, etc.) into a single controlled artifact.\n\n2. **Configuration control / change history**: Only version 1 of the model package exists. There is no lineage data, change log, or version history demonstrating that the baseline is maintained under configuration control over time.\n\n3. **Review cadence (CM-2.r2.b.1)**: No evidence of an organization-defined review frequency (e.g., quarterly review policy) was returned.\n\n4. **Circumstance-triggered reviews (CM-2.r2.b.2)**: No evidence of defined triggering circumstances for baseline review was found.\n\n5. **Component install/upgrade reviews (CM-2.r2.b.3)**: With only one model version and no upgrade history, it cannot be determined whether baseline reviews occur upon component changes.\n\n6. **Data capture disabled**: The absence of inference data capture (captureEnabled: false) means there is no operational monitoring baseline, which would typically inform drift-triggered reviews.\n\nThe available tooling does not expose configuration change history, review schedules, or formal baseline documents — these would require human attestation or additional evidence sources (e.g., ITSM records, S3-stored baseline documents, AWS Config history).",
+        "evidenceCited": [
+          "1aee09da-4c5a-4b4c-beb1-633be0b82bd7",
+          "d977be65-e6a6-4d70-a348-94d596ef9907"
+        ],
+        "gaps": [
+          "Formal baseline configuration document (consolidated artifact covering all system components)",
+          "Configuration change history / audit log showing baseline evolution over time",
+          "Defined review frequency policy (CM-2.r2.b.1)",
+          "Defined circumstances that trigger a baseline review (CM-2.r2.b.2)",
+          "Evidence of baseline review upon component installation or upgrade (CM-2.r2.b.3)",
+          "Model lineage data showing artifact provenance and version transitions",
+          "AWS Config or CloudTrail history for endpoint and model configuration changes",
+          "Data capture / monitoring baseline (currently disabled, captureEnabled: false)"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "1aee09da-4c5a-4b4c-beb1-633be0b82bd7",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T18:58:07.377Z"
+        },
+        {
+          "id": "d977be65-e6a6-4d70-a348-94d596ef9907",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T18:58:07.378Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "1aee09da-4c5a-4b4c-beb1-633be0b82bd7",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T18:58:07.377Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "d977be65-e6a6-4d70-a348-94d596ef9907",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T18:58:07.378Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

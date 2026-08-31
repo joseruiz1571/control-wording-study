@@ -1,0 +1,112 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T19:19:06.436Z",
+  "results": [
+    {
+      "controlId": "CM-8(1).r0",
+      "controlIntent": "Update the inventory of system components when any of the following occur: component installations; component removals; and system updates.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-8(1).r0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "CM-8(1).r0 requires that the system component inventory be updated whenever component installations, removals, or system updates occur. Correlating evidence across the model registry and CloudTrail reveals a critical gap:\n\n1. **Initial deployment (satisfied):** The model package `churn-predictor/1` was created in the registry on 2025-11-30T18:00:00Z and approved on 2025-12-01T09:00:00Z (evidence e40dfb68). The endpoint `churn-predictor-endpoint` was then created on 2025-12-01T11:00:00Z — after registry approval — indicating the inventory was in sync at initial deployment (evidence cd4be984).\n\n2. **Hotfix update (not satisfied):** A subsequent `UpdateEndpoint` event occurred on 2026-03-15T14:22:00Z, deploying config `churn-predictor-v1-hotfix` (evidence 9a5c6db1). This constitutes a system update (component change). However, the model registry contains only version 1 with no record of any update, hotfix, or new model package version corresponding to this change. The inventory was not updated to reflect this system update, directly violating the control requirement.\n\nThe temporal ordering is decisive: the registry entry predates the hotfix by over three months and was never updated, confirming the inventory is stale relative to the actual deployed state of the endpoint.",
+        "evidenceCited": [
+          "e40dfb68-15dd-4714-8b9c-8d5abd470cb2",
+          "cd4be984-f4b8-494c-ac96-bd17924f66f3",
+          "9a5c6db1-5958-4458-ba65-14c77b12da9b"
+        ],
+        "gaps": [
+          "No registry entry or new model package version exists for the 2026-03-15 hotfix deployment — human attestation needed to confirm whether a registry update was performed out-of-band or in a separate system not covered by these collectors.",
+          "The CloudTrail evidence note for CreateEndpoint contains a conflicting timestamp claim ('2h BEFORE registry approval') that contradicts the actual timestamps; human review of raw CloudTrail logs is recommended to rule out clock skew or data quality issues.",
+          "No evidence of component removal events was available to assess that dimension of the control."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "e40dfb68-15dd-4714-8b9c-8d5abd470cb2",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T19:18:46.648Z"
+        },
+        {
+          "id": "cd4be984-f4b8-494c-ac96-bd17924f66f3",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T19:18:46.649Z"
+        },
+        {
+          "id": "9a5c6db1-5958-4458-ba65-14c77b12da9b",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T19:18:46.649Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "e40dfb68-15dd-4714-8b9c-8d5abd470cb2",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T19:18:46.648Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "cd4be984-f4b8-494c-ac96-bd17924f66f3",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T19:18:46.649Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "9a5c6db1-5958-4458-ba65-14c77b12da9b",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T19:18:46.649Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,112 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:52:57.117Z",
+  "results": [
+    {
+      "controlId": "SA-10(5).v3",
+      "controlIntent": "Require that the developer of the system, system component, or system service maintain mapping integrity between the master build data describing the current version of security-relevant hardware, software, and firmware and the on-site master copy of the data for the current version.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "SA-10(5).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SA-10(5).v3 requires that the master build data in the model registry remain in sync with the on-site (deployed) master copy at all times. Evidence from two sources reveals a critical integrity break:\n\n1. **Initial deployment (CreateEndpoint, 2025-12-01T11:00Z):** The endpoint `churn-predictor-endpoint` was created using config `churn-predictor-v1-config`, and the registry shows model package version 1 was approved at `2025-12-01T09:00Z`. The deployment occurred *after* registry approval, which is consistent with proper change-control ordering for the initial release.\n\n2. **Hotfix deployment (UpdateEndpoint, 2026-03-15T14:22Z) — CRITICAL VIOLATION:** The endpoint was subsequently updated to config `churn-predictor-v1-hotfix` by `data-scientist-jdoe`. There is **no corresponding registry entry** for this hotfix version. The model registry (master build data) still reflects only version 1 (`churn-predictor/1`), while the live endpoint is now running an unregistered artifact. This breaks the required mapping integrity: the registry no longer accurately describes what is deployed, and the deployed copy is not traceable to any approved registry entry.\n\nThis unregistered hotfix deployment means the developer has failed to maintain the required correspondence between the master build data and the on-site master copy, directly violating the control intent.",
+        "evidenceCited": [
+          "d2496462-8e63-40a5-96cd-916487e5a544",
+          "7bd34a0b-3ae6-4c74-a225-22c720c18da2",
+          "b6310773-02a6-4af0-851a-ba7da5cb6391"
+        ],
+        "gaps": [
+          "No registry entry or model package ARN exists for the 'churn-predictor-v1-hotfix' endpoint config — human attestation needed to determine whether an out-of-band approval process was followed.",
+          "The endpoint config 'churn-predictor-v1-hotfix' details (e.g., model artifact URI, container image) were not retrievable, so the exact nature of the change cannot be fully characterized.",
+          "No evidence of a waiver, emergency change record, or compensating control for the hotfix deployment was available from the collected sources."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "d2496462-8e63-40a5-96cd-916487e5a544",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:52:37.433Z"
+        },
+        {
+          "id": "7bd34a0b-3ae6-4c74-a225-22c720c18da2",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:52:37.433Z"
+        },
+        {
+          "id": "b6310773-02a6-4af0-851a-ba7da5cb6391",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:52:37.433Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "d2496462-8e63-40a5-96cd-916487e5a544",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:52:37.433Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "7bd34a0b-3ae6-4c74-a225-22c720c18da2",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:52:37.433Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "b6310773-02a6-4af0-851a-ba7da5cb6391",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:52:37.433Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

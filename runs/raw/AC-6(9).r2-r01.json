@@ -1,0 +1,93 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:49:50.654Z",
+  "results": [
+    {
+      "controlId": "AC-6(9).r2",
+      "controlIntent": "The execution of privileged functions is logged in a log of privileged-function execution.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(9).r2",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "AC-6(9).r2 requires that the execution of privileged functions is captured in a log. The evidence shows that CloudTrail IS logging privileged operations against the \"churn-predictor-endpoint\" — two events were captured:\n\n1. **CreateEndpoint** (2025-12-01T11:00:00Z, event ID: a3fac036-9d24-48c0-abf0-ab8df42958af): The initial deployment by IAM user \"data-scientist-jdoe\" was recorded, including the endpoint name and config name.\n2. **UpdateEndpoint** (2026-03-15T14:22:00Z, event ID: 8cd162d4-62f1-40c7-be0a-10f4887facea): A hotfix deployment by the same user was also recorded with full request parameters.\n\n**Positive finding:** Both privileged endpoint operations (create and update) are present in CloudTrail logs with timestamps, user identity, and request parameters — demonstrating that the logging mechanism is active and capturing privileged function executions.\n\n**Gaps/Concerns reducing the rating to \"partially-satisfied\":**\n- The `CreateEndpoint` event note explicitly flags that the deployment occurred **2 hours before** the model registry approval, suggesting the privileged action was logged but the surrounding change-control process was not enforced.\n- The `UpdateEndpoint` (hotfix) event has **no corresponding model registry entry**, meaning a privileged deployment was executed and logged, but without the required approval artifact — the log exists but the governance chain it should reflect is incomplete.\n- The available collector only returned CloudTrail events; there is no evidence of a dedicated privileged-function audit log (e.g., a separate SIEM or audit trail) beyond CloudTrail, nor evidence of alerting or review processes consuming these logs.\n- Registry approval events are absent from the log, making it impossible to confirm that the full lifecycle of privileged actions (approve → deploy) is being captured end-to-end.\n\nIn summary: logging of privileged functions is occurring at the infrastructure level (CloudTrail), satisfying the basic logging requirement, but the substantive adequacy of the logging regime is undermined by missing approval records and out-of-order execution, indicating the log does not fully reflect the authorized privileged-function lifecycle.",
+        "evidenceCited": [
+          "a3fac036-9d24-48c0-abf0-ab8df42958af",
+          "8cd162d4-62f1-40c7-be0a-10f4887facea"
+        ],
+        "gaps": [
+          "No model registry approval events present in CloudTrail — cannot confirm approved privileged actions are logged end-to-end",
+          "No evidence of a dedicated privileged-function audit log or SIEM integration beyond raw CloudTrail",
+          "No evidence that CloudTrail logs are being actively reviewed or alerted on for unauthorized privileged executions",
+          "Hotfix UpdateEndpoint has no registry entry — the log captures the action but the authorization artifact is missing, limiting log completeness",
+          "Human attestation needed to confirm whether additional logging controls (e.g., CloudWatch Logs Insights, GuardDuty, or a SIEM) are consuming and retaining these events per policy"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "a3fac036-9d24-48c0-abf0-ab8df42958af",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T18:49:31.887Z"
+        },
+        {
+          "id": "8cd162d4-62f1-40c7-be0a-10f4887facea",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T18:49:31.887Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "a3fac036-9d24-48c0-abf0-ab8df42958af",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T18:49:31.887Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "8cd162d4-62f1-40c7-be0a-10f4887facea",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T18:49:31.887Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

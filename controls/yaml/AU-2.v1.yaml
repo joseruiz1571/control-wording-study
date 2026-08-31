@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AU-2.v1"
+controls:
+  - id: "AU-2.v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      a. Identify the event types the system can log in support of the audit function: [Assignment: organization-defined event types that the system is capable of logging]; b. Coordinate event logging with other organizational entities that need audit-related information, to guide and inform the selection criteria for events to be logged; c. Specify these event types for logging within the system: [Assignment: organization-defined event types (subset of the event types defined in AU-2a.) along with the frequency of (or situation requiring) logging for each identified event type]; d. Provide a rationale for why the event types selected for logging are deemed to be adequate to support after-the-fact investigations of incidents; and e. Review and update the event types selected for logging [Assignment: organization-defined frequency].
+    collectors:
+      - getCloudTrailEvents

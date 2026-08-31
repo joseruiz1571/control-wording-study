@@ -1,0 +1,78 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:31:36.392Z",
+  "results": [
+    {
+      "controlId": "AC-3.v1",
+      "controlIntent": "Apply approved authorizations for logical access to information and system resources in accordance with applicable access control policies.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-3.v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The IAM execution role attached to the churn-predictor-endpoint (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) has two critically over-permissive policies that violate AC-3's requirement to apply approved authorizations in accordance with access control policies:\n\n1. **OverlyBroadS3** grants `s3:*` on `*` (all resources). The evidence itself notes this is \"Overly broad — training bucket writes and cross-account access not scoped.\" An inference endpoint should only need read access to specific model artifact buckets, not write or cross-account S3 access across all buckets.\n\n2. **SageMakerFull** grants `sagemaker:*` on `*` (all resources). A deployed inference endpoint has no legitimate need for full SageMaker administrative privileges (e.g., creating/deleting training jobs, modifying other endpoints, accessing other models).\n\nNeither policy scopes actions or resources to the minimum necessary for the endpoint's function. This represents a substantive failure of logical access control — the authorizations granted are not commensurate with the access required, and no resource-level or action-level restrictions are in place. The configuration does not meet the sufficiency threshold for AC-3.",
+        "evidenceCited": [
+          "3e54c683-3d18-4a68-93d5-12b11232ab89"
+        ],
+        "gaps": [
+          "No evidence of a compensating network-layer control (e.g., VPC endpoint policies, SCPs) that might partially restrict the overly broad IAM permissions",
+          "No access control policy document was available to compare granted permissions against formally approved authorizations",
+          "Resource-based policies on S3 buckets (if any) were not assessed and could provide additional scoping"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "3e54c683-3d18-4a68-93d5-12b11232ab89",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:31:22.051Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "3e54c683-3d18-4a68-93d5-12b11232ab89",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:31:22.051Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant SC-28(1).v2"
+controls:
+  - id: "SC-28(1).v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Cryptographic mechanisms are implemented to prevent unauthorized disclosure and modification of the following information at rest on [Assignment: organization-defined system components or media]: [Assignment: organization-defined information].
+    collectors:
+      - getKMSConfig

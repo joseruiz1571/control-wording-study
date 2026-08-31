@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant AU-6(3).v4"
+controls:
+  - id: "AU-6(3).v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      Audit records in different repositories are analyzed and correlated to gain organization-wide situational awareness.
+    collectors:
+      - getCloudTrailEvents
+      - getModelMonitorSchedules

@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AU-8.v4"
+controls:
+  - id: "AU-8.v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      a. Use internal system clocks to generate time stamps for audit records; and b. Audit-record time stamps meet [Assignment: organization-defined granularity of time measurement] and use Coordinated Universal Time, have a fixed local time offset from Coordinated Universal Time, or include the local time offset as part of the time stamp.
+    collectors:
+      - getCloudTrailEvents

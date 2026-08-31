@@ -1,0 +1,60 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:18:31.156Z",
+  "results": [
+    {
+      "controlId": "SC-28(1).v4",
+      "controlIntent": "To prevent unauthorized disclosure and modification of the following information at rest on [Assignment: organization-defined system components or media], implement cryptographic mechanisms: [Assignment: organization-defined information].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-28(1).v4",
+        "status": "partially-satisfied",
+        "confidence": "high",
+        "rationale": "Evidence (id: 0f1b0bd9-7bd8-445f-988c-c6b4942f9129) shows two critical deficiencies against SC-28(1).v4:\n\n1. **Incomplete coverage — endpoint volumes unencrypted**: `volumeKmsKeyId` is null, meaning the storage volumes attached to the churn-predictor-endpoint instances are not protected by any cryptographic mechanism at rest. This is a direct gap against the control's requirement to protect information at rest on system components.\n\n2. **Insufficient key management — AWS-managed key only**: The model artifact key (`arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker`) is managed by AWS (`keyManager: AWS`), not by the organization. SP 800-53 SC-28(1) expects the organization to define and control the cryptographic mechanisms. AWS-managed keys do not allow the organization to enforce custom key policies, control key rotation schedules, restrict key usage via grants, or audit key access independently — all of which are expected for substantive cryptographic protection under this control.\n\n**What is satisfied**: Model artifacts do have encryption enabled (`keyEnabled: true`) via an AWS-managed KMS key, providing a baseline level of protection for stored model artifacts.\n\n**What is not satisfied**: (a) Endpoint instance volumes lack any encryption, and (b) the key in use is not under organizational control, making the cryptographic mechanism insufficiently substantive to fully satisfy SC-28(1).v4.",
+        "evidenceCited": [
+          "0f1b0bd9-7bd8-445f-988c-c6b4942f9129"
+        ],
+        "gaps": [
+          "Customer-managed KMS key (CMK) configuration for model artifacts — current key is AWS-managed, limiting organizational control",
+          "KMS encryption for endpoint instance volumes (volumeKmsKeyId is null — no encryption configured)",
+          "Evidence of organizational key policy definitions, rotation schedules, and access control grants that would demonstrate substantive cryptographic control",
+          "Confirmation of whether S3 buckets storing training data and model outputs are encrypted with customer-managed keys",
+          "Human attestation on whether the organization's defined assignments for SC-28(1) explicitly permit AWS-managed keys"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "0f1b0bd9-7bd8-445f-988c-c6b4942f9129",
+          "source": "sagemaker:kms:config",
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e",
+          "retrievedAt": "2026-08-30T10:18:12.206Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "0f1b0bd9-7bd8-445f-988c-c6b4942f9129",
+          "source": "sagemaker:kms:config",
+          "retrievedAt": "2026-08-30T10:18:12.206Z",
+          "payload": {
+            "volumeKmsKeyId": null,
+            "artifactKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker",
+            "keyEnabled": true,
+            "keyManager": "AWS"
+          },
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

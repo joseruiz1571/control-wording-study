@@ -1,0 +1,58 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:22:30.582Z",
+  "results": [
+    {
+      "controlId": "SC-7(5).v4",
+      "controlIntent": "Implement default denial of network communications traffic and exception-based allowance of network communications traffic [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-7(5).v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SC-7(5).v4 requires that network communications traffic be denied by default, with only explicitly permitted (exception-based) traffic allowed at managed interfaces. The evidence retrieved for the \"churn-predictor-endpoint\" shows a complete absence of the required network boundary controls:\n\n1. **No VPC**: `vpcId` is null, meaning the endpoint is not deployed within a Virtual Private Cloud. Without a VPC, there is no managed network perimeter through which default-deny policies can be enforced.\n\n2. **No Subnets**: `vpcSubnetIds` is empty (`[]`), confirming the endpoint has no VPC subnet placement and therefore no network segmentation.\n\n3. **No Security Groups**: `securityGroupIds` is empty (`[]`). Security groups are the primary mechanism in AWS for implementing default-deny, exception-based allowance of traffic. Without any security groups, there are no stateful firewall rules controlling inbound or outbound traffic.\n\n4. **Network Isolation Disabled**: `enableNetworkIsolation` is `false`, meaning the endpoint is not isolated from the internet or other network resources.\n\nTaken together, the endpoint has no VPC boundary, no security group rules enforcing default-deny, and no network isolation. This configuration fails to implement the default-deny / exception-based allowance posture required by SC-7(5).v4.",
+        "evidenceCited": [
+          "f8495ded-4131-453c-be72-80544faa1f6f"
+        ],
+        "gaps": [
+          "Security group ingress/egress rule details (not retrievable without security groups being attached)",
+          "Whether any upstream network controls (e.g., AWS Network Firewall, WAF, or PrivateLink) exist outside the endpoint configuration itself — these would require additional collectors not available in this session",
+          "Human attestation confirming whether compensating controls exist at the organizational network boundary level"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "f8495ded-4131-453c-be72-80544faa1f6f",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T10:22:18.390Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "f8495ded-4131-453c-be72-80544faa1f6f",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T10:22:18.390Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

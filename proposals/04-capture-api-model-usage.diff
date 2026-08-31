@@ -1,0 +1,30 @@
+--- a/src/llm/anthropic-provider.ts
++++ b/src/llm/anthropic-provider.ts
+@@ -49,6 +49,15 @@
+     return {
+       stopReason: response.stop_reason ?? "end_turn",
+       content: response.content as unknown as LlmContentBlock[],
++      // Optional study fields: dated snapshot id Anthropic actually served,
++      // plus token usage the current code discards (no dollar amounts here).
++      model: response.model,
++      usage: response.usage
++        ? {
++            inputTokens: response.usage.input_tokens,
++            outputTokens: response.usage.output_tokens,
++          }
++        : undefined,
+     };
+   }
+ }
+--- a/src/llm/llm-provider.interface.ts
++++ b/src/llm/llm-provider.interface.ts
+@@ -40,6 +40,9 @@
+ export type LlmCompletionResult = {
+   stopReason: string;
+   content: LlmContentBlock[];
++  /** Model id the API reports it served (may be a dated snapshot, not the alias). */
++  model?: string;
++  usage?: { inputTokens: number; outputTokens: number };
+ };
+ 
+ export interface LlmProvider {

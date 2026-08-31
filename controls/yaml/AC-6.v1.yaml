@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-6.v1"
+controls:
+  - id: "AC-6.v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Apply the principle of least privilege so that users (or processes acting on behalf of users) receive only the authorized accesses that are necessary to accomplish assigned organizational tasks.
+    collectors:
+      - getEndpointExecutionRole

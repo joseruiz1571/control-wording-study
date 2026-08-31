@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:25:41.104Z",
+  "results": [
+    {
+      "controlId": "SI-12.v4",
+      "controlIntent": "Applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements govern the management and retention of information within the system and information output from the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-12.v4 requires that applicable laws, regulations, policies, and operational requirements govern the management and retention of information within the system and its outputs. For an ML inference endpoint, data capture is the primary mechanism by which inference inputs and outputs are retained for compliance, auditability, drift monitoring, and regulatory purposes.\n\nEvidence retrieved (ID: 17e28266-b1ea-421a-93be-a5fc51f4d85a) shows that for the \"churn-predictor-endpoint\":\n- **dataCaptureEnabled: false** — Data capture is completely disabled.\n- **capturePercentage: 0** — No inference traffic is being captured.\n- **captureDestination: null** — No S3 destination is configured for retention.\n\nThis configuration is substantively inadequate. With data capture fully disabled, the system retains no record of model inputs or outputs, making it impossible to demonstrate compliance with information retention obligations (e.g., audit trails, regulatory data retention mandates, model governance policies). There is no evidence that any alternative retention mechanism is in place. The configuration fails the sufficiency test required by SI-12.v4.",
+        "evidenceCited": [
+          "17e28266-b1ea-421a-93be-a5fc51f4d85a"
+        ],
+        "gaps": [
+          "No evidence of an alternative data retention mechanism (e.g., application-layer logging, external audit log pipeline) that could compensate for disabled SageMaker data capture.",
+          "No policy documentation was available to confirm whether a formal retention schedule or exemption has been approved for this endpoint.",
+          "Human attestation would be needed to confirm whether regulatory or legal requirements have been formally assessed and documented for this model's outputs."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "17e28266-b1ea-421a-93be-a5fc51f4d85a",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:25:30.567Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "17e28266-b1ea-421a-93be-a5fc51f4d85a",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:25:30.567Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

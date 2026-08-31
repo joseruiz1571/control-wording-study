@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant SA-10(5).v4"
+controls:
+  - id: "SA-10(5).v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      Require the developer of the system, system component, or system service to maintain integrity of the mapping from the master build data that describes the current version of security-relevant hardware, software, and firmware to the on-site master copy of the data for the current version.
+    collectors:
+      - getModelRegistryEntry
+      - getCloudTrailEvents

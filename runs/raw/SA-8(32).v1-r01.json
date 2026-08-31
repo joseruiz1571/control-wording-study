@@ -1,0 +1,36 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:11:26.194Z",
+  "results": [
+    {
+      "controlId": "SA-8(32).v1",
+      "controlIntent": "Apply the security design principle of sufficient documentation in [Assignment: organization-defined systems or system components].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-8(32).v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The control SA-8(32).v1 requires application of the security design principle of **sufficient documentation** for the assessed system or system component. The primary evidence artifact for this control is the model card, which should capture intended use, limitations, risk rating, and evaluation details for the ML model \"churn-predictor-v1\" (endpoint: \"churn-predictor-endpoint\"). The `getModelCard` collector returned **null**, indicating that no model card exists whatsoever for this model. Without any model card or equivalent documentation artifact, the principle of sufficient documentation is entirely unmet. There is no evidence of documented intended use, known limitations, risk ratings, or evaluation details — all of which are foundational requirements for this control.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 — the getModelCard collector returned null. A model card documenting intended use, limitations, risk rating, and evaluation details must be created and maintained.",
+          "Human attestation would be needed to confirm whether equivalent documentation exists in an external system (e.g., Confluence, SharePoint, or a separate model registry) not covered by the available collectors.",
+          "Additional documentation artifacts such as system security plans, architecture diagrams, or data flow documentation were not assessable with the available tools but may also be required to fully satisfy this control."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

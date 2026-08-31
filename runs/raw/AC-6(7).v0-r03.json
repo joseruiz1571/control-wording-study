@@ -1,0 +1,79 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:50:33.371Z",
+  "results": [
+    {
+      "controlId": "AC-6(7).v0",
+      "controlIntent": "(a) Review [Assignment: organization-defined frequency] the privileges assigned to [Assignment: organization-defined roles or classes of users] to validate the need for such privileges; and (b) Reassign or remove privileges, if necessary, to correctly reflect organizational mission and business needs.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(7).v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The execution role attached to the \"churn-predictor-endpoint\" (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) has two critically over-privileged policies:\n\n1. **OverlyBroadS3** — grants `s3:*` on `*` (all resources). The policy note explicitly flags this as overly broad, noting that training bucket writes and cross-account access are not scoped. An inference endpoint should only need read access to specific model artifact buckets, not wildcard S3 write or cross-account access.\n\n2. **SageMakerFull** — grants `sagemaker:*` on `*`. An inference endpoint has no legitimate need for the full SageMaker action space (e.g., creating/deleting training jobs, pipelines, other endpoints, etc.).\n\nControl AC-6(7) requires that privileges assigned to roles be periodically reviewed to validate their necessity, and that unnecessary privileges be reassigned or removed. The evidence shows:\n- The role name (\"Generic\") suggests it is a shared, non-purpose-built role, indicating no tailored privilege scoping has occurred.\n- Both policies use wildcard actions and wildcard resources — a clear indicator that least-privilege review and remediation have **not** been performed.\n- There is no evidence of any periodic review process, privilege validation, or reassignment/removal of excess permissions.\n\nThe configuration is substantively insufficient: privileges are far broader than needed for an inference endpoint, and there is no indication that a review cycle has been applied to right-size them.",
+        "evidenceCited": [
+          "c2bd20e6-3fda-4934-a3f9-b8544d267198"
+        ],
+        "gaps": [
+          "No evidence of a documented privilege review schedule or audit log showing periodic reviews have been conducted.",
+          "No evidence of a process for reassigning or removing privileges following review findings.",
+          "No information on whether a formal role/user classification exists that would be subject to review under AC-6(7)(a).",
+          "No evidence of compensating controls (e.g., SCPs, permission boundaries) that might limit the effective scope of the wildcard policies."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "c2bd20e6-3fda-4934-a3f9-b8544d267198",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:50:20.364Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "c2bd20e6-3fda-4934-a3f9-b8544d267198",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:50:20.364Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

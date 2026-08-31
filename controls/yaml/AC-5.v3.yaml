@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-5.v3"
+controls:
+  - id: "AC-5.v3"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Separation of duties is supported by: a. Identifying and documenting [Assignment: organization-defined duties of individuals requiring separation]; and b. Defining system access authorizations to support that separation.
+    collectors:
+      - getEndpointExecutionRole

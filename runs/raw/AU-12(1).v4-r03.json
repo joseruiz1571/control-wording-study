@@ -1,0 +1,114 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:10:28.272Z",
+  "results": [
+    {
+      "controlId": "AU-12(1).v4",
+      "controlIntent": "Form a system-wide (logical or physical) audit trail by compiling audit records from [Assignment: organization-defined system components], time-correlated to within [Assignment: organization-defined level of tolerance for the relationship between time stamps of individual records in the audit trail].\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "AU-12(1).v4",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "AU-12(1).v4 requires a system-wide audit trail compiled from multiple system components, with records time-correlated within an acceptable tolerance. Evidence from two sources — CloudTrail and the SageMaker Model Registry — was retrieved and cross-correlated.\n\n**What is working:**\n- Two distinct system components (CloudTrail and Model Registry) are generating audit records, forming a partial multi-source audit trail.\n- The `CreateEndpoint` event (2025-12-01T11:00:00Z, evidence ID: 3de1adef-aa95-4300-9388-fa7f0632d2c5) can be temporally correlated with the registry approval (2025-12-01T09:00:00Z, evidence ID: 73e13b2f-0bd4-4264-acd5-db970fabca57) — both records exist and are timestamped, enabling a 2-hour delta to be measured.\n\n**What is broken:**\n1. **Incomplete audit trail for the hotfix deployment**: The `UpdateEndpoint` event on 2026-03-15T14:22:00Z (evidence ID: f532747c-26e5-4f35-8e5d-975b34303f46) has no corresponding Model Registry entry. This means the system-wide audit trail is broken for this change — one system component (CloudTrail) recorded the event, but the registry component did not, preventing time-correlation across sources for this deployment.\n2. **Timestamp integrity concern**: The CloudTrail note on the `CreateEndpoint` event states the endpoint was \"deployed 2h BEFORE registry approval,\" yet the recorded timestamps show the opposite (deployment at 11:00Z, approval at 09:00Z). This discrepancy raises a concern about the accuracy or integrity of audit record timestamps — a core requirement of time-correlated audit trails.\n3. **Limited component coverage**: Only two system components are evidenced. There is no indication of additional components (e.g., CloudWatch Logs, inference logging, network logs) contributing to a unified, time-correlated trail.\n\nOverall, the control is only partially satisfied: a correlated trail exists for the initial deployment but is absent for the hotfix, and timestamp integrity concerns undermine confidence in the time-correlation accuracy.",
+        "evidenceCited": [
+          "3de1adef-aa95-4300-9388-fa7f0632d2c5",
+          "f532747c-26e5-4f35-8e5d-975b34303f46",
+          "73e13b2f-0bd4-4264-acd5-db970fabca57"
+        ],
+        "gaps": [
+          "No Model Registry entry exists for the 2026-03-15 hotfix UpdateEndpoint event — human attestation needed to confirm whether this was an approved change.",
+          "Timestamp discrepancy in the CreateEndpoint CloudTrail note vs. recorded timestamps requires human investigation to determine which is accurate and whether clock skew or log tampering occurred.",
+          "No evidence of additional system components (CloudWatch Logs, inference logs, VPC flow logs, etc.) contributing to the audit trail — broader component coverage cannot be assessed.",
+          "Organization-defined tolerance level for timestamp correlation has not been defined or evidenced — cannot assess whether the 2-hour delta between approval and deployment is within tolerance.",
+          "No evidence of a centralized log aggregation or SIEM system that would compile records from all components into a unified, time-correlated trail."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "3de1adef-aa95-4300-9388-fa7f0632d2c5",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:10:02.548Z"
+        },
+        {
+          "id": "f532747c-26e5-4f35-8e5d-975b34303f46",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:10:02.548Z"
+        },
+        {
+          "id": "73e13b2f-0bd4-4264-acd5-db970fabca57",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T08:10:02.549Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "3de1adef-aa95-4300-9388-fa7f0632d2c5",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:10:02.548Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "f532747c-26e5-4f35-8e5d-975b34303f46",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:10:02.548Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        },
+        {
+          "id": "73e13b2f-0bd4-4264-acd5-db970fabca57",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T08:10:02.549Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

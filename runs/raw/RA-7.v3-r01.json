@@ -1,0 +1,115 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:47:04.027Z",
+  "results": [
+    {
+      "controlId": "RA-7.v3",
+      "controlIntent": "Findings from security and privacy assessments, monitoring, and audits are responded to in accordance with organizational risk tolerance.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "RA-7.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "RA-7.v3 requires that findings from security/privacy assessments, monitoring, and audits are responded to in accordance with organizational risk tolerance. Evidence across two independent signals shows this is not occurring:\n\n1. **Monitoring findings are not actionable (evidence: 92883dc8):** The sole DataQuality monitoring schedule (\"churn-predictor-data-quality\") has a last run status of \"Failed\" because data capture is disabled. This means the monitoring system cannot generate findings, and there is no evidence that this failure has been remediated — the root cause (disabled data capture) remains unaddressed.\n\n2. **Audit findings show unresolved change-control violations (evidence: 028ffd89, 715617fa):** CloudTrail records show (a) the endpoint was created 2 hours *before* registry approval, violating change-control policy, and (b) a hotfix update was deployed with no corresponding registry entry. Neither violation has a documented response or remediation action visible in the evidence. These represent open audit findings with no evidence of risk-based response.\n\nTaken together, the organization is neither generating monitoring findings (due to disabled data capture) nor responding to audit findings (change-control violations remain unaddressed). This constitutes a clear failure of RA-7.v3.",
+        "evidenceCited": [
+          "92883dc8-a8f8-484c-b75f-f57f49d8cc0f",
+          "028ffd89-dd16-43c2-b441-fc8ae9cff468",
+          "715617fa-3bae-42ab-81e9-b4c60cc53f13"
+        ],
+        "gaps": [
+          "No evidence of a risk register, ticket system, or remediation plan showing that the data capture failure was acknowledged and scheduled for fix.",
+          "No evidence of a post-incident review or exception approval for the pre-approval deployment (CreateEndpoint before registry approval).",
+          "No evidence of a registry entry or waiver for the hotfix UpdateEndpoint deployment.",
+          "ModelQuality, ModelBias, and ModelExplainability monitoring schedules are absent — it is unclear whether their absence is intentional and risk-accepted.",
+          "Human attestation would be needed to confirm whether any out-of-band remediation actions were taken that are not captured in these systems."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "92883dc8-a8f8-484c-b75f-f57f49d8cc0f",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T09:46:46.792Z"
+        },
+        {
+          "id": "028ffd89-dd16-43c2-b441-fc8ae9cff468",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:46:46.792Z"
+        },
+        {
+          "id": "715617fa-3bae-42ab-81e9-b4c60cc53f13",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:46:46.792Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "92883dc8-a8f8-484c-b75f-f57f49d8cc0f",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T09:46:46.792Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        },
+        {
+          "id": "028ffd89-dd16-43c2-b441-fc8ae9cff468",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:46:46.792Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "715617fa-3bae-42ab-81e9-b4c60cc53f13",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:46:46.792Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

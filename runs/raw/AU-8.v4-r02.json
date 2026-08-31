@@ -1,0 +1,91 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:45:25.938Z",
+  "results": [
+    {
+      "controlId": "AU-8.v4",
+      "controlIntent": "a. Use internal system clocks to generate time stamps for audit records; and b. Audit-record time stamps meet [Assignment: organization-defined granularity of time measurement] and use Coordinated Universal Time, have a fixed local time offset from Coordinated Universal Time, or include the local time offset as part of the time stamp.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-8.v4",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "The two CloudTrail audit records retrieved for the churn-predictor-endpoint (CreateEndpoint and UpdateEndpoint) both carry ISO 8601 timestamps with the 'Z' (UTC) suffix (e.g., '2025-12-01T11:00:00Z' and '2026-03-15T14:22:00Z'). This demonstrates that: (a) AWS CloudTrail uses internal, NTP-synchronized system clocks to generate timestamps — satisfying AU-8.v4(a); and (b) timestamps are expressed in UTC with second-level granularity — partially satisfying AU-8.v4(b). However, the organization's formally defined granularity assignment (the '[Assignment: organization-defined granularity]' parameter in the control) was not available in the retrieved evidence. Without knowing whether the organization requires sub-second (e.g., millisecond) granularity, it cannot be confirmed that the second-level timestamps fully meet the defined threshold. Additionally, only CloudTrail events were available; any supplementary audit logging systems (e.g., application-level logs, SageMaker model monitor logs) were not assessed and may have different timestamp behaviors.",
+        "evidenceCited": [
+          "2947eaad-db7f-4c49-b8ea-8be36421f69b",
+          "aefcf05f-3510-434c-bfd8-d2295d620b45"
+        ],
+        "gaps": [
+          "Organization's formally defined granularity requirement (e.g., seconds vs. milliseconds) for audit record timestamps is not documented in available evidence — human attestation or policy document review required.",
+          "No evidence retrieved for application-level or SageMaker-native audit logs; their timestamp format and UTC conformance could not be assessed.",
+          "No NTP/clock synchronization configuration evidence was available to independently verify the clock source used by the system."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "2947eaad-db7f-4c49-b8ea-8be36421f69b",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:45:07.554Z"
+        },
+        {
+          "id": "aefcf05f-3510-434c-bfd8-d2295d620b45",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:45:07.554Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "2947eaad-db7f-4c49-b8ea-8be36421f69b",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:45:07.554Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "aefcf05f-3510-434c-bfd8-d2295d620b45",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:45:07.554Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

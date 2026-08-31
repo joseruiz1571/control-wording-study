@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-3.v2"
+controls:
+  - id: "AC-3.v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Logical access to information and system resources is to be limited to approved authorizations, in accordance with applicable access control policies.
+    collectors:
+      - getEndpointExecutionRole

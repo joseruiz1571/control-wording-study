@@ -1,0 +1,58 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:24:43.566Z",
+  "results": [
+    {
+      "controlId": "SI-12.v2",
+      "controlIntent": "In accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements, manage and retain information within the system and information output from the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-12.v2 requires that information within the system and information output from the system be managed and retained in accordance with applicable laws, regulations, policies, and operational requirements. For an ML inference endpoint, this means capturing and retaining inference inputs and outputs (predictions) so they can be audited, monitored for drift/quality, and reviewed as required.\n\nThe evidence retrieved (ID: c17dfdfd-667f-4deb-a1b8-8f1fdfdb525c) shows that for the \"churn-predictor-endpoint\":\n- **dataCaptureEnabled: false** — Data capture is completely disabled.\n- **capturePercentage: 0** — No inference traffic (inputs or outputs) is being captured.\n- **captureDestination: null** — No S3 destination is configured for storing captured data.\n\nThis configuration is substantively inadequate for SI-12.v2 compliance. Without data capture enabled, the system retains no record of inference inputs or model outputs, making it impossible to:\n1. Demonstrate information retention in accordance with regulatory or policy requirements.\n2. Support audit trails of model decisions (e.g., churn predictions affecting customers).\n3. Enable downstream drift detection or quality monitoring that depends on retained output data.\n\nThe configuration is not merely incomplete — it is entirely absent, representing a clear gap against the control's intent.",
+        "evidenceCited": [
+          "c17dfdfd-667f-4deb-a1b8-8f1fdfdb525c"
+        ],
+        "gaps": [
+          "No data capture destination (S3 path) is configured, so there is no retention store for inference inputs/outputs.",
+          "Human attestation would be needed to determine whether any alternative retention mechanism (e.g., application-layer logging, external audit log) exists outside of SageMaker's data capture feature.",
+          "Applicable organizational retention policies and regulatory requirements (e.g., GDPR, CCPA, internal data governance policies) were not available for review to determine the specific retention period required.",
+          "Evidence of any compensating controls (e.g., upstream/downstream logging pipelines) was not retrievable via available tools."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "c17dfdfd-667f-4deb-a1b8-8f1fdfdb525c",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:24:31.190Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "c17dfdfd-667f-4deb-a1b8-8f1fdfdb525c",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:24:31.190Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

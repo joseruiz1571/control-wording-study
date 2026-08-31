@@ -1,0 +1,162 @@
+{
+  "AC-3": {
+    "title": "Access Enforcement",
+    "text": "Enforce approved authorizations for logical access to information and system resources in accordance with applicable access control policies."
+  },
+  "AC-2(7)": {
+    "title": "Account Management | Privileged User Accounts",
+    "text": "(a) Establish and administer privileged user accounts in accordance with [Selection: a role-based access scheme; an attribute-based access scheme];\n(b) Monitor privileged role or attribute assignments;\n(c) Monitor changes to roles or attributes; and\n(d) Revoke access when privileged role or attribute assignments are no longer appropriate."
+  },
+  "AC-5": {
+    "title": "Separation of Duties",
+    "text": "a. Identify and document [Assignment: organization-defined duties of individuals requiring separation]; and\nb. Define system access authorizations to support separation of duties."
+  },
+  "AC-6": {
+    "title": "Least Privilege",
+    "text": "Employ the principle of least privilege, allowing only authorized accesses for users (or processes acting on behalf of users) that are necessary to accomplish assigned organizational tasks."
+  },
+  "AC-6(5)": {
+    "title": "Least Privilege | Privileged Accounts",
+    "text": "Restrict privileged accounts on the system to [Assignment: organization-defined personnel or roles]."
+  },
+  "AC-6(7)": {
+    "title": "Least Privilege | Review of User Privileges",
+    "text": "(a) Review [Assignment: organization-defined frequency] the privileges assigned to [Assignment: organization-defined roles or classes of users] to validate the need for such privileges; and\n(b) Reassign or remove privileges, if necessary, to correctly reflect organizational mission and business needs."
+  },
+  "AC-6(9)": {
+    "title": "Least Privilege | Log Use of Privileged Functions",
+    "text": "Log the execution of privileged functions."
+  },
+  "AC-6(10)": {
+    "title": "Least Privilege | Prohibit Non-privileged Users from Executing Privileged Functions",
+    "text": "Prevent non-privileged users from executing privileged functions."
+  },
+  "AU-2": {
+    "title": "Event Logging",
+    "text": "a. Identify the types of events that the system is capable of logging in support of the audit function: [Assignment: organization-defined event types that the system is capable of logging];\nb. Coordinate the event logging function with other organizational entities requiring audit-related information to guide and inform the selection criteria for events to be logged;\nc. Specify the following event types for logging within the system: [Assignment: organization-defined event types (subset of the event types defined in AU-2a.) along with the frequency of (or situation requiring) logging for each identified event type];\nd. Provide a rationale for why the event types selected for logging are deemed to be adequate to support after-the-fact investigations of incidents; and\ne. Review and update the event types selected for logging [Assignment: organization-defined frequency]."
+  },
+  "AU-3": {
+    "title": "Content of Audit Records",
+    "text": "Ensure that audit records contain information that establishes the following:\na. What type of event occurred;\nb. When the event occurred;\nc. Where the event occurred;\nd. Source of the event;\ne. Outcome of the event; and \nf. Identity of any individuals, subjects, or objects/entities associated with the event."
+  },
+  "AU-6": {
+    "title": "Audit Record Review, Analysis, and Reporting",
+    "text": "a. Review and analyze system audit records [Assignment: organization-defined frequency] for indications of [Assignment: organization-defined inappropriate or unusual activity] and the potential impact of the inappropriate or unusual activity;\nb. Report findings to [Assignment: organization-defined personnel or roles]; and\nc. Adjust the level of audit record review, analysis, and reporting within the system when there is a change in risk based on law enforcement information, intelligence information, or other credible sources of information."
+  },
+  "AU-6(3)": {
+    "title": "Audit Record Review, Analysis, and Reporting | Correlate Audit Record Repositories",
+    "text": "Analyze and correlate audit records across different repositories to gain organization-wide situational awareness."
+  },
+  "AU-8": {
+    "title": "Time Stamps",
+    "text": "a. Use internal system clocks to generate time stamps for audit records; and\nb. Record time stamps for audit records that meet [Assignment: organization-defined granularity of time measurement] and that use Coordinated Universal Time, have a fixed local time offset from Coordinated Universal Time, or that include the local time offset as part of the time stamp."
+  },
+  "AU-12": {
+    "title": "Audit Record Generation",
+    "text": "a. Provide audit record generation capability for the event types the system is capable of auditing as defined in AU-2a on [Assignment: organization-defined system components];\nb. Allow [Assignment: organization-defined personnel or roles] to select the event types that are to be logged by specific components of the system; and\nc. Generate audit records for the event types defined in AU-2c that include the audit record content defined in AU-3."
+  },
+  "AU-12(1)": {
+    "title": "Audit Record Generation | System-wide and Time-correlated Audit Trail",
+    "text": "Compile audit records from [Assignment: organization-defined system components] into a system-wide (logical or physical) audit trail that is time-correlated to within [Assignment: organization-defined level of tolerance for the relationship between time stamps of individual records in the audit trail]."
+  },
+  "CM-2": {
+    "title": "Baseline Configuration",
+    "text": "a. Develop, document, and maintain under configuration control, a current baseline configuration of the system; and\nb. Review and update the baseline configuration of the system:\n1. [Assignment: organization-defined frequency];\n2. When required due to [Assignment: organization-defined circumstances]; and\n3. When system components are installed or upgraded."
+  },
+  "CM-3": {
+    "title": "Configuration Change Control",
+    "text": "a. Determine and document the types of changes to the system that are configuration-controlled;\nb. Review proposed configuration-controlled changes to the system and approve or disapprove such changes with explicit consideration for security and privacy impact analyses;\nc. Document configuration change decisions associated with the system;\nd. Implement approved configuration-controlled changes to the system;\ne. Retain records of configuration-controlled changes to the system for [Assignment: organization-defined time period];\nf. Monitor and review activities associated with configuration-controlled changes to the system; and\ng. Coordinate and provide oversight for configuration change control activities through [Assignment: organization-defined configuration change control element] that convenes [Selection (one or more): [Assignment: organization-defined frequency]; when [Assignment: organization-defined configuration change conditions]]."
+  },
+  "CM-3(1)": {
+    "title": "Configuration Change Control | Automated Documentation, Notification, and Prohibition of Changes",
+    "text": "Use [Assignment: organization-defined automated mechanisms] to:\n(a) Document proposed changes to the system;\n(b) Notify [Assignment: organization-defined approval authorities] of proposed changes to the system and request change approval;\n(c) Highlight proposed changes to the system that have not been approved or disapproved within [Assignment: organization-defined time period];\n(d) Prohibit changes to the system until designated approvals are received;\n(e) Document all changes to the system; and\n(f) Notify [Assignment: organization-defined personnel] when approved changes to the system are completed."
+  },
+  "CM-3(2)": {
+    "title": "Configuration Change Control | Testing, Validation, and Documentation of Changes",
+    "text": "Test, validate, and document changes to the system before finalizing the implementation of the changes."
+  },
+  "CM-6": {
+    "title": "Configuration Settings",
+    "text": "a. Establish and document configuration settings for components employed within the system that reflect the most restrictive mode consistent with operational requirements using [Assignment: organization-defined common secure configurations];\nb. Implement the configuration settings;\nc. Identify, document, and approve any deviations from established configuration settings for [Assignment: organization-defined system components] based on [Assignment: organization-defined operational requirements]; and\nd. Monitor and control changes to the configuration settings in accordance with organizational policies and procedures."
+  },
+  "CM-7(1)": {
+    "title": "Least Functionality | Periodic Review",
+    "text": "(a) Review the system [Assignment: organization-defined frequency] to identify unnecessary and/or nonsecure functions, ports, protocols, software, and services; and\n(b) Disable or remove [Assignment: organization-defined functions, ports, protocols, software, and services within the system deemed to be unnecessary and/or nonsecure]."
+  },
+  "CM-8": {
+    "title": "System Component Inventory",
+    "text": "a. Develop and document an inventory of system components that:\n1. Accurately reflects the system;\n2. Includes all components within the system;\n3. Does not include duplicate accounting of components or components assigned to any other system;\n4. Is at the level of granularity deemed necessary for tracking and reporting; and\n5. Includes the following information to achieve system component accountability: [Assignment: organization-defined information deemed necessary to achieve effective system component accountability]; and\nb. Review and update the system component inventory [Assignment: organization-defined frequency]."
+  },
+  "CM-8(1)": {
+    "title": "System Component Inventory | Updates During Installation and Removal",
+    "text": "Update the inventory of system components as part of component installations, removals, and system updates."
+  },
+  "RA-3": {
+    "title": "Risk Assessment",
+    "text": "a. Conduct a risk assessment, including:\n1. Identifying threats to and vulnerabilities in the system;\n2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and\n3. Determining the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information;\nb. Integrate risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments;\nc. Document risk assessment results in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]];\nd. Review risk assessment results [Assignment: organization-defined frequency];\ne. Disseminate risk assessment results to [Assignment: organization-defined personnel or roles]; and\nf. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system."
+  },
+  "RA-7": {
+    "title": "Risk Response",
+    "text": "Respond to findings from security and privacy assessments, monitoring, and audits in accordance with organizational risk tolerance."
+  },
+  "SA-10": {
+    "title": "Developer Configuration Management",
+    "text": "Require the developer of the system, system component, or system service to:\na. Perform configuration management during system, component, or service [Selection (one or more): design; development; implementation; operation; disposal];\nb. Document, manage, and control the integrity of changes to [Assignment: organization-defined configuration items under configuration management];\nc. Implement only organization-approved changes to the system, component, or service;\nd. Document approved changes to the system, component, or service and the potential security and privacy impacts of such changes; and\ne. Track security flaws and flaw resolution within the system, component, or service and report findings to [Assignment: organization-defined personnel]."
+  },
+  "SA-10(5)": {
+    "title": "Developer Configuration Management | Mapping Integrity for Version Control",
+    "text": "Require the developer of the system, system component, or system service to maintain the integrity of the mapping between the master build data describing the current version of security-relevant hardware, software, and firmware and the on-site master copy of the data for the current version."
+  },
+  "SA-8(32)": {
+    "title": "Security and Privacy Engineering Principles | Sufficient Documentation",
+    "text": "Implement the security design principle of sufficient documentation in [Assignment: organization-defined systems or system components]."
+  },
+  "SA-4(8)": {
+    "title": "Acquisition Process | Continuous Monitoring Plan for Controls",
+    "text": "Require the developer of the system, system component, or system service to produce a plan for continuous monitoring of control effectiveness that is consistent with the continuous monitoring program of the organization."
+  },
+  "SA-11": {
+    "title": "Developer Testing and Evaluation",
+    "text": "Require the developer of the system, system component, or system service, at all post-design stages of the system development life cycle, to:\na. Develop and implement a plan for ongoing security and privacy control assessments;\nb. Perform [Selection (one or more): unit; integration; system; regression] testing/evaluation [Assignment: organization-defined frequency] at [Assignment: organization-defined depth and coverage];\nc. Produce evidence of the execution of the assessment plan and the results of the testing and evaluation;\nd. Implement a verifiable flaw remediation process; and\ne. Correct flaws identified during testing and evaluation."
+  },
+  "SI-2": {
+    "title": "Flaw Remediation",
+    "text": "a. Identify, report, and correct system flaws;\nb. Test software and firmware updates related to flaw remediation for effectiveness and potential side effects before installation;\nc. Install security-relevant software and firmware updates within [Assignment: organization-defined time period] of the release of the updates; and\nd. Incorporate flaw remediation into the organizational configuration management process."
+  },
+  "SI-2(2)": {
+    "title": "Flaw Remediation | Automated Flaw Remediation Status",
+    "text": "Determine if system components have applicable security-relevant software and firmware updates installed using [Assignment: organization-defined automated mechanisms] [Assignment: organization-defined frequency]."
+  },
+  "SI-4": {
+    "title": "System Monitoring",
+    "text": "a. Monitor the system to detect:\n1. Attacks and indicators of potential attacks in accordance with the following monitoring objectives: [Assignment: organization-defined monitoring objectives]; and\n2. Unauthorized local, network, and remote connections;\nb. Identify unauthorized use of the system through the following techniques and methods: [Assignment: organization-defined techniques and methods];\nc. Invoke internal monitoring capabilities or deploy monitoring devices:\n1. Strategically within the system to collect organization-determined essential information; and\n2. At ad hoc locations within the system to track specific types of transactions of interest to the organization;\nd. Analyze detected events and anomalies;\ne. Adjust the level of system monitoring activity when there is a change in risk to organizational operations and assets, individuals, other organizations, or the Nation;\nf. Obtain legal opinion regarding system monitoring activities; and\ng. Provide [Assignment: organization-defined system monitoring information] to [Assignment: organization-defined personnel or roles] [Selection (one or more): as needed; [Assignment: organization-defined frequency]]."
+  },
+  "SI-4(2)": {
+    "title": "System Monitoring | Automated Tools and Mechanisms for Real-time Analysis",
+    "text": "Employ automated tools and mechanisms to support near real-time analysis of events."
+  },
+  "SI-6": {
+    "title": "Security and Privacy Function Verification",
+    "text": "a. Verify the correct operation of [Assignment: organization-defined security and privacy functions];\nb. Perform the verification of the functions specified in SI-6a [Selection (one or more): [Assignment: organization-defined system transitional states]; upon command by user with appropriate privilege; [Assignment: organization-defined frequency]];\nc. Alert [Assignment: organization-defined personnel or roles] to failed security and privacy verification tests; and\nd. [Selection (one or more): Shut the system down; Restart the system; [Assignment: organization-defined alternative action(s)]] when anomalies are discovered."
+  },
+  "SI-7": {
+    "title": "Software, Firmware, and Information Integrity",
+    "text": "a. Employ integrity verification tools to detect unauthorized changes to the following software, firmware, and information: [Assignment: organization-defined software, firmware, and information]; and\nb. Take the following actions when unauthorized changes to the software, firmware, and information are detected: [Assignment: organization-defined actions]."
+  },
+  "SI-12": {
+    "title": "Information Management and Retention",
+    "text": "Manage and retain information within the system and information output from the system in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements."
+  },
+  "SC-28(1)": {
+    "title": "Protection of Information at Rest | Cryptographic Protection",
+    "text": "Implement cryptographic mechanisms to prevent unauthorized disclosure and modification of the following information at rest on [Assignment: organization-defined system components or media]: [Assignment: organization-defined information]."
+  },
+  "SC-7(5)": {
+    "title": "Boundary Protection | Deny by Default \u2014 Allow by Exception",
+    "text": "Deny network communications traffic by default and allow network communications traffic by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]]."
+  },
+  "CA-7": {
+    "title": "Continuous Monitoring",
+    "text": "Develop a system-level continuous monitoring strategy and implement continuous monitoring in accordance with the organization-level continuous monitoring strategy that includes:\na. Establishing the following system-level metrics to be monitored: [Assignment: organization-defined system-level metrics];\nb. Establishing [Assignment: organization-defined frequencies] for monitoring and [Assignment: organization-defined frequencies] for assessment of control effectiveness;\nc. Ongoing control assessments in accordance with the continuous monitoring strategy;\nd. Ongoing monitoring of system and organization-defined metrics in accordance with the continuous monitoring strategy;\ne. Correlation and analysis of information generated by control assessments and monitoring;\nf. Response actions to address results of the analysis of control assessment and monitoring information; and\ng. Reporting the security and privacy status of the system to [Assignment: organization-defined personnel or roles] [Assignment: organization-defined frequency]."
+  }
+}

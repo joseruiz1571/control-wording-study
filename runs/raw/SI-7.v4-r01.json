@@ -1,0 +1,114 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:59:24.141Z",
+  "results": [
+    {
+      "controlId": "SI-7.v4",
+      "controlIntent": "a. Integrity verification tools are employed to detect unauthorized changes to the following software, firmware, and information: [Assignment: organization-defined software, firmware, and information]; and b. The following actions are taken when unauthorized changes to the software, firmware, and information are detected: [Assignment: organization-defined actions].\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "SI-7.v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SI-7.v4 requires (a) integrity verification tools to detect unauthorized changes to software/firmware/information, and (b) defined actions when such changes are detected.\n\n**Evidence correlation across sources and time:**\n\n1. **Initial deployment (satisfied path):** The model registry entry (b583f9fc) shows approval at 2025-12-01T09:00:00Z. The CreateEndpoint CloudTrail event (eab0d7c8) shows the endpoint was created at 2025-12-01T11:00:00Z — two hours *after* registry approval. This temporal ordering is consistent with a gated, integrity-verified deployment for the initial release.\n\n2. **Hotfix deployment (critical failure):** The UpdateEndpoint CloudTrail event (0eb19196) shows a deployment of config `churn-predictor-v1-hotfix` on 2026-03-15T14:22:00Z by the same IAM user. The registry evidence contains **no corresponding model package entry** for this hotfix. This means:\n   - The change was not registered or approved in the model registry before deployment — bypassing the integrity verification gate.\n   - There is no evidence that any integrity verification tool detected or flagged this unauthorized/unregistered change.\n   - There is no evidence of any defined response action being triggered (e.g., rollback, alert, incident ticket).\n\nThe hotfix deployment represents an unauthorized software change (relative to the approved registry state) that went undetected and unresponded-to by any integrity control. This directly violates both sub-requirements of SI-7.v4: the detection mechanism was bypassed, and no corrective action was taken.",
+        "evidenceCited": [
+          "b583f9fc-c20d-4680-9a20-f2518f018f10",
+          "eab0d7c8-fcbd-41d5-8a95-0e0102a6d09a",
+          "0eb19196-1f46-4792-892b-71ce4ffab369"
+        ],
+        "gaps": [
+          "No evidence of any integrity verification tool (e.g., SageMaker Model Monitor, hash verification, artifact signing) configured for the endpoint or model artifacts.",
+          "No evidence of alerting, rollback, or incident response triggered by the unregistered hotfix deployment.",
+          "No registry entry or approval record for 'churn-predictor-v1-hotfix' — human attestation needed to determine if an out-of-band approval process exists.",
+          "No evidence of defined organizational policy specifying what actions must be taken when unauthorized changes are detected (the 'Assignment' clause of SI-7.v4b).",
+          "CloudTrail coverage completeness is unknown — additional unauthorized changes may exist that are not captured in the retrieved events."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "b583f9fc-c20d-4680-9a20-f2518f018f10",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T10:59:02.648Z"
+        },
+        {
+          "id": "eab0d7c8-fcbd-41d5-8a95-0e0102a6d09a",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T10:59:02.648Z"
+        },
+        {
+          "id": "0eb19196-1f46-4792-892b-71ce4ffab369",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T10:59:02.648Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "b583f9fc-c20d-4680-9a20-f2518f018f10",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T10:59:02.648Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "eab0d7c8-fcbd-41d5-8a95-0e0102a6d09a",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T10:59:02.648Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "0eb19196-1f46-4792-892b-71ce4ffab369",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T10:59:02.648Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

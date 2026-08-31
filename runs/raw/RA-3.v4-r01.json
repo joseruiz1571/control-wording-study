@@ -1,0 +1,37 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:42:32.532Z",
+  "results": [
+    {
+      "controlId": "RA-3.v4",
+      "controlIntent": "a. Conduct a risk assessment, including: 1. Identifying threats to and vulnerabilities in the system; 2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and 3. Determining the likelihood and impact of adverse effects on individuals arising from processing of personally identifiable information; b. Integrate risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments; c. Document the results of the risk assessment in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]]; d. Review the risk assessment results [Assignment: organization-defined frequency]; e. Disseminate the risk assessment results to [Assignment: organization-defined personnel or roles]; and f. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "RA-3.v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The only available evidence collector — getModelCard — returned null, indicating that no model card exists for \"churn-predictor-v1\" / \"churn-predictor-endpoint\". A model card is the primary artifact expected to document risk assessment results for an ML model, including: (a) identified threats and vulnerabilities, (b) likelihood and magnitude of harm from unauthorized access/use/disclosure, (c) adverse effects on individuals (e.g., from PII processing), (d) risk ratings, and (e) intended use and limitations. Without a model card or any equivalent documented risk assessment artifact, none of the RA-3.v4 sub-requirements can be demonstrated as satisfied:\n- (a) No evidence of threat/vulnerability identification or likelihood/impact analysis.\n- (b) No evidence of integration with organizational risk management decisions.\n- (c) No documented risk assessment results in any plan, report, or defined document.\n- (d) No evidence of periodic review of risk assessment results.\n- (e) No evidence of dissemination to defined personnel or roles.\n- (f) No evidence of a defined update cadence or trigger-based update process.\nThe absence of a model card constitutes a clear gap against the control's documentation and sufficiency requirements.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 — the getModelCard collector returned null, so there is no documented risk assessment, threat/vulnerability analysis, likelihood/impact determination, PII adverse-effects analysis, review schedule, dissemination plan, or update frequency.",
+          "Human attestation would be needed to determine whether a risk assessment exists in an external system (e.g., a GRC tool, SharePoint, or separate security plan) that was not surfaced by the available collector tools.",
+          "Evidence of organizational-level risk management integration (RA-3.v4.b) could not be assessed without additional collectors or human attestation.",
+          "Evidence of dissemination to defined personnel/roles (RA-3.v4.e) and update frequency (RA-3.v4.f) is entirely absent."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

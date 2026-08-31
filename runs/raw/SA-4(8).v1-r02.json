@@ -1,0 +1,64 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:07:40.126Z",
+  "results": [
+    {
+      "controlId": "SA-4(8).v1",
+      "controlIntent": "The developer of the system, system component, or system service is required to produce a plan for continuous monitoring of control effectiveness that is consistent with the continuous monitoring program of the organization.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-4(8).v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SA-4(8).v1 requires a substantive, effective continuous monitoring plan for control effectiveness. The evidence reveals two critical deficiencies:\n\n1. **Incomplete monitoring coverage**: Only a single DataQuality monitor schedule (\"churn-predictor-data-quality\") is configured. There are no ModelQuality, ModelBias, or ModelExplainability schedules. A monitoring plan consistent with an organizational continuous monitoring program must address model performance drift, fairness/bias, and explainability — not just data quality. The absence of three of four standard monitor types means the plan is not substantively adequate.\n\n2. **The sole monitor is non-functional**: The DataQuality schedule has a `lastRunStatus` of \"Failed\" with the reason \"No capture data found — data capture is disabled.\" Because data capture is disabled on the endpoint, the monitor cannot collect or analyze any data. A monitoring schedule that cannot execute provides no actual monitoring capability.\n\nTogether, these findings demonstrate that the continuous monitoring configuration is both incomplete in scope and inoperative in practice, failing to meet the sufficiency standard required by this control.",
+        "evidenceCited": [
+          "023e3485-eb10-404c-9c32-35bcec98ef36"
+        ],
+        "gaps": [
+          "ModelQuality monitor schedule — not configured; needed to detect prediction accuracy/drift issues",
+          "ModelBias monitor schedule — not configured; needed to detect fairness regressions",
+          "ModelExplainability monitor schedule — not configured; needed to track feature attribution stability",
+          "Data capture configuration for the endpoint — must be enabled for any monitor to function; current status is disabled",
+          "Organizational continuous monitoring program documentation — needed to verify alignment of monitoring plan with broader organizational requirements",
+          "Baseline artifacts for ModelQuality, ModelBias, and ModelExplainability — not present, indicating these monitors were never set up"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "023e3485-eb10-404c-9c32-35bcec98ef36",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:07:25.578Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "023e3485-eb10-404c-9c32-35bcec98ef36",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:07:25.578Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,86 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:56:00.361Z",
+  "results": [
+    {
+      "controlId": "CM-2.r0",
+      "controlIntent": "a. Develop a current baseline configuration of the system; document that baseline configuration; and maintain that baseline configuration under configuration control; and b. Review and update the baseline configuration of the system: 1. [Assignment: organization-defined frequency]; 2. When [Assignment: organization-defined circumstances] require a review and update; and 3. When system components are installed or upgraded.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-2.r0",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CM-2 requires: (a) a documented, configuration-controlled baseline, and (b) periodic and event-driven review/update of that baseline.\n\n**What is satisfied:**\n- A model registry entry exists (ID: 9d16dc36-d5e0-4644-a01e-53c027f224e1) for `churn-predictor` version 1, with a recorded creation time (2025-11-30), approval time (2025-12-01), approval status (\"Approved\"), and a unique ARN. This constitutes a rudimentary baseline record.\n- An endpoint configuration exists (ID: 48f086d2-6ded-470f-9f08-0ee8c54de629) capturing instance type (`ml.m5.large`), network isolation (`false`), and data capture settings (`disabled`). This documents the deployed infrastructure baseline.\n\n**What is not satisfied or unclear:**\n1. **Configuration control depth**: Only a single model version (v1) is present. There is no evidence of a versioning history, change log, or formal change-control workflow governing updates to the baseline.\n2. **Review cadence**: No organization-defined review frequency is documented or inferable from the evidence.\n3. **Event-driven review triggers**: No policy or record of reviews triggered by circumstances (e.g., drift, incidents, regulatory changes) is present.\n4. **Component install/upgrade reviews**: With only one version in the registry, there is no evidence that a review process fires when components are upgraded.\n5. **Data capture disabled**: `dataCaptureEnabled: false` means runtime behavior is not being logged, which undermines the ability to detect configuration drift and support baseline reviews.\n\nOverall, the system has the skeleton of a baseline (registry entry + endpoint config) but lacks the documented review cadence, change-control evidence, and audit trail required for full CM-2 conformance.",
+        "evidenceCited": [
+          "9d16dc36-d5e0-4644-a01e-53c027f224e1",
+          "48f086d2-6ded-470f-9f08-0ee8c54de629"
+        ],
+        "gaps": [
+          "No documented organization-defined review frequency for the baseline configuration",
+          "No evidence of event-driven or circumstance-triggered review policy",
+          "No change log or version history beyond v1 to demonstrate configuration control over time",
+          "No evidence of a review process triggered by component installation or upgrade",
+          "Data capture is disabled (capturePercentage=0, captureDestination=null), preventing runtime audit trails that would support baseline drift detection",
+          "Network isolation is disabled (enableNetworkIsolation=false) — this configuration choice is not documented as a deliberate, reviewed baseline decision",
+          "Human attestation needed: Is there an out-of-band configuration management plan (e.g., in a CMDB or SSP) that defines review schedules and change-control procedures?"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "9d16dc36-d5e0-4644-a01e-53c027f224e1",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T18:55:39.509Z"
+        },
+        {
+          "id": "48f086d2-6ded-470f-9f08-0ee8c54de629",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T18:55:39.509Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "9d16dc36-d5e0-4644-a01e-53c027f224e1",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T18:55:39.509Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "48f086d2-6ded-470f-9f08-0ee8c54de629",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T18:55:39.509Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

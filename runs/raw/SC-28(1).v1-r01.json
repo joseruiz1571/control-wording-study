@@ -1,0 +1,59 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:15:02.564Z",
+  "results": [
+    {
+      "controlId": "SC-28(1).v1",
+      "controlIntent": "Put cryptographic mechanisms in place to prevent unauthorized disclosure and modification of the following information at rest on [Assignment: organization-defined system components or media]: [Assignment: organization-defined information].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-28(1).v1",
+        "status": "partially-satisfied",
+        "confidence": "high",
+        "rationale": "SC-28(1).v1 requires cryptographic mechanisms to protect information at rest. The evidence (ID: 884e0a62-2b72-400d-aa7a-ea0ab12085cf) reveals two significant findings:\n\n1. **Model Artifacts — Partially Covered:** An AWS-managed KMS key (`arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker`) is applied to model artifacts and is enabled. However, the key manager is `AWS`, not `CUSTOMER`. AWS-managed keys provide encryption at rest, but they do not satisfy the typical organizational requirement for cryptographic control under SP 800-53 SC-28(1), which implies the organization must control the cryptographic mechanism. With AWS-managed keys, AWS retains administrative control over the key material, limiting the organization's ability to enforce access policies, rotate keys on demand, or revoke access independently.\n\n2. **Endpoint/Training Volumes — Not Covered:** `volumeKmsKeyId` is `null`, meaning the storage volumes attached to the endpoint instances (and potentially training instances) are **not encrypted with any KMS key**. This is a direct gap — data at rest on these volumes (including model inputs, outputs, and intermediate data) is not protected by a cryptographic mechanism under organizational control.\n\nTogether, the configuration is only partially conformant: artifact encryption exists but relies on an AWS-managed key (insufficient organizational control), and volume encryption is entirely absent.",
+        "evidenceCited": [
+          "884e0a62-2b72-400d-aa7a-ea0ab12085cf"
+        ],
+        "gaps": [
+          "Customer-managed KMS key (CMK) is not configured for model artifacts — AWS-managed key does not provide sufficient organizational cryptographic control per SP 800-53 SC-28(1).",
+          "volumeKmsKeyId is null — endpoint and training instance storage volumes lack any KMS encryption, leaving data at rest on those volumes unprotected.",
+          "No evidence of a defined organizational policy specifying which system components and information types require encryption at rest, which would be needed to fully scope conformance.",
+          "Human attestation needed to confirm whether compensating controls (e.g., encrypted EBS volumes at the hypervisor level outside SageMaker KMS config) exist for the volume encryption gap."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "884e0a62-2b72-400d-aa7a-ea0ab12085cf",
+          "source": "sagemaker:kms:config",
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e",
+          "retrievedAt": "2026-08-30T10:14:46.929Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "884e0a62-2b72-400d-aa7a-ea0ab12085cf",
+          "source": "sagemaker:kms:config",
+          "retrievedAt": "2026-08-30T10:14:46.929Z",
+          "payload": {
+            "volumeKmsKeyId": null,
+            "artifactKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker",
+            "keyEnabled": true,
+            "keyManager": "AWS"
+          },
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,79 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:53:41.582Z",
+  "results": [
+    {
+      "controlId": "AC-6(7).v4",
+      "controlIntent": "(a) Review [Assignment: organization-defined frequency] privileges given to [Assignment: organization-defined roles or classes of users] to validate that those privileges are needed; and (b) Reassign or remove privileges, if necessary, to correctly reflect organizational mission and business needs.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(7).v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The IAM execution role attached to the \"churn-predictor-endpoint\" (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) has two critically over-permissive policies:\n\n1. **OverlyBroadS3** — grants `s3:*` on `*` (all resources). The policy note explicitly flags this as overly broad, allowing training bucket writes and cross-account access that are not scoped to the specific buckets or operations needed by this endpoint. A least-privilege configuration would restrict S3 actions to only what is required (e.g., `s3:GetObject`) on only the specific bucket(s) used for model artifacts.\n\n2. **SageMakerFull** — grants `sagemaker:*` on `*` (all resources). An inference endpoint has no legitimate need for the full SageMaker action space (e.g., creating/deleting training jobs, modifying other endpoints, managing pipelines). This should be scoped to the minimal set of SageMaker actions required for inference.\n\nControl AC-6(7) requires that privileges assigned to roles be periodically reviewed to validate they are still needed, and that unnecessary privileges be reassigned or removed. The evidence shows:\n- The role name (\"Generic\") suggests it was not purpose-built for this endpoint, indicating no tailored privilege review was performed.\n- Both policies use wildcard actions (`*`) and wildcard resources (`*`), which is a strong indicator that privileges have never been scoped down through a review process.\n- There is no evidence of any periodic review cadence, reassignment, or removal of excess privileges.\n\nThe current configuration fails both sub-requirements of AC-6(7): (a) there is no indication privileges were reviewed for necessity, and (b) excess privileges have not been removed or reassigned to reflect actual business needs.",
+        "evidenceCited": [
+          "8459b7bb-772b-472d-8900-202c9b541a78"
+        ],
+        "gaps": [
+          "No evidence of a documented privilege review schedule or audit log showing periodic reviews of this role's permissions.",
+          "No evidence of a role/permission change history that would indicate privileges were ever reassigned or removed after initial provisioning.",
+          "No organizational policy document defining the review frequency (Assignment: organization-defined frequency) or the roles/classes of users subject to review (Assignment: organization-defined roles or classes of users).",
+          "Human attestation would be needed to confirm whether out-of-band reviews (e.g., manual IAM Access Analyzer reviews, quarterly access reviews) have been conducted but not captured in tooling."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "8459b7bb-772b-472d-8900-202c9b541a78",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:53:26.659Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "8459b7bb-772b-472d-8900-202c9b541a78",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:53:26.659Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

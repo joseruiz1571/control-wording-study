@@ -1,0 +1,112 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:32:05.823Z",
+  "results": [
+    {
+      "controlId": "CM-8(1).v4",
+      "controlIntent": "Component installations, removals, and system updates include updating the inventory of system components.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-8(1).v4",
+        "status": "partially-satisfied",
+        "confidence": "high",
+        "rationale": "CM-8(1) requires that component installations, removals, and system updates include updating the system component inventory. Evidence was assessed across two sources with attention to temporal ordering:\n\n**Satisfied aspect — Initial deployment:**\n- The model registry entry (id: 21d12983) shows model package v1 was approved at 2025-12-01T09:00:00Z.\n- The CreateEndpoint CloudTrail event (id: da14c5da) shows the endpoint was deployed at 2025-12-01T11:00:00Z — **2 hours after** registry approval.\n- This correct temporal ordering (registry updated → then deployed) demonstrates that the initial component installation was accompanied by a proper inventory update.\n\n**Not satisfied aspect — Hotfix update:**\n- The UpdateEndpoint CloudTrail event (id: 817671d4) shows the endpoint was updated on 2026-03-15T14:22:00Z to a new config (\"churn-predictor-v1-hotfix\") by the same IAM user.\n- No corresponding registry entry exists for this hotfix deployment. The model registry — which serves as the component inventory — was **not updated** when this system component change occurred.\n- This is a direct violation of CM-8(1): a component update was made without updating the inventory.\n\n**Conclusion:** The control is only partially satisfied. The initial deployment followed proper inventory-update sequencing, but the subsequent hotfix deployment bypassed the model registry entirely, leaving the component inventory out of sync with the actual deployed state.",
+        "evidenceCited": [
+          "21d12983-bea0-448b-8c72-1a5a6f2f860a",
+          "da14c5da-3a59-4aa0-89c4-d336af9cb9cb",
+          "817671d4-0a97-41e0-906f-cc98a12339a6"
+        ],
+        "gaps": [
+          "No registry entry exists for the 'churn-predictor-v1-hotfix' endpoint config — human attestation needed to confirm whether a registry update was performed out-of-band or in a separate system.",
+          "It is unknown whether the hotfix config change involved a new model artifact or only infrastructure changes — this affects the severity of the inventory gap.",
+          "No evidence of a compensating inventory system (e.g., CMDB, tagging) that might have captured the hotfix deployment separately from the SageMaker model registry."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "21d12983-bea0-448b-8c72-1a5a6f2f860a",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:31:46.665Z"
+        },
+        {
+          "id": "da14c5da-3a59-4aa0-89c4-d336af9cb9cb",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:31:46.666Z"
+        },
+        {
+          "id": "817671d4-0a97-41e0-906f-cc98a12339a6",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:31:46.666Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "21d12983-bea0-448b-8c72-1a5a6f2f860a",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:31:46.665Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "da14c5da-3a59-4aa0-89c4-d336af9cb9cb",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:31:46.666Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "817671d4-0a97-41e0-906f-cc98a12339a6",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:31:46.666Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

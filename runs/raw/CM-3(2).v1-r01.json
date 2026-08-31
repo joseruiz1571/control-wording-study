@@ -1,0 +1,113 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:04:44.633Z",
+  "results": [
+    {
+      "controlId": "CM-3(2).v1",
+      "controlIntent": "Before finalizing the implementation of changes to the system, test, validate, and document those changes.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-3(2).v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "CM-3(2) requires that changes to the system be tested, validated, and documented *before* they are finalized/deployed. Analysis of the temporal evidence across both sources reveals two distinct issues:\n\n**Issue 1 — Initial Deployment (partially mitigated):** The model package (churn-predictor v1) was created on 2025-11-30T18:00:00Z and formally approved in the registry at 2025-12-01T09:00:00Z. The endpoint was created at 2025-12-01T11:00:00Z — two hours *after* registry approval. This ordering is consistent with a proper change-control gate for the initial deployment.\n\n**Issue 2 — Hotfix Deployment (critical violation):** On 2026-03-15T14:22:00Z, user `data-scientist-jdoe` executed an `UpdateEndpoint` event using config `churn-predictor-v1-hotfix`. There is **no corresponding model registry entry** for this change — meaning no approval record, no documented validation, and no evidence of pre-deployment testing exists. This is a direct violation of CM-3(2): a change was finalized and pushed to production without passing through the required test/validate/document gate. The control is therefore **not satisfied** overall, as the hotfix change — a material modification to the production endpoint — bypassed the change-control process entirely.",
+        "evidenceCited": [
+          "8a4a4112-609d-4456-b9f1-bd258eca403b",
+          "6e00ef6d-048f-482d-84d9-94276cd0f571",
+          "0a011450-f4fa-4e66-8eb2-af2ea9e6c409"
+        ],
+        "gaps": [
+          "No model registry entry exists for the 'churn-predictor-v1-hotfix' configuration — it is unknown whether any informal testing occurred outside the registry workflow.",
+          "No CI/CD pipeline logs or test reports are available to determine whether automated testing was run before the hotfix deployment.",
+          "No change request ticket or out-of-band approval documentation (e.g., from a ticketing system like Jira/ServiceNow) was retrievable to assess whether an emergency change process was followed.",
+          "Human attestation from the deploying user (data-scientist-jdoe) or their manager would be needed to determine intent and any compensating controls applied during the hotfix."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "8a4a4112-609d-4456-b9f1-bd258eca403b",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:04:26.265Z"
+        },
+        {
+          "id": "6e00ef6d-048f-482d-84d9-94276cd0f571",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:04:26.265Z"
+        },
+        {
+          "id": "0a011450-f4fa-4e66-8eb2-af2ea9e6c409",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:04:26.265Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "8a4a4112-609d-4456-b9f1-bd258eca403b",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:04:26.265Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "6e00ef6d-048f-482d-84d9-94276cd0f571",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:04:26.265Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        },
+        {
+          "id": "0a011450-f4fa-4e66-8eb2-af2ea9e6c409",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:04:26.265Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,59 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:21:43.834Z",
+  "results": [
+    {
+      "controlId": "SC-7(5).v3",
+      "controlIntent": "Deny network communications traffic by default, allowing network communications traffic only by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-7(5).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SC-7(5).v3 requires that network communications traffic be denied by default, with traffic permitted only by exception at managed interfaces. The evidence retrieved for the \"churn-predictor-endpoint\" shows a complete absence of deny-by-default network controls:\n\n1. **No VPC**: `vpcId` is null, meaning the endpoint is not deployed within a Virtual Private Cloud. Without a VPC, there is no managed network boundary to enforce default-deny policies.\n2. **No Subnets**: `vpcSubnetIds` is empty, confirming no VPC-level network segmentation is in place.\n3. **No Security Groups**: `securityGroupIds` is empty. Security groups are the primary mechanism for enforcing default-deny inbound/outbound rules at the interface level in AWS. Their absence means no stateful firewall rules are applied.\n4. **Network Isolation Disabled**: `enableNetworkIsolation` is `false`, meaning the endpoint is not isolated from external network traffic.\n\nCollectively, these findings indicate that the endpoint has no deny-by-default network posture. Traffic is not restricted at any managed interface, and there are no exception-based allow rules — because there is no boundary enforcement at all. This directly violates the intent of SC-7(5).v3.",
+        "evidenceCited": [
+          "0b5dd4cb-0ce8-49c2-8553-c7ac9927c86a"
+        ],
+        "gaps": [
+          "Security group ingress/egress rule details (not retrievable without security groups being attached)",
+          "Network ACL configurations at the subnet level",
+          "AWS Organizations Service Control Policies (SCPs) that might impose network restrictions at the account level",
+          "Any compensating controls (e.g., WAF, API Gateway policies) that might partially enforce deny-by-default behavior upstream of the endpoint"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "0b5dd4cb-0ce8-49c2-8553-c7ac9927c86a",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T10:21:31.916Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "0b5dd4cb-0ce8-49c2-8553-c7ac9927c86a",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T10:21:31.916Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

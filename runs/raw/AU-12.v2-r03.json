@@ -1,0 +1,92 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:13:57.525Z",
+  "results": [
+    {
+      "controlId": "AU-12.v2",
+      "controlIntent": "a. On [Assignment: organization-defined system components], provide audit record generation capability for the event types the system is capable of auditing as defined in AU-2a; b. Permit [Assignment: organization-defined personnel or roles] to select the event types that are to be logged by specific components of the system; and c. Generate audit records for the AU-2c event types that include the AU-3 audit record content.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-12.v2",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CloudTrail is generating audit records for key endpoint lifecycle events (CreateEndpoint, UpdateEndpoint), and those records include the AU-3 required content: timestamps, user identity (IAM username), event name, and request parameters (endpoint name, config name). This satisfies AU-12(a) and AU-12(c) at a basic level.\n\nHowever, two significant deficiencies undermine full conformance:\n\n1. **AU-12(b) — Authorized selection of event types**: There is no evidence that authorized personnel or roles have formally configured which event types are logged for specific system components. The audit trail captures what CloudTrail captures by default, but no deliberate, role-governed event-type selection is evidenced.\n\n2. **AU-12(c) — Completeness of audit records for AU-2 event types**: The UpdateEndpoint hotfix event (773198f6, 2026-03-15) has no corresponding model registry entry, meaning a significant change-control event (registry approval) was never recorded. The CreateEndpoint event (c68fc54a) was executed 2 hours *before* the registry approval event, indicating the audit trail does not capture a coherent, complete sequence of required governance events. Registry approval events — which should be auditable per AU-2 — are either absent or out of sequence, indicating gaps in audit record generation for the full set of required event types.",
+        "evidenceCited": [
+          "c68fc54a-dee8-4d42-a8a6-1bc977aace63",
+          "773198f6-18ad-4724-ba49-1412f25c29b2"
+        ],
+        "gaps": [
+          "No evidence of formal configuration specifying which event types are logged per AU-12(b) — e.g., CloudTrail event selector configuration, SageMaker logging policy, or documented role assignments for audit configuration.",
+          "No registry approval audit record exists for the hotfix deployment (773198f6), leaving a gap in AU-2 event coverage.",
+          "No evidence of whether audit record generation covers the full AU-2 event type list beyond endpoint create/update (e.g., model training, data access, inference invocations, access control changes).",
+          "Human attestation needed to confirm whether the pre-approval deployment (c68fc54a) represents a systemic control gap or a one-time exception with compensating controls."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "c68fc54a-dee8-4d42-a8a6-1bc977aace63",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:13:34.170Z"
+        },
+        {
+          "id": "773198f6-18ad-4724-ba49-1412f25c29b2",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:13:34.170Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "c68fc54a-dee8-4d42-a8a6-1bc977aace63",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:13:34.170Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "773198f6-18ad-4724-ba49-1412f25c29b2",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:13:34.170Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,12 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-7(1).v1"
+controls:
+  - id: "CM-7(1).v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      (a) At [Assignment: organization-defined frequency], review the system to identify unnecessary and/or nonsecure functions, ports, protocols, software, and services; and (b) Disable or remove [Assignment: organization-defined functions, ports, protocols, software, and services within the system deemed to be unnecessary and/or nonsecure].
+    collectors:
+      - getEndpointConfig
+      - getEndpointExecutionRole
+      - getEndpointNetworkConfig

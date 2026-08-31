@@ -1,0 +1,115 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:46:20.790Z",
+  "results": [
+    {
+      "controlId": "RA-7.v2",
+      "controlIntent": "In accordance with organizational risk tolerance, respond to findings from security and privacy assessments, monitoring, and audits.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "RA-7.v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "RA-7.v2 requires that findings from security/privacy assessments, monitoring, and audits are responded to in accordance with organizational risk tolerance. Evidence from two independent signals both indicate non-conformance:\n\n**Signal 1 — Monitoring is non-functional (evidence ID: fb5a15bf-4bdf-4074-adbd-e291cf0b6e19):**\nThe sole monitoring schedule (`churn-predictor-data-quality`, DataQuality type) has a last run status of **Failed** due to \"No capture data found — data capture is disabled.\" This means the monitoring pipeline cannot generate findings, and therefore no response to findings is possible. Additionally, only one of four standard monitor types (DataQuality) is configured — ModelQuality, ModelBias, and ModelExplainability monitors are entirely absent. The organization cannot respond to findings it is not collecting.\n\n**Signal 2 — Change-control bypasses indicate findings/policies are not being acted upon (evidence IDs: 24052c83-a456-4012-9e3c-ec92a75cc864, dcac46b8-b572-4e39-aa39-b7f67dccf5f4):**\n- `CreateEndpoint` (2025-12-01, user: data-scientist-jdoe): The endpoint was deployed **2 hours before** the model registry approval event — a direct violation of change-control policy.\n- `UpdateEndpoint` (2026-03-15, user: data-scientist-jdoe): A hotfix deployment was made with **no corresponding registry entry**, bypassing the approval process entirely.\n\nThese two CloudTrail events demonstrate that even when governance policies exist (registry approval requirements), they are not being followed — meaning audit findings and policy requirements are not being responded to in accordance with organizational risk tolerance.\n\n**Synthesis:** The control is not satisfied on two fronts: (1) the monitoring infrastructure is broken, preventing finding generation; and (2) change-control audit evidence shows that governance findings and policies are being bypassed rather than acted upon.",
+        "evidenceCited": [
+          "fb5a15bf-4bdf-4074-adbd-e291cf0b6e19",
+          "24052c83-a456-4012-9e3c-ec92a75cc864",
+          "dcac46b8-b572-4e39-aa39-b7f67dccf5f4"
+        ],
+        "gaps": [
+          "No evidence of a formal risk register or finding-response tracking system (e.g., ticketing/JIRA) that would show whether findings are being logged and remediated — human attestation required.",
+          "No evidence of organizational risk tolerance thresholds or SLAs for finding remediation — cannot confirm whether response timelines (if any) meet policy.",
+          "ModelQuality, ModelBias, and ModelExplainability monitor schedules are entirely absent — it is unclear whether this is a deliberate scoping decision or a gap; human attestation needed.",
+          "No evidence of data capture being intentionally disabled with a documented risk acceptance — the failure reason may represent an unacknowledged risk.",
+          "No evidence of whether the change-control bypass events triggered any incident response or corrective action."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "fb5a15bf-4bdf-4074-adbd-e291cf0b6e19",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T09:45:58.729Z"
+        },
+        {
+          "id": "24052c83-a456-4012-9e3c-ec92a75cc864",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:45:58.729Z"
+        },
+        {
+          "id": "dcac46b8-b572-4e39-aa39-b7f67dccf5f4",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:45:58.729Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "fb5a15bf-4bdf-4074-adbd-e291cf0b6e19",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T09:45:58.729Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        },
+        {
+          "id": "24052c83-a456-4012-9e3c-ec92a75cc864",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:45:58.729Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "dcac46b8-b572-4e39-aa39-b7f67dccf5f4",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:45:58.729Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

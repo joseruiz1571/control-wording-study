@@ -1,0 +1,79 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:53:07.898Z",
+  "results": [
+    {
+      "controlId": "AC-6(7).v3",
+      "controlIntent": "(a) Validate the need for privileges by reviewing, [Assignment: organization-defined frequency], the privileges assigned to [Assignment: organization-defined roles or classes of users]; and (b) Reassign or remove privileges, if necessary, to correctly reflect organizational mission and business needs.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(7).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The execution role attached to the churn-predictor-endpoint (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) has two critically over-privileged policies:\n\n1. **OverlyBroadS3**: Grants `s3:*` on `*` — all S3 actions on all buckets and objects. An inference endpoint requires only scoped read access to its model artifacts bucket, not wildcard write/delete/admin access across all S3 resources. The policy note itself flags this as overly broad.\n\n2. **SageMakerFull**: Grants `sagemaker:*` on `*` — full SageMaker control-plane access. An inference endpoint has no legitimate need to create, delete, or modify other SageMaker resources.\n\nThese configurations directly violate the least-privilege principle underlying AC-6(7). Furthermore, there is no evidence of any periodic privilege review process — no review frequency, no review records, and no history of privilege reassignment or removal. The role name (\"Generic\") suggests it was never tailored to the specific needs of this endpoint, and no remediation has occurred. Both sub-requirements of the control — (a) periodic review of assigned privileges and (b) reassignment/removal of unnecessary privileges — are unmet.",
+        "evidenceCited": [
+          "d7ad1857-6202-4213-b0af-332f67fd6275"
+        ],
+        "gaps": [
+          "No evidence of a periodic privilege review process (schedule, frequency, or review records) for this role or endpoint",
+          "No audit trail or history showing privileges were ever reassigned or removed to reflect actual business needs",
+          "No documentation of an organizational role definition that would justify the current privilege scope",
+          "Additional collectors (e.g., CloudTrail logs, access advisor data) that could show whether the broad permissions are actually exercised were not available in this session"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "d7ad1857-6202-4213-b0af-332f67fd6275",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:52:51.210Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "d7ad1857-6202-4213-b0af-332f67fd6275",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:52:51.210Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

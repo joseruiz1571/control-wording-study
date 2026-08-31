@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:23:44.749Z",
+  "results": [
+    {
+      "controlId": "SI-12.v1",
+      "controlIntent": "Information within the system and information output from the system is managed and retained in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-12.v1 requires that information within the system and information output from the system is managed and retained in accordance with applicable laws, directives, policies, and operational requirements. For an ML inference endpoint, a foundational mechanism for managing and retaining output information is data capture — recording inference inputs and outputs for auditability, drift monitoring, and compliance purposes.\n\nThe evidence retrieved shows that for the \"churn-predictor-endpoint\":\n- **dataCaptureEnabled: false** — Data capture is completely disabled.\n- **capturePercentage: 0** — No inference traffic is being captured.\n- **captureDestination: null** — No S3 destination is configured for storing captured data.\n\nThis configuration means that no inference inputs or outputs are being retained at all. Without any data capture or retention mechanism in place, the endpoint cannot demonstrate compliance with information management and retention requirements under SI-12. There is no evidence of an alternative retention mechanism (e.g., application-layer logging to S3 or another store) available through the collected evidence.",
+        "evidenceCited": [
+          "95740fc5-1270-4602-b869-943bb2c1592a"
+        ],
+        "gaps": [
+          "No evidence of alternative application-layer logging or retention mechanisms (e.g., CloudWatch Logs, custom S3 pipelines) that might compensate for disabled data capture — human attestation would be needed to rule these out.",
+          "No documented retention policy or legal/regulatory requirements specific to this model's use case were available for comparison.",
+          "No S3 bucket lifecycle policies or retention configurations were assessable, as no capture destination is configured."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "95740fc5-1270-4602-b869-943bb2c1592a",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:23:34.669Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "95740fc5-1270-4602-b869-943bb2c1592a",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:23:34.669Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

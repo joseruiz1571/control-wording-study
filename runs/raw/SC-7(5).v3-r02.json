@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:21:29.480Z",
+  "results": [
+    {
+      "controlId": "SC-7(5).v3",
+      "controlIntent": "Deny network communications traffic by default, allowing network communications traffic only by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-7(5).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SC-7(5).v3 requires that network communications traffic be denied by default, with exceptions granted only at managed interfaces. The evidence retrieved for the \"churn-predictor-endpoint\" shows a complete absence of boundary protection controls:\n\n1. **No VPC** (`vpcId: null`): The endpoint is not deployed inside a Virtual Private Cloud. Without a VPC, there are no managed network interfaces (security groups, network ACLs, route tables) through which a deny-by-default policy can be enforced.\n\n2. **No Subnets** (`vpcSubnetIds: []`): No subnets are configured, confirming the endpoint is not VPC-attached and therefore not subject to subnet-level traffic controls.\n\n3. **No Security Groups** (`securityGroupIds: []`): No security groups are attached. Security groups are the primary mechanism in AWS for implementing allow-by-exception rules at managed interfaces. Their absence means no such rules exist.\n\n4. **Network Isolation Disabled** (`enableNetworkIsolation: false`): SageMaker's network isolation feature, which would prevent the endpoint from making outbound network calls, is explicitly disabled.\n\nTaken together, the endpoint has no deny-by-default network posture. Traffic is neither restricted inbound nor outbound through any managed interface. This directly contradicts the control requirement.",
+        "evidenceCited": [
+          "2b6405dc-d1b9-419b-9d38-0ce06b31ab39"
+        ],
+        "gaps": [
+          "VPC flow logs or firewall rule sets that might exist outside of SageMaker's direct configuration (e.g., AWS Network Firewall, third-party appliances) were not assessed — however, the absence of VPC attachment makes such controls moot for this endpoint.",
+          "Human attestation confirming whether any compensating network controls exist at the account or organizational level (e.g., AWS Organizations SCPs restricting internet access)."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "2b6405dc-d1b9-419b-9d38-0ce06b31ab39",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T10:21:15.392Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "2b6405dc-d1b9-419b-9d38-0ce06b31ab39",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T10:21:15.392Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

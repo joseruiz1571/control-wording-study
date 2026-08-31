@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:23:01.065Z",
+  "results": [
+    {
+      "controlId": "SI-12.v0",
+      "controlIntent": "Manage and retain information within the system and information output from the system in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SI-12 requires that information output from the system be managed and retained in accordance with applicable laws, regulations, policies, and operational requirements. For an ML inference endpoint like \"churn-predictor-endpoint\", this means capturing and retaining model inputs and outputs (inference data) so they can be audited, monitored for drift, and reviewed for compliance purposes.\n\nThe retrieved evidence (c2ee2242-9f0d-4d62-8a53-9ab15d015113) shows that data capture is entirely disabled: `dataCaptureEnabled=false`, `capturePercentage=0`, and `captureDestination=null`. This means:\n1. No inference requests or responses are being captured or retained.\n2. There is no S3 destination configured to store any output data.\n3. Zero percent of traffic is sampled, so there is no partial retention either.\n\nThis configuration is substantively inadequate for SI-12 conformance. Without any data capture, the organization cannot demonstrate retention of system output, cannot support post-hoc audits of model decisions, and cannot fulfill data retention obligations that may be imposed by law, regulation, or internal policy. The control is not satisfied.",
+        "evidenceCited": [
+          "c2ee2242-9f0d-4d62-8a53-9ab15d015113"
+        ],
+        "gaps": [
+          "No evidence of an alternative data retention mechanism (e.g., application-layer logging, downstream database capture) that might compensate for the disabled SageMaker data capture — human attestation would be needed to confirm whether such compensating controls exist.",
+          "Applicable regulatory or policy retention requirements specific to this model's use case (e.g., GDPR, CCPA, internal data governance policy) were not available for review, which would determine the precise retention period and scope required.",
+          "Audit logs or CloudTrail records that might show whether data capture was intentionally disabled with documented justification were not retrieved."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "c2ee2242-9f0d-4d62-8a53-9ab15d015113",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:22:47.125Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "c2ee2242-9f0d-4d62-8a53-9ab15d015113",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:22:47.125Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

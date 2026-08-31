@@ -1,0 +1,94 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:23:03.352Z",
+  "results": [
+    {
+      "controlId": "AU-3.v0",
+      "controlIntent": "Ensure that audit records contain information that establishes the following: a. What type of event occurred; b. When the event occurred; c. Where the event occurred; d. Source of the event; e. Outcome of the event; and f. Identity of any individuals, subjects, or objects/entities associated with the event.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-3.v0",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "The CloudTrail events retrieved for the churn-predictor-endpoint cover two audit records (CreateEndpoint and UpdateEndpoint). Evaluating each AU-3 dimension:\n\n**a. Event type (What):** SATISFIED — Both records include `eventName` (`CreateEndpoint`, `UpdateEndpoint`), clearly identifying the type of event.\n\n**b. Timing (When):** SATISFIED — Both records include `eventTime` with precise ISO-8601 timestamps (`2025-12-01T11:00:00Z`, `2026-03-15T14:22:00Z`).\n\n**c. Location (Where):** PARTIALLY SATISFIED — The endpoint name and config name are present in `requestParameters`, providing some location context. However, no AWS region, account ID, or resource ARN is captured in the retrieved records, leaving the \"where\" dimension incomplete.\n\n**d. Source of event (Source):** SATISFIED — `userIdentity` is present in both records, identifying the IAM user (`data-scientist-jdoe`) and identity type (`IAMUser`).\n\n**e. Outcome (Result):** NOT SATISFIED — Neither record contains `responseElements`, `errorCode`, `errorMessage`, or any success/failure indicator. It is impossible to determine from these records whether the endpoint operations succeeded or failed.\n\n**f. Identity of individuals/entities:** PARTIALLY SATISFIED — The IAM username is captured, but no session context, assumed-role chain, MFA status, or source IP address is present in the retrieved records, limiting the completeness of identity attribution.\n\nOverall, the audit records are substantive in some dimensions (event type, timing, initiating user) but materially deficient in outcome recording and location/identity completeness. This constitutes a partial satisfaction of AU-3.",
+        "evidenceCited": [
+          "b9c2d5c1-ab37-44e0-b389-b85e4f0cc290",
+          "688a8738-c535-486d-9252-66f46a846dcb"
+        ],
+        "gaps": [
+          "Outcome/result of each event is absent — no responseElements, errorCode, or success/failure status in retrieved records",
+          "AWS region and account ID are not present in the retrieved records, limiting 'where' determination",
+          "Source IP address of the API caller is not captured in the retrieved records",
+          "No session context (e.g., assumed-role chain, MFA status) is present for the IAM user identity",
+          "No evidence of CloudTrail log integrity validation (log file validation) or centralized SIEM ingestion to confirm audit record completeness at the platform level",
+          "Human attestation needed to confirm whether CloudTrail is configured to capture responseElements for SageMaker API calls in this account"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "b9c2d5c1-ab37-44e0-b389-b85e4f0cc290",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:22:45.271Z"
+        },
+        {
+          "id": "688a8738-c535-486d-9252-66f46a846dcb",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:22:45.271Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "b9c2d5c1-ab37-44e0-b389-b85e4f0cc290",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:22:45.271Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "688a8738-c535-486d-9252-66f46a846dcb",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:22:45.271Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

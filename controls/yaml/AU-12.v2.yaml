@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AU-12.v2"
+controls:
+  - id: "AU-12.v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      a. On [Assignment: organization-defined system components], provide audit record generation capability for the event types the system is capable of auditing as defined in AU-2a; b. Permit [Assignment: organization-defined personnel or roles] to select the event types that are to be logged by specific components of the system; and c. Generate audit records for the AU-2c event types that include the AU-3 audit record content.
+    collectors:
+      - getCloudTrailEvents

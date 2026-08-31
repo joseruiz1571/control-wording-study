@@ -1,0 +1,92 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:49:29.178Z",
+  "results": [
+    {
+      "controlId": "AC-6(9).r1",
+      "controlIntent": "Log privileged-function execution in a log of that execution.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(9).r1",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CloudTrail is active and does capture privileged endpoint operations for churn-predictor-endpoint: the CreateEndpoint event (evidence 6bbf5e6a) and UpdateEndpoint event (evidence 55df1b44) are both logged with full user identity (data-scientist-jdoe), timestamps, and request parameters — satisfying the basic requirement to log privileged-function execution.\n\nHowever, the logging coverage is substantively incomplete in two ways:\n\n1. **Missing registry approval log for the hotfix (evidence 55df1b44):** The UpdateEndpoint hotfix on 2026-03-15 has no corresponding model registry approval event in CloudTrail. This means a privileged action — model promotion/approval — was either never performed or was not logged, leaving a gap in the audit trail for that privileged function execution.\n\n2. **Out-of-order execution vs. approval (evidence 6bbf5e6a):** The initial CreateEndpoint occurred 2 hours before the registry approval event. While the deployment itself was logged, the absence of a prior approval log entry means the full privileged-function chain (approve → deploy) was not captured in the correct sequence, undermining the sufficiency of the log as a control artifact.\n\nAC-6(9).r1 requires that privileged-function executions be logged — the infrastructure (CloudTrail) is in place and recording some events, but the logging does not consistently cover all privileged actions in the model lifecycle (particularly registry approvals), making the overall configuration only partially sufficient.",
+        "evidenceCited": [
+          "6bbf5e6a-2def-4417-ab53-5d27c501555f",
+          "55df1b44-9b5a-4021-9276-1921d30a1593"
+        ],
+        "gaps": [
+          "Model registry approval events are not present in CloudTrail for the hotfix deployment — it is unclear whether registry approval logging is configured or whether the approval step was bypassed entirely.",
+          "No CloudTrail evidence of the registry approval event that supposedly preceded the CreateEndpoint on 2025-12-01 — human attestation or registry audit log review needed to confirm whether approval was logged elsewhere.",
+          "Scope of CloudTrail coverage (which API calls are included, which regions/services are logged) is not confirmed — a CloudTrail trail configuration review would be needed to verify completeness.",
+          "No evidence of alerting or monitoring on privileged-function log events — logging alone may not satisfy the spirit of AC-6(9) without detection capability."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "6bbf5e6a-2def-4417-ab53-5d27c501555f",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T18:49:06.074Z"
+        },
+        {
+          "id": "55df1b44-9b5a-4021-9276-1921d30a1593",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T18:49:06.074Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "6bbf5e6a-2def-4417-ab53-5d27c501555f",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T18:49:06.074Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "55df1b44-9b5a-4021-9276-1921d30a1593",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T18:49:06.074Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

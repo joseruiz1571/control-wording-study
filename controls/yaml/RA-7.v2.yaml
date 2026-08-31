@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant RA-7.v2"
+controls:
+  - id: "RA-7.v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      In accordance with organizational risk tolerance, respond to findings from security and privacy assessments, monitoring, and audits.
+    collectors:
+      - getModelMonitorSchedules
+      - getCloudTrailEvents

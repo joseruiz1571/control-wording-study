@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-3(2).v3"
+controls:
+  - id: "CM-3(2).v3"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      Do not finalize implementation of changes to the system until the changes have been tested, validated, and documented.
+    collectors:
+      - getCloudTrailEvents
+      - getModelRegistryEntry

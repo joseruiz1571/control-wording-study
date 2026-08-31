@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant SC-7(5).v1"
+controls:
+  - id: "SC-7(5).v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      By default, deny network communications traffic and allow network communications traffic by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]].
+    collectors:
+      - getEndpointNetworkConfig

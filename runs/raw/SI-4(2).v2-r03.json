@@ -1,0 +1,63 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:41:09.187Z",
+  "results": [
+    {
+      "controlId": "SI-4(2).v2",
+      "controlIntent": "Automated tools and mechanisms are employed to support near real-time analysis of events.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-4(2).v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-4(2).v2 requires that automated tools and mechanisms support **near real-time analysis of events**. The evidence reveals three compounding failures:\n\n1. **Insufficient monitoring frequency**: The sole monitoring schedule (`churn-predictor-data-quality`) runs on a weekly cron (`cron(0 6 ? * MON *)`). A weekly cadence does not constitute near real-time analysis — it introduces up to a 7-day blind spot between anomalous events and detection.\n\n2. **Monitor is non-functional**: The last run status is `Failed` with the reason \"No capture data found — data capture is disabled.\" The underlying data capture pipeline is disabled, meaning the monitor has no input data to analyze even at its already-insufficient weekly frequency.\n\n3. **Severely limited monitoring coverage**: Only a single `DataQuality` monitor exists. There are no `ModelQuality`, `ModelBias`, or `ModelExplainability` schedules configured, leaving large portions of the model's behavioral surface entirely unmonitored.\n\nTaken together, the monitoring configuration is neither substantively adequate (weekly cadence ≠ near real-time) nor operationally functional (data capture disabled, last run failed). The control is not satisfied.",
+        "evidenceCited": [
+          "60a774ff-11ee-43c9-bb80-75964ab40f0a"
+        ],
+        "gaps": [
+          "Near real-time monitoring would require sub-hourly or continuous schedule expressions (e.g., cron every 5–15 minutes or streaming-based triggers) — none are present.",
+          "Data capture must be enabled on the endpoint for any monitor to function — human attestation needed to confirm whether this is intentional or a misconfiguration.",
+          "ModelQuality, ModelBias, and ModelExplainability monitor schedules are entirely absent — human confirmation needed on whether these are out of scope for this model.",
+          "CloudWatch alarms or event-driven triggers (e.g., EventBridge rules) that could supplement near real-time analysis were not assessable with available tools.",
+          "Root cause and remediation status of the last run failure should be confirmed by the model operations team."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "60a774ff-11ee-43c9-bb80-75964ab40f0a",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:40:53.152Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "60a774ff-11ee-43c9-bb80-75964ab40f0a",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:40:53.152Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

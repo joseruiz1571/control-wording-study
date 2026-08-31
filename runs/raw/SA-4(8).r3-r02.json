@@ -1,0 +1,63 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T19:33:20.701Z",
+  "results": [
+    {
+      "controlId": "SA-4(8).r3",
+      "controlIntent": "Require a plan for continuous monitoring of control effectiveness from the developer of the system, system component, or system service; that plan is consistent with the continuous monitoring program of the organization.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-4(8).r3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SA-4(8).r3 requires a substantive, operational continuous monitoring plan for control effectiveness — one that is consistent with the organization's broader continuous monitoring program. The evidence reveals multiple critical deficiencies:\n\n1. **Monitoring is non-functional**: The sole monitoring schedule (`churn-predictor-data-quality`) has a last-run status of \"Failed\" with the reason \"No capture data found — data capture is disabled.\" This means the monitoring infrastructure is broken at its foundation — no inference data is being captured, so no monitoring can actually occur.\n\n2. **Incomplete coverage**: Only a single DataQuality schedule exists. There are no schedules for ModelQuality (prediction accuracy drift), ModelBias (fairness monitoring), or ModelExplainability (feature attribution drift). A substantive continuous monitoring plan for an ML model should address multiple dimensions of model health.\n\n3. **No baseline evidence**: No baseline creation timestamp was returned, suggesting the DataQuality monitor may not even have a properly configured baseline to compare against.\n\n4. **Scheduled but inoperative**: Having a schedule in \"Scheduled\" state does not constitute a functioning monitoring plan when the underlying data capture prerequisite is disabled. The configuration exists in name only.\n\nTaken together, the continuous monitoring configuration is not substantive — it is neither operational nor comprehensive enough to satisfy the intent of SA-4(8).r3.",
+        "evidenceCited": [
+          "5d9b3fd3-ff78-4550-a7f9-753801a695a8"
+        ],
+        "gaps": [
+          "Data capture configuration status (enabled/disabled, S3 destination, sampling rate) — needed to confirm root cause and remediation path",
+          "Baseline dataset and constraints artifacts for the DataQuality monitor — needed to confirm whether a valid baseline exists",
+          "ModelQuality, ModelBias, and ModelExplainability monitoring schedules — absent from the environment; human attestation needed to confirm whether these are intentionally omitted or planned",
+          "Organizational continuous monitoring program documentation — needed to assess whether the current (broken) plan is consistent with organizational standards",
+          "Incident/remediation records for the repeated monitoring failures — needed to assess whether the organization is aware of and addressing the gap"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "5d9b3fd3-ff78-4550-a7f9-753801a695a8",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T19:33:03.766Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "5d9b3fd3-ff78-4550-a7f9-753801a695a8",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T19:33:03.766Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

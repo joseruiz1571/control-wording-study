@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant SA-10.r3"
+controls:
+  - id: "SA-10.r3"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      Require the developer of the system, system component, or system service to: a. Perform configuration management during [Selection (one or more): design; development; implementation; operation; disposal] of the system, component, or service; b. Document the integrity of changes to [Assignment: organization-defined configuration items under configuration management]; manage the integrity of those changes; and control the integrity of those changes; c. Implement only those changes to the system, component, or service that the organization has approved; d. Document approved changes to the system, component, or service; and document the potential security and privacy impacts of such changes; and e. Track security flaws and flaw resolution within the system, component, or service; and report findings to [Assignment: organization-defined personnel].
+    collectors:
+      - getCloudTrailEvents
+      - getModelRegistryEntry

@@ -1,0 +1,93 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:25:00.293Z",
+  "results": [
+    {
+      "controlId": "AU-3.v2",
+      "controlIntent": "Audit records contain information that establishes: a. What type of event occurred; b. When the event occurred; c. Where the event occurred; d. Source of the event; e. Outcome of the event; and f. Identity of any individuals, subjects, or objects/entities associated with the event.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-3.v2",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CloudTrail events retrieved for the churn-predictor-endpoint cover two key lifecycle events: CreateEndpoint (2025-12-01T11:00:00Z) and UpdateEndpoint (2026-03-15T14:22:00Z). Assessing each AU-3.v2 sub-requirement:\n\n(a) EVENT TYPE — SATISFIED: Both records clearly identify the event name (CreateEndpoint, UpdateEndpoint), establishing what type of event occurred.\n\n(b) WHEN — SATISFIED: Both records carry precise ISO-8601 timestamps, satisfying the temporal requirement.\n\n(c) WHERE — PARTIALLY SATISFIED: The endpoint name and config name are present in requestParameters, providing partial location context. However, no AWS region, account ID, or resource ARN is captured in the retrieved records, leaving the full \"where\" ambiguous.\n\n(d) SOURCE — SATISFIED: Both events record the IAM identity type and userName (data-scientist-jdoe), establishing the source of the event.\n\n(e) OUTCOME — NOT SATISFIED: Neither event record contains an errorCode, errorMessage, responseElements, or any explicit success/failure indicator. The outcome of each operation is entirely absent from the audit records, which is a direct gap against AU-3.v2(e).\n\n(f) IDENTITY — SATISFIED: The userIdentity block in both records identifies the IAMUser 'data-scientist-jdoe' as the associated individual.\n\nAdditionally, the notes embedded in the evidence flag two significant audit-integrity concerns: (1) the CreateEndpoint was executed ~2 hours before the model registry approval, and (2) the UpdateEndpoint hotfix has no corresponding registry entry. These gaps mean the audit trail does not capture the full chain of authorization, further weakening the sufficiency of the records.\n\nOverall: requirements (a), (b), (d), and (f) are met; (c) is partially met; and (e) is not met. The absence of event outcomes is a substantive deficiency under AU-3.v2.",
+        "evidenceCited": [
+          "6980bd89-e750-4fad-be15-e36bd59cb17a",
+          "ef194141-10e1-481f-82c6-fe36c6ea9e50"
+        ],
+        "gaps": [
+          "Event outcome (success/failure status, errorCode, responseElements) is absent from both CloudTrail records — AU-3.v2(e) cannot be confirmed satisfied.",
+          "No AWS region, account ID, or resource ARN present in retrieved records — full 'where' context for AU-3.v2(c) is incomplete.",
+          "No registry approval event was retrieved; the CreateEndpoint record notes deployment occurred 2 hours before approval, and the UpdateEndpoint hotfix has no registry entry — authorization linkage in the audit trail is unverifiable from available evidence.",
+          "Only two events were retrieved; a broader audit log review (e.g., DescribeEndpoint, DeleteEndpoint, InvokeEndpoint, IAM policy changes) would be needed to assess completeness of audit coverage across the full model lifecycle.",
+          "Human attestation would be needed to confirm whether CloudTrail is configured with full response elements logging and whether a SIEM or log aggregation system enriches these records with the missing fields."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "6980bd89-e750-4fad-be15-e36bd59cb17a",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:24:35.922Z"
+        },
+        {
+          "id": "ef194141-10e1-481f-82c6-fe36c6ea9e50",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:24:35.922Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "6980bd89-e750-4fad-be15-e36bd59cb17a",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:24:35.922Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "ef194141-10e1-481f-82c6-fe36c6ea9e50",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:24:35.922Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

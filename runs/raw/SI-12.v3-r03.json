@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:25:27.496Z",
+  "results": [
+    {
+      "controlId": "SI-12.v3",
+      "controlIntent": "Manage and retain both information residing in the system and information output from the system in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-12.v3 requires that information residing in or output from the system be managed and retained in accordance with applicable laws, regulations, policies, and operational requirements. For an ML inference endpoint, this means capturing model inputs and outputs (inference data) so that records are preserved and available for audit, drift detection, and compliance purposes.\n\nEvidence retrieved (ID: 73f6ee58-2644-4ff6-af93-4323a1c93dd8) shows that for endpoint \"churn-predictor-endpoint\":\n1. **Data capture is disabled** (`dataCaptureEnabled: false`) — no inference inputs or outputs are being recorded.\n2. **Capture percentage is 0%** — even if enabled, no traffic would be captured.\n3. **No capture destination is configured** (`captureDestination: null`) — there is no S3 path designated for retaining inference data.\n\nThis configuration is entirely non-substantive with respect to information output retention. The endpoint produces predictions (information output) that are not retained in any form, making it impossible to satisfy the retention and management obligations required by SI-12. There is no evidence of any compensating mechanism for retaining model output data.",
+        "evidenceCited": [
+          "73f6ee58-2644-4ff6-af93-4323a1c93dd8"
+        ],
+        "gaps": [
+          "No evidence of alternative/compensating retention mechanisms (e.g., application-layer logging, downstream database capture of predictions) — these would require human attestation or additional tooling outside the current collector scope.",
+          "Retention policy documentation (legal/regulatory requirements applicable to this model's outputs) was not retrievable via available tools — human review of policy documents is needed to confirm the specific retention period required.",
+          "Audit logs or CloudWatch log retention settings for the endpoint were not assessed — a separate collector would be needed to evaluate whether inference request logs are retained at the infrastructure level."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "73f6ee58-2644-4ff6-af93-4323a1c93dd8",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:25:13.682Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "73f6ee58-2644-4ff6-af93-4323a1c93dd8",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:25:13.682Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

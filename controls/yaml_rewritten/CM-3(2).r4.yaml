@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-3(2).r4"
+controls:
+  - id: "CM-3(2).r4"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      a. Testing of changes to the system occurs before the implementation of those changes is finalized; b. Validation of changes to the system occurs before the implementation of those changes is finalized; and c. Documentation of changes to the system occurs before the implementation of those changes is finalized.
+    collectors:
+      - getCloudTrailEvents
+      - getModelRegistryEntry

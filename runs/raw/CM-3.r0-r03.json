@@ -1,0 +1,114 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T19:13:53.107Z",
+  "results": [
+    {
+      "controlId": "CM-3.r0",
+      "controlIntent": "a. Determine the types of changes to the system that are configuration-controlled, and document those types; b. Review proposed configuration-controlled changes to the system and, with explicit consideration for security and privacy impact analyses, approve or disapprove such changes; c. Document configuration change decisions associated with the system; d. Implement approved configuration-controlled changes to the system; e. Retain records of configuration-controlled changes to the system for [Assignment: organization-defined time period]; f. Monitor activities associated with configuration-controlled changes to the system, and review those activities; and g. Coordinate configuration change control activities, and provide oversight for those activities, through [Assignment: organization-defined configuration change control element] that convenes [Selection (one or more): [Assignment: organization-defined frequency]; when [Assignment: organization-defined configuration change conditions]].\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-3.r0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "CM-3 requires that configuration-controlled changes be proposed, reviewed, approved, documented, and implemented in that order — with records retained and oversight maintained.\n\nEvidence from this session reveals two critical failures:\n\n**1. Hotfix deployment with no registry approval (UpdateEndpoint — ef123dd4):**\nOn 2026-03-15T14:22:00Z, user `data-scientist-jdoe` deployed a hotfix (`churn-predictor-v1-hotfix`) directly to the endpoint. No corresponding model registry entry or approval record exists for this change. This violates CM-3 sub-clauses (b) approval, (c) documentation, and (d) implementation of *approved* changes. A configuration change was implemented without any documented review or approval.\n\n**2. Initial deployment sequencing concern (CreateEndpoint — 7a3805ad vs. registry — e85e8444):**\nThe model registry shows approval at 2025-12-01T09:00:00Z, and the endpoint was created at 2025-12-01T11:00:00Z. While the timestamps show the deployment occurred after approval, the CloudTrail note explicitly flags this as a change-control concern (\"Deployed 2h BEFORE registry approval at 09:00\"), suggesting the audit trail itself contains conflicting or unreliable metadata — undermining confidence in the integrity of the change-control record.\n\n**Summary:** At minimum, the March 2026 hotfix represents a clear, unapproved configuration change with no registry entry, no documented approval, and no evidence of security/privacy impact analysis — directly violating CM-3(b), (c), (d), and (e). The control is not satisfied.",
+        "evidenceCited": [
+          "7a3805ad-fd1e-4630-9128-ad17e3f29434",
+          "ef123dd4-c672-4fbc-b2e7-e89de7e52eb0",
+          "e85e8444-2d39-4b87-8dd7-3dbaeb44f6e9"
+        ],
+        "gaps": [
+          "No model registry entry exists for the hotfix config 'churn-predictor-v1-hotfix' — human attestation needed to confirm whether an out-of-band approval process was followed.",
+          "No evidence of a security or privacy impact analysis for any change (CM-3b requirement).",
+          "No evidence of a configuration change control board or oversight body (CM-3g requirement).",
+          "Retention policy for change records (CM-3e) cannot be confirmed from available tooling.",
+          "The conflicting note in the CreateEndpoint CloudTrail record (timestamps vs. note text) requires human review to resolve whether the initial deployment was truly pre-approval."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "7a3805ad-fd1e-4630-9128-ad17e3f29434",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T19:13:32.115Z"
+        },
+        {
+          "id": "ef123dd4-c672-4fbc-b2e7-e89de7e52eb0",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T19:13:32.115Z"
+        },
+        {
+          "id": "e85e8444-2d39-4b87-8dd7-3dbaeb44f6e9",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T19:13:32.116Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "7a3805ad-fd1e-4630-9128-ad17e3f29434",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T19:13:32.115Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "ef123dd4-c672-4fbc-b2e7-e89de7e52eb0",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T19:13:32.115Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        },
+        {
+          "id": "e85e8444-2d39-4b87-8dd7-3dbaeb44f6e9",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T19:13:32.116Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

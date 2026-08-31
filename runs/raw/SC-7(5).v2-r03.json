@@ -1,0 +1,58 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:20:55.173Z",
+  "results": [
+    {
+      "controlId": "SC-7(5).v2",
+      "controlIntent": "Network communications traffic is denied by default and allowed by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-7(5).v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SC-7(5).v2 requires that network communications traffic be denied by default and allowed only by exception at managed interfaces. The evidence retrieved for the \"churn-predictor-endpoint\" reveals three compounding failures:\n\n1. **No VPC deployment**: `vpcId` is `null` and `vpcSubnetIds` is empty. The endpoint is not placed inside a Virtual Private Cloud, meaning it is not behind a managed network boundary where deny-by-default rules can be enforced via VPC security controls (NACLs, route tables, security groups).\n\n2. **No security groups**: `securityGroupIds` is empty. Security groups are the primary mechanism in AWS for implementing stateful, deny-by-default ingress/egress rules at the interface level. Without any security groups, there is no deny-by-default posture enforced at a managed interface.\n\n3. **Network isolation disabled**: `enableNetworkIsolation` is `false`. SageMaker's network isolation feature, when enabled, prevents the endpoint container from making outbound network calls — a key deny-by-default control for egress traffic. Its absence means the endpoint can freely initiate outbound connections.\n\nCollectively, the endpoint has no VPC boundary, no security group rules, and no network isolation — none of the foundational mechanisms for a deny-by-default network posture are in place. This directly contradicts the intent of SC-7(5).v2.",
+        "evidenceCited": [
+          "093b71f1-1488-4074-9236-8f8840e34a5e"
+        ],
+        "gaps": [
+          "Firewall or WAF rules upstream of the endpoint (e.g., AWS Network Firewall, API Gateway resource policies) were not assessed — these could theoretically provide compensating deny-by-default controls, but no such evidence was available via the collector tools.",
+          "VPC endpoint policies or AWS PrivateLink configuration, if any, could not be verified.",
+          "Human attestation from the network/security team on whether any out-of-band perimeter controls exist would be needed to fully rule out compensating controls."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "093b71f1-1488-4074-9236-8f8840e34a5e",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T10:20:41.379Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "093b71f1-1488-4074-9236-8f8840e34a5e",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T10:20:41.379Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

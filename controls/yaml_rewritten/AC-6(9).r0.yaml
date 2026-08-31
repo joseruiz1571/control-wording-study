@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-6(9).r0"
+controls:
+  - id: "AC-6(9).r0"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Log the execution of privileged functions in a log of privileged-function execution.
+    collectors:
+      - getCloudTrailEvents

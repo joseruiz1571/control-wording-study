@@ -1,0 +1,112 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:03:39.836Z",
+  "results": [
+    {
+      "controlId": "CM-3(2).v0",
+      "controlIntent": "Test, validate, and document changes to the system before finalizing the implementation of the changes.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-3(2).v0",
+        "status": "partially-satisfied",
+        "confidence": "high",
+        "rationale": "CM-3(2).v0 requires that changes are tested, validated, and documented *before* being finalized/deployed. Evidence from two separate deployment events tells a split story:\n\n**Initial deployment (SATISFIED):** The model package (v1) was created in the registry on 2025-11-30T18:00:00Z and formally approved at 2025-12-01T09:00:00Z (evidence: 0c5a17d9). The `CreateEndpoint` event occurred at 2025-12-01T11:00:00Z (evidence: a7bd61be) — two hours *after* registry approval. This temporal ordering is consistent with the control requirement: validation/approval preceded deployment.\n\n**Hotfix deployment (NOT SATISFIED):** A subsequent `UpdateEndpoint` event on 2026-03-15T14:22:00Z deployed config `churn-predictor-v1-hotfix` (evidence: 0da37ef6). There is no corresponding model registry entry for this hotfix — no creation record, no approval record, and no documented validation. This change was pushed directly to the production endpoint without passing through the formal change-control gate, violating the core requirement of CM-3(2).\n\nBecause one of two recorded deployment events bypasses the required pre-deployment testing and approval process, the control is only partially satisfied.",
+        "evidenceCited": [
+          "a7bd61be-2311-4711-98b4-4ae177676497",
+          "0da37ef6-d596-4a24-8651-ae1c39317621",
+          "0c5a17d9-aa3f-4667-a136-5066b1a36d9b"
+        ],
+        "gaps": [
+          "No model registry entry exists for the 'churn-predictor-v1-hotfix' config — it is unknown whether any informal testing or validation was performed and documented outside the registry (e.g., in a ticketing system or separate test report). Human attestation from the deploying engineer (data-scientist-jdoe) would be needed to determine whether any out-of-band validation occurred.",
+          "No test/validation artifacts (e.g., evaluation metrics, A/B test results, staging environment logs) were retrievable for either deployment event to confirm the *nature* of pre-deployment testing beyond the approval gate.",
+          "It is unclear whether an emergency change-control exception process exists and was invoked for the hotfix — this would require review of organizational change management policy documentation."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "a7bd61be-2311-4711-98b4-4ae177676497",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:03:20.623Z"
+        },
+        {
+          "id": "0da37ef6-d596-4a24-8651-ae1c39317621",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:03:20.623Z"
+        },
+        {
+          "id": "0c5a17d9-aa3f-4667-a136-5066b1a36d9b",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:03:20.623Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "a7bd61be-2311-4711-98b4-4ae177676497",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:03:20.623Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "0da37ef6-d596-4a24-8651-ae1c39317621",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:03:20.623Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        },
+        {
+          "id": "0c5a17d9-aa3f-4667-a136-5066b1a36d9b",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:03:20.623Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

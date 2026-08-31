@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant SI-12.v1"
+controls:
+  - id: "SI-12.v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Information within the system and information output from the system is managed and retained in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements.
+    collectors:
+      - getDataCaptureConfig

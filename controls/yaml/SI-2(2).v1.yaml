@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant SI-2(2).v1"
+controls:
+  - id: "SI-2(2).v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      Using [Assignment: organization-defined automated mechanisms], determine [Assignment: organization-defined frequency] whether system components have applicable security-relevant software and firmware updates installed.
+    collectors:
+      - getModelRegistryEntry
+      - getCloudTrailEvents

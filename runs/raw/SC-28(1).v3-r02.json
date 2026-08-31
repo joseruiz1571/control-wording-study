@@ -1,0 +1,59 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:17:13.082Z",
+  "results": [
+    {
+      "controlId": "SC-28(1).v3",
+      "controlIntent": "Implement cryptographic mechanisms that prevent unauthorized disclosure and modification of the following information at rest on [Assignment: organization-defined system components or media]: [Assignment: organization-defined information].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-28(1).v3",
+        "status": "partially-satisfied",
+        "confidence": "high",
+        "rationale": "SC-28(1).v3 requires cryptographic mechanisms to prevent unauthorized disclosure and modification of information at rest. The evidence reveals a mixed posture:\n\n**What is covered:**\n- Model artifacts are encrypted using an AWS-managed KMS key (`arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker`), and the key is enabled (`keyEnabled: true`). This provides a baseline cryptographic protection for model artifacts at rest.\n\n**What is deficient:**\n1. **Endpoint volume encryption is absent**: `volumeKmsKeyId` is `null`, meaning the storage volumes attached to the endpoint's compute instances are NOT encrypted with KMS. Data processed or temporarily stored on these volumes (e.g., inference inputs/outputs, model weights loaded into instance storage) is not protected by a cryptographic mechanism at rest — a direct gap against SC-28(1).\n2. **AWS-managed key (not customer-managed)**: The key manager is `AWS`, not `CUSTOMER`. AWS-managed keys do not allow the organization to enforce key policies, restrict key usage, rotate on a custom schedule, or audit access with the same granularity as customer-managed keys (CMKs). For organizations with defined information protection requirements under SC-28(1), reliance solely on AWS-managed keys may not satisfy the \"organization-defined\" cryptographic control assignment, as the organization has no direct control over the key material.\n\n**Overall**: Encryption exists for model artifacts but is absent for endpoint volumes, and the key management model (AWS-managed) limits organizational control. The control is only partially satisfied.",
+        "evidenceCited": [
+          "96a4826e-5a05-4bda-888a-f3b53c7e7b64"
+        ],
+        "gaps": [
+          "Endpoint volume encryption (volumeKmsKeyId) is null — human confirmation needed on whether instance storage is encrypted via an alternative mechanism (e.g., OS-level encryption or instance store encryption)",
+          "No customer-managed KMS key (CMK) is in use; organization should attest whether AWS-managed keys satisfy their defined cryptographic control requirements under SC-28(1)",
+          "No evidence collected on S3 bucket encryption for model artifacts or training data at rest — additional collectors may be needed",
+          "No evidence on network-attached storage or data capture configurations for the endpoint"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "96a4826e-5a05-4bda-888a-f3b53c7e7b64",
+          "source": "sagemaker:kms:config",
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e",
+          "retrievedAt": "2026-08-30T10:16:56.604Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "96a4826e-5a05-4bda-888a-f3b53c7e7b64",
+          "source": "sagemaker:kms:config",
+          "retrievedAt": "2026-08-30T10:16:56.604Z",
+          "payload": {
+            "volumeKmsKeyId": null,
+            "artifactKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker",
+            "keyEnabled": true,
+            "keyManager": "AWS"
+          },
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

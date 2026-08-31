@@ -1,0 +1,87 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:58:04.081Z",
+  "results": [
+    {
+      "controlId": "CM-2.r1",
+      "controlIntent": "a. Develop a current system baseline configuration; document that baseline configuration; and keep that baseline configuration under configuration control; and b. Review and update the baseline configuration of the system: 1. [Assignment: organization-defined frequency]; 2. When [Assignment: organization-defined circumstances] require a review and update; and 3. When system components are installed or upgraded.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-2.r1",
+        "status": "not-satisfied",
+        "confidence": "medium",
+        "rationale": "CM-2.r1 requires: (a) a documented, current baseline configuration kept under configuration control, and (b) periodic review and update of that baseline triggered by defined frequency, defined circumstances, and component installation/upgrade events.\n\nEvidence retrieved shows:\n\n1. **Model Registry (2426b6fa):** Only a single model package version (v1) exists with an approval timestamp of 2025-12-01. There is no evidence of a formally documented baseline configuration, no versioned baseline history, and no metadata indicating a review schedule or change-control process.\n\n2. **Endpoint Config (f88e3bea):** The endpoint configuration captures instance type (`ml.m5.large`), network isolation (`false`), and data capture (`false`). Critically, data capture is **disabled** (`dataCaptureEnabled: false`, `capturePercentage: 0`, `captureDestination: null`), which means there is no automated mechanism to detect configuration drift or support baseline monitoring. Network isolation is also disabled with no documented rationale as part of a baseline decision record.\n\nTaken together, the evidence shows raw configuration state exists in AWS but there is no indication that: (a) this state has been formally documented as a baseline, (b) it is under configuration control with change tracking, or (c) any review/update process has been defined or executed. The absence of data capture further undermines the ability to detect and respond to configuration changes over time.",
+        "evidenceCited": [
+          "2426b6fa-c28b-487d-9d4b-49261e039864",
+          "f88e3bea-6137-4795-bcbc-189e6222b537"
+        ],
+        "gaps": [
+          "No evidence of a formally documented baseline configuration artifact (e.g., a configuration document, IaC template, or CMDB record) for the model or endpoint",
+          "No evidence of a defined review frequency or review schedule for the baseline",
+          "No evidence of a change-control process or approval workflow for baseline updates",
+          "No evidence of baseline reviews triggered by component upgrades or defined circumstances",
+          "Data capture is disabled, removing a key mechanism for detecting configuration drift",
+          "Network isolation is disabled with no documented rationale or baseline decision record",
+          "Only one model version exists — no history of baseline evolution or update events to assess",
+          "Human attestation needed to confirm whether out-of-band processes (e.g., ticketing systems, runbooks) cover these gaps"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "2426b6fa-c28b-487d-9d4b-49261e039864",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T18:57:45.113Z"
+        },
+        {
+          "id": "f88e3bea-6137-4795-bcbc-189e6222b537",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T18:57:45.113Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "2426b6fa-c28b-487d-9d4b-49261e039864",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T18:57:45.113Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "f88e3bea-6137-4795-bcbc-189e6222b537",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T18:57:45.113Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

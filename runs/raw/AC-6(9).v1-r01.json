@@ -1,0 +1,93 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:55:57.759Z",
+  "results": [
+    {
+      "controlId": "AC-6(9).v1",
+      "controlIntent": "Record the execution of privileged functions in a log.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(9).v1",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "AC-6(9).v1 requires that the execution of privileged functions be recorded in a log. The CloudTrail evidence confirms that two privileged functions — CreateEndpoint (b002fa6a) and UpdateEndpoint (695ce644) — were both captured in CloudTrail logs with event name, timestamp, IAM user identity (data-scientist-jdoe), and request parameters. This demonstrates that the logging mechanism is active and recording privileged ML infrastructure actions.\n\nHowever, the evidence reveals substantive governance gaps that undermine the sufficiency of the logging posture:\n\n1. **Out-of-order deployment (b002fa6a):** The CreateEndpoint event occurred 2 hours *before* the model registry approval, meaning a privileged deployment action was executed outside of the approved change-control process. While the action was logged, the log reveals an unauthorized privileged function execution — indicating that logging alone is not preventing or flagging unauthorized privileged actions in a timely manner.\n\n2. **Hotfix with no registry entry (695ce644):** The UpdateEndpoint hotfix was deployed with no corresponding model registry entry. Again, the action was logged, but there is no evidence of a compensating control (e.g., alerting, automated blocking, or review workflow) that would act on these logged events to enforce privilege boundaries.\n\nIn summary: logging of privileged functions is occurring (satisfying the literal logging requirement), but the logged events themselves reveal that privileged functions are being executed outside of sanctioned processes, and there is no evidence that the logs are being monitored or acted upon to enforce AC-6(9)'s intent of accountability for privileged function execution. This makes the control only partially satisfied.",
+        "evidenceCited": [
+          "b002fa6a-eb72-4686-9cbc-af7e277555ae",
+          "695ce644-637c-469d-8596-827b4c457f99"
+        ],
+        "gaps": [
+          "No evidence of CloudTrail log monitoring, alerting, or SIEM integration to act on logged privileged function executions — human attestation needed.",
+          "No evidence of whether CloudTrail is enabled for all relevant AWS services/regions (coverage completeness unknown).",
+          "No evidence of log integrity controls (e.g., CloudTrail log file validation) to ensure logs cannot be tampered with.",
+          "No evidence of a log retention policy meeting organizational or regulatory requirements.",
+          "Human attestation needed to confirm whether the out-of-order deployment and registry-less hotfix were reviewed, escalated, or remediated after being logged."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "b002fa6a-eb72-4686-9cbc-af7e277555ae",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T07:55:31.400Z"
+        },
+        {
+          "id": "695ce644-637c-469d-8596-827b4c457f99",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T07:55:31.400Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "b002fa6a-eb72-4686-9cbc-af7e277555ae",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:55:31.400Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "695ce644-637c-469d-8596-827b4c457f99",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:55:31.400Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

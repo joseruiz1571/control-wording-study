@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant SI-7.v2"
+controls:
+  - id: "SI-7.v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      a. Employ integrity verification tools that detect unauthorized changes to the following software, firmware, and information: [Assignment: organization-defined software, firmware, and information]; and b. When unauthorized changes to the software, firmware, and information are detected, take the following actions: [Assignment: organization-defined actions].
+    collectors:
+      - getModelRegistryEntry
+      - getCloudTrailEvents

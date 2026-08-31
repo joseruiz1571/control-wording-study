@@ -1,0 +1,93 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:55:22.304Z",
+  "results": [
+    {
+      "controlId": "AC-6(9).v0",
+      "controlIntent": "Log the execution of privileged functions.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(9).v0",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "AC-6(9) requires that the execution of privileged functions be logged. The CloudTrail evidence shows that two privileged operations against the \"churn-predictor-endpoint\" were in fact captured in CloudTrail logs:\n\n1. **CreateEndpoint** (2025-12-01T11:00:00Z, event ID: 8427c538) — The initial deployment of the endpoint by IAM user \"data-scientist-jdoe\" was logged, including the endpoint name and config name.\n2. **UpdateEndpoint** (2026-03-15T14:22:00Z, event ID: e4d4a4b0) — A hotfix deployment by the same user was also logged with full request parameters.\n\nThis confirms that CloudTrail is active and capturing privileged SageMaker API calls (CreateEndpoint, UpdateEndpoint), satisfying the *logging* requirement of AC-6(9) at a technical level.\n\nHowever, the evidence reveals two significant substantive concerns that undermine full conformance:\n\n- **Event 8427c538**: The endpoint was deployed **2 hours before** the model registry approval (deployment at 09:00, approval at 11:00). This indicates a privileged function was executed outside of authorized change-control gates — the log exists, but the privileged action itself was unauthorized.\n- **Event e4d4a4b0**: The hotfix deployment has **no corresponding registry entry**, meaning a privileged deployment occurred with no traceability to an approved model artifact.\n\nWhile the logging mechanism (CloudTrail) is functioning and capturing privileged function executions, the control's intent — that privileged functions are logged *and* that those logs can be used to detect and enforce proper authorization — is only partially met. The logs reveal violations rather than evidence of a controlled process. There is no evidence of alerting, review, or remediation triggered by these logged anomalies.",
+        "evidenceCited": [
+          "8427c538-2f05-48f6-b802-fd5f88db1938",
+          "e4d4a4b0-4fb9-4fbc-a110-d0d66d970dc4"
+        ],
+        "gaps": [
+          "No evidence of CloudWatch Alarms or EventBridge rules monitoring CloudTrail for unauthorized privileged actions — it is unknown whether the logged anomalies triggered any alerts or human review.",
+          "No evidence of log integrity controls (e.g., CloudTrail log file validation) to confirm logs cannot be tampered with after the fact.",
+          "No evidence of a log review process or audit cadence that would act on the captured privileged function events.",
+          "Model registry approval records were not directly retrieved — the notes in CloudTrail events reference approval timing, but the registry itself was not inspected.",
+          "No evidence of IAM policy controls restricting who can invoke CreateEndpoint/UpdateEndpoint, which would complement logging with prevention."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "8427c538-2f05-48f6-b802-fd5f88db1938",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T07:55:05.658Z"
+        },
+        {
+          "id": "e4d4a4b0-4fb9-4fbc-a110-d0d66d970dc4",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T07:55:05.658Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "8427c538-2f05-48f6-b802-fd5f88db1938",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:55:05.658Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "e4d4a4b0-4fb9-4fbc-a110-d0d66d970dc4",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:55:05.658Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

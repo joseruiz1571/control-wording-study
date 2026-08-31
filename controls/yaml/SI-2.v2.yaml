@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant SI-2.v2"
+controls:
+  - id: "SI-2.v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      a. Identify, report, and correct system flaws; b. Test software and firmware updates related to flaw remediation for effectiveness and potential side effects prior to installation; c. Within [Assignment: organization-defined time period] of the release of the updates, install security-relevant software and firmware updates; and d. Incorporate flaw remediation into the organizational configuration management process.
+    collectors:
+      - getCloudTrailEvents
+      - getModelRegistryEntry

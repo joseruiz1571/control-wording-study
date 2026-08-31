@@ -1,0 +1,85 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:56:27.117Z",
+  "results": [
+    {
+      "controlId": "CM-2.r0",
+      "controlIntent": "a. Develop a current baseline configuration of the system; document that baseline configuration; and maintain that baseline configuration under configuration control; and b. Review and update the baseline configuration of the system: 1. [Assignment: organization-defined frequency]; 2. When [Assignment: organization-defined circumstances] require a review and update; and 3. When system components are installed or upgraded.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-2.r0",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CM-2.r0 requires: (a) developing, documenting, and maintaining a current baseline configuration under configuration control; and (b) reviewing and updating that baseline at a defined frequency, when circumstances require it, and when components are installed or upgraded.\n\n**What is satisfied:**\n- A baseline configuration *exists* in a rudimentary sense: the model registry entry (ac88560a) records model package version 1, approval status, approval timestamp, and ARN — providing a point-in-time snapshot of the approved model artifact.\n- The endpoint configuration (fa8c635d) documents the compute baseline: instance type ml.m5.large, network isolation flag (false), and data-capture settings (disabled). Together these two records constitute a partial baseline configuration.\n\n**What is not satisfied or insufficiently evidenced:**\n1. **Documentation under configuration control:** Only a single model version (v1) exists in the registry. There is no evidence of a formal baseline configuration document, Infrastructure-as-Code (IaC) artifact, or change-control record that would demonstrate the baseline is *maintained* under configuration control rather than merely existing.\n2. **Review cadence:** No evidence of a defined review frequency or any scheduled review activity was returned by either collector.\n3. **Circumstance-triggered reviews:** No policy, trigger, or review log was found to demonstrate reviews occur when circumstances require it.\n4. **Component install/upgrade reviews:** With only one model version present and no upgrade history, there is no evidence that baseline reviews accompany component changes.\n5. **Security baseline gaps:** Network isolation is disabled and data capture is disabled — both are security-relevant baseline settings that are uncontrolled and unmonitored, suggesting the baseline has not been fully defined or enforced.\n\nOverall, the organization has the raw materials of a baseline (registry entry + endpoint config) but lacks the governance processes — formal documentation, version history, review schedule, and change-triggered reviews — required for full CM-2.r0 conformance.",
+        "evidenceCited": [
+          "ac88560a-06c0-4b29-af16-31eb15409fc3",
+          "fa8c635d-96fa-42c8-9bd0-1f5881ccb26b"
+        ],
+        "gaps": [
+          "No formal baseline configuration document or IaC artifact was retrievable — human attestation needed to confirm whether one exists outside AWS tooling",
+          "No configuration change history or version history beyond v1 is available — cannot assess whether baseline is maintained under change control",
+          "No evidence of a defined review frequency or review schedule for the baseline configuration",
+          "No evidence of circumstance-triggered or upgrade-triggered baseline reviews",
+          "Data capture is disabled — no automated mechanism to detect configuration drift or changes to the serving environment",
+          "Network isolation is disabled — it is unclear whether this is a documented, approved baseline decision or an oversight; human attestation required"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "ac88560a-06c0-4b29-af16-31eb15409fc3",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T18:56:02.809Z"
+        },
+        {
+          "id": "fa8c635d-96fa-42c8-9bd0-1f5881ccb26b",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T18:56:02.810Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "ac88560a-06c0-4b29-af16-31eb15409fc3",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T18:56:02.809Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "fa8c635d-96fa-42c8-9bd0-1f5881ccb26b",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T18:56:02.810Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

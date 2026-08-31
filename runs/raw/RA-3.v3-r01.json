@@ -1,0 +1,43 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:41:45.477Z",
+  "results": [
+    {
+      "controlId": "RA-3.v3",
+      "controlIntent": "a. Conduct a risk assessment, including: 1. Identifying system threats and vulnerabilities; 2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and 3. Determining the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information; b. Combine system-level risk assessments with risk assessment results and risk management decisions from the organization and mission or business process perspectives; c. Document risk assessment results in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]]; d. At [Assignment: organization-defined frequency], review risk assessment results; e. Provide risk assessment results to [Assignment: organization-defined personnel or roles]; and f. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "RA-3.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The only available evidence collector — getModelCard — returned null for model \"churn-predictor-v1\" / endpoint \"churn-predictor-endpoint\". No model card exists, which means there is no retrievable documentation of:\n\n(a) A conducted risk assessment identifying threats, vulnerabilities, likelihood/magnitude of harm, or adverse effects on individuals from PII processing;\n(b) Integration of system-level risk results with organizational/mission risk management decisions;\n(c) Documented risk assessment results in any recognized artifact (security/privacy plan, risk assessment report, or organization-defined document);\n(d) Evidence of periodic review of risk assessment results;\n(e) Evidence that risk assessment results were provided to defined personnel or roles; or\n(f) Evidence of a defined update cadence or trigger-based update process for the risk assessment.\n\nAll six sub-requirements of RA-3 are unmet because the foundational documentation artifact (the model card, which is the primary vehicle for capturing risk-related information for this model) is entirely absent.",
+        "evidenceCited": [],
+        "gaps": [
+          "Model card is null — no risk assessment documentation exists for churn-predictor-v1",
+          "No evidence of threat/vulnerability identification (RA-3.a.1)",
+          "No evidence of likelihood/magnitude-of-harm determination (RA-3.a.2)",
+          "No evidence of PII adverse-effect likelihood and impact analysis (RA-3.a.3)",
+          "No evidence of integration with organizational risk management decisions (RA-3.b)",
+          "No risk assessment report or equivalent document (RA-3.c)",
+          "No evidence of periodic review schedule or completed reviews (RA-3.d)",
+          "No evidence of risk assessment results being shared with defined personnel/roles (RA-3.e)",
+          "No evidence of a defined update frequency or change-triggered update process (RA-3.f)",
+          "Human attestation needed to confirm whether any out-of-band risk assessment documentation exists outside the model card system"
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

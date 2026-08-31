@@ -1,0 +1,78 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:30:42.542Z",
+  "results": [
+    {
+      "controlId": "AC-3.v0",
+      "controlIntent": "Enforce approved authorizations for logical access to information and system resources in accordance with applicable access control policies.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-3.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The IAM execution role attached to the `churn-predictor-endpoint` (`SageMakerExecutionRole-Generic`) has two policies that fail to enforce approved authorizations in accordance with least-privilege access control principles required by AC-3:\n\n1. **OverlyBroadS3**: Grants `s3:*` on `*` (all S3 resources). This allows unrestricted read and write access to every S3 bucket in the account — and potentially cross-account — far beyond what a churn-prediction inference endpoint requires. The evidence note explicitly flags this as overly broad.\n\n2. **SageMakerFull**: Grants `sagemaker:*` on `*` (all SageMakerresources). This allows the endpoint to invoke, modify, delete, or create any SageMaker resource in the account, not just the resources it legitimately needs.\n\nNeither policy scopes actions to specific, approved resources (e.g., the model's S3 artifact bucket/prefix, or the specific endpoint/model ARN). This represents a substantive failure of access control enforcement: the configuration does not restrict logical access to only what is authorized for this workload. A conformant configuration would use resource-scoped, action-limited policies tied to the specific S3 paths and SageMaker resources needed by `churn-predictor-v1`.",
+        "evidenceCited": [
+          "255c79a7-42e5-41a4-b14b-025bddec267f"
+        ],
+        "gaps": [
+          "Network-level access controls (VPC endpoint policies, security groups) were not assessed — additional collectors for those would provide a more complete picture.",
+          "Data resource policies (S3 bucket policies, KMS key policies) were not retrieved — these could compensate for or compound the IAM over-permissioning.",
+          "Human attestation of whether a compensating control or exception approval exists for the broad IAM policies would be needed to fully close the gap."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "255c79a7-42e5-41a4-b14b-025bddec267f",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:30:26.432Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "255c79a7-42e5-41a4-b14b-025bddec267f",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:30:26.432Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,78 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:35:50.611Z",
+  "results": [
+    {
+      "controlId": "AC-5.v0",
+      "controlIntent": "a. Identify and document [Assignment: organization-defined duties of individuals requiring separation]; and b. Define system access authorizations to support separation of duties.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-5.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The IAM execution role attached to the churn-predictor-endpoint (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) demonstrates a complete absence of separation of duties. Two policies are attached: (1) 'OverlyBroadS3' grants s3:* on all resources (*), explicitly noted as overly broad with unscoped training-bucket write access and cross-account access; (2) 'SageMakerFull' grants sagemaker:* on all resources (*). These wildcard policies collapse all ML lifecycle duties — data ingestion, model training, deployment, inference, and administration — into a single execution identity. AC-5 requires (a) identifying and documenting duties requiring separation and (b) defining access authorizations to enforce that separation. Neither requirement is met: there is no evidence of duty decomposition, and the access authorizations actively undermine separation by granting unrestricted SageMaker and S3 permissions to an inference endpoint role. A conformant configuration would scope the inference role to only the actions needed at runtime (e.g., sagemaker:InvokeEndpoint, s3:GetObject on specific inference-input buckets) and use separate roles for training, deployment, and administration.",
+        "evidenceCited": [
+          "a6acd8f0-12ad-4d6a-a263-93f3ffa89ba6"
+        ],
+        "gaps": [
+          "No organizational duty-separation documentation was retrievable (e.g., RACI matrix, role-definition policy documents) — human attestation needed to confirm whether duties are at least documented even if not technically enforced.",
+          "No evidence of additional SCPs (Service Control Policies) or permission boundaries that might further restrict the role at the AWS Organizations level — these could partially compensate but were not available via the collector.",
+          "No evidence of whether separate IAM roles exist for training vs. deployment vs. inference workflows — only the endpoint execution role was assessed."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "a6acd8f0-12ad-4d6a-a263-93f3ffa89ba6",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:35:31.674Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "a6acd8f0-12ad-4d6a-a263-93f3ffa89ba6",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:35:31.674Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

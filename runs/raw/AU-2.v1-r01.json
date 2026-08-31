@@ -1,0 +1,95 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:17:56.594Z",
+  "results": [
+    {
+      "controlId": "AU-2.v1",
+      "controlIntent": "a. Identify the event types the system can log in support of the audit function: [Assignment: organization-defined event types that the system is capable of logging]; b. Coordinate event logging with other organizational entities that need audit-related information, to guide and inform the selection criteria for events to be logged; c. Specify these event types for logging within the system: [Assignment: organization-defined event types (subset of the event types defined in AU-2a.) along with the frequency of (or situation requiring) logging for each identified event type]; d. Provide a rationale for why the event types selected for logging are deemed to be adequate to support after-the-fact investigations of incidents; and e. Review and update the event types selected for logging [Assignment: organization-defined frequency].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-2.v1",
+        "status": "not-satisfied",
+        "confidence": "medium",
+        "rationale": "AU-2.v1 requires that the organization: (a) identify event types the system is capable of logging, (b) coordinate event logging with relevant stakeholders, (c) specify event types and logging frequency, (d) provide rationale for adequacy of selected events, and (e) periodically review and update the event types logged.\n\nThe CloudTrail evidence retrieved shows only two raw events for the churn-predictor-endpoint:\n\n1. **CreateEndpoint** (2025-12-01T11:00:00Z, evidence ID: 7f86d301-392f-449a-ac6c-9de7a240d91e): The endpoint was deployed by `data-scientist-jdoe` **2 hours before** the corresponding model registry approval. This indicates that the audit trail captured a critical sequencing anomaly — a deployment that bypassed the change-control gate — but there is no evidence that this event was reviewed, flagged, or acted upon as part of an audit function.\n\n2. **UpdateEndpoint** (2026-03-15T14:22:00Z, evidence ID: 4b380a23-5e92-4ad9-8fde-8dcb91286f61): A hotfix deployment was made with **no corresponding registry entry**, meaning this change was not tracked in the model registry. Again, the event was captured in CloudTrail, but there is no evidence of a defined logging policy, review cadence, or stakeholder coordination.\n\n**Key gaps against AU-2.v1 sub-requirements:**\n- **(a) Event type identification**: No documented list of event types the system is configured to log was found. Only ad-hoc CloudTrail events are present.\n- **(b) Coordination**: No evidence of coordination between the ML team, security, or audit stakeholders on what events should be logged.\n- **(c) Specified event types and frequency**: No formal specification of which event types are logged and at what frequency or under what conditions.\n- **(d) Adequacy rationale**: No documented rationale explaining why the selected events are sufficient for after-the-fact incident investigation.\n- **(e) Review and update cadence**: No evidence of periodic review or updates to the logging configuration.\n\nFurthermore, the anomalies captured in the logs (pre-approval deployment, hotfix with no registry entry) suggest that even the events that *are* being logged are not being monitored or acted upon, undermining the functional purpose of the audit logging control.",
+        "evidenceCited": [
+          "7f86d301-392f-449a-ac6c-9de7a240d91e",
+          "4b380a23-5e92-4ad9-8fde-8dcb91286f61"
+        ],
+        "gaps": [
+          "No documented audit logging policy specifying which event types are selected for logging (AU-2a/c)",
+          "No evidence of stakeholder coordination on event logging criteria (AU-2b)",
+          "No documented rationale for why current logged events are adequate for incident investigation (AU-2d)",
+          "No evidence of a periodic review and update process for event type selection (AU-2e)",
+          "No evidence that the captured anomalies (pre-approval deployment, unregistered hotfix) were reviewed or escalated by an audit function",
+          "No evidence of a model registry entry for the hotfix deployment on 2026-03-15",
+          "No evidence of data plane / inference invocation logging (e.g., SageMaker Model Monitor, S3 access logs) to assess completeness of the audit trail"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "7f86d301-392f-449a-ac6c-9de7a240d91e",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:17:38.826Z"
+        },
+        {
+          "id": "4b380a23-5e92-4ad9-8fde-8dcb91286f61",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:17:38.826Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "7f86d301-392f-449a-ac6c-9de7a240d91e",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:17:38.826Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "4b380a23-5e92-4ad9-8fde-8dcb91286f61",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:17:38.826Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

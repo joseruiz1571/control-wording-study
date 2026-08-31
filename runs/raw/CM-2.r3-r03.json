@@ -1,0 +1,85 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T19:00:36.311Z",
+  "results": [
+    {
+      "controlId": "CM-2.r3",
+      "controlIntent": "a. Develop a current baseline configuration of the system, document it, and maintain it under configuration control; and b. Review and update that baseline configuration: 1. [Assignment: organization-defined frequency]; 2. When [Assignment: organization-defined circumstances] require a review and update; and 3. When system components are installed or upgraded.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-2.r3",
+        "status": "not-satisfied",
+        "confidence": "medium",
+        "rationale": "CM-2.r3 requires (a) a documented, configuration-controlled baseline and (b) periodic review and update of that baseline. The evidence retrieved shows only a single model package version (v1, approved 2025-12-01, ARN: arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1), with no subsequent versions, no change history, and no lineage data — indicating the baseline has never been reviewed or updated since initial deployment. The endpoint configuration (ml.m5.large, network isolation disabled, data capture disabled) reveals additional concerns: data capture is entirely off (capturePercentage=0, captureDestination=null), meaning there is no runtime monitoring to detect configuration drift, and network isolation is disabled, which would typically be a baseline security requirement. Together, these signals indicate that while a registry entry exists (a partial form of documentation), there is no evidence of: (1) a formally documented baseline configuration artifact, (2) a defined review frequency or triggering circumstances, (3) any review or update cycle having occurred, or (4) configuration control processes beyond the initial approval. The control is therefore not satisfied.",
+        "evidenceCited": [
+          "be3af62c-6d5c-433e-9970-5e111357a8bf",
+          "eb3ddb63-3951-4959-b63d-7032a873f5ec"
+        ],
+        "gaps": [
+          "No documented baseline configuration artifact (e.g., IaC template, configuration document, or change log) was retrievable",
+          "No evidence of a defined review frequency or organization-defined triggering circumstances for baseline updates",
+          "No model lineage or version history beyond v1 — cannot confirm any review-and-update cycle has occurred",
+          "Data capture is disabled (capturePercentage=0), preventing runtime drift detection that would support baseline maintenance",
+          "Network isolation is disabled — no evidence this was evaluated as part of a baseline review",
+          "Human attestation needed to confirm whether out-of-band configuration management processes (e.g., change control board, CMDB records) exist"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "be3af62c-6d5c-433e-9970-5e111357a8bf",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T19:00:17.206Z"
+        },
+        {
+          "id": "eb3ddb63-3951-4959-b63d-7032a873f5ec",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T19:00:17.207Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "be3af62c-6d5c-433e-9970-5e111357a8bf",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T19:00:17.206Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "eb3ddb63-3951-4959-b63d-7032a873f5ec",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T19:00:17.207Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

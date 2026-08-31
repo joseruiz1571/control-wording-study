@@ -1,0 +1,39 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:42:00.407Z",
+  "results": [
+    {
+      "controlId": "RA-3.v3",
+      "controlIntent": "a. Conduct a risk assessment, including: 1. Identifying system threats and vulnerabilities; 2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and 3. Determining the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information; b. Combine system-level risk assessments with risk assessment results and risk management decisions from the organization and mission or business process perspectives; c. Document risk assessment results in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]]; d. At [Assignment: organization-defined frequency], review risk assessment results; e. Provide risk assessment results to [Assignment: organization-defined personnel or roles]; and f. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "RA-3.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The only available evidence collector — getModelCard — returned null for model \"churn-predictor-v1\" / endpoint \"churn-predictor-endpoint\". No model card exists, which means there is no retrievable documentation of:\n\n(a) A conducted risk assessment identifying threats, vulnerabilities, likelihood and magnitude of harm from unauthorized access/use/disclosure/disruption/modification/destruction, or adverse effects on individuals from PII processing;\n(b) Integration of system-level risk assessments with organizational/mission risk management decisions;\n(c) Documented risk assessment results in any recognized artifact (security/privacy plan, risk assessment report, or organization-defined document);\n(d) Evidence of periodic review of risk assessment results;\n(e) Evidence that risk assessment results were provided to defined personnel or roles; or\n(f) Evidence of a defined update cadence or trigger-based update process for the risk assessment.\n\nThe complete absence of a model card — the primary artifact that would capture intended use, limitations, risk ratings, and evaluation details — means none of the six sub-requirements of RA-3 can be confirmed as satisfied.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1; a model card (or equivalent risk assessment report/security plan) documenting threats, vulnerabilities, likelihood/magnitude of harm, and PII impact analysis is required.",
+          "No evidence of organizational or mission/business-process-level risk assessment integration.",
+          "No evidence of a defined review frequency or record of periodic risk assessment reviews.",
+          "No evidence that risk assessment results have been distributed to defined personnel or roles.",
+          "No evidence of a defined update frequency or change-triggered update process for the risk assessment.",
+          "Human attestation would be needed to confirm whether any off-system risk assessment documentation (e.g., in a GRC tool, SharePoint, or paper records) exists that was not captured by the available collector."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

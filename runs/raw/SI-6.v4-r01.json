@@ -1,0 +1,80 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:53:11.037Z",
+  "results": [
+    {
+      "controlId": "SI-6.v4",
+      "controlIntent": "a. Verify the correct operation of [Assignment: organization-defined security and privacy functions]; b. The verification of the functions specified in SI-6a is performed [Selection (one or more): [Assignment: organization-defined system transitional states]; upon command by user with appropriate privilege; [Assignment: organization-defined frequency]]; c. [Assignment: organization-defined personnel or roles] are alerted to failed security and privacy verification tests; and d. [Selection (one or more): Shut the system down; Restart the system; [Assignment: organization-defined alternative action(s)]] when anomalies are discovered.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "SI-6.v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The evidence reveals multiple critical failures against all four sub-requirements of SI-6.v4:\n\n(a) **Verification of security/privacy functions**: Data capture is fully disabled (dataCaptureEnabled: false, capturePercentage: 0, captureDestination: null — evidence 134fb495). Without data capture, no inference data flows to any monitor, making functional verification impossible. The sole DataQuality monitor confirms this: its last run failed with \"No capture data found — data capture is disabled\" (evidence 079b9b5d). No ModelQuality, ModelBias, or ModelExplainability schedules exist at all.\n\n(b) **Verification at defined frequency/state/command**: A weekly cron schedule (`cron(0 6 ? * MON *)`) is configured, satisfying the scheduling intent on paper. However, the schedule is non-functional because every execution fails due to the disabled data capture. The frequency requirement is therefore not met in practice.\n\n(c) **Alerting personnel on failed verification tests**: There is no evidence of any alerting mechanism (e.g., SNS topics, CloudWatch alarms, or notification configurations) tied to the failed monitor runs. The last run status is \"Failed\" with no indication that any personnel were notified.\n\n(d) **Action on anomaly discovery**: No evidence of any configured remediation actions (shutdown, restart, or alternative actions) upon anomaly detection. The system is not even reaching the anomaly-detection stage due to the upstream data capture failure.\n\nIn summary, the foundational prerequisite (data capture) is disabled, the only monitoring schedule is persistently failing, and there is no evidence of alerting or remediation workflows. The control is not satisfied across all four sub-requirements.",
+        "evidenceCited": [
+          "079b9b5d-65b1-4a95-b9ed-d3a751a0ccb4",
+          "134fb495-0e0f-419e-a212-3e436c5d14c5"
+        ],
+        "gaps": [
+          "No evidence of alerting/notification configuration (e.g., SNS, CloudWatch alarms) for failed monitor runs — human attestation needed to confirm whether out-of-band alerting exists",
+          "No evidence of remediation/response playbooks or automated actions (shutdown, restart, alternative actions) upon anomaly discovery",
+          "No ModelQuality, ModelBias, or ModelExplainability monitoring schedules exist — coverage of privacy and broader security functions is absent",
+          "Cannot determine whether any manual or privileged-user-triggered verification processes exist outside of SageMaker Model Monitor"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "079b9b5d-65b1-4a95-b9ed-d3a751a0ccb4",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:52:51.876Z"
+        },
+        {
+          "id": "134fb495-0e0f-419e-a212-3e436c5d14c5",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:52:51.877Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "079b9b5d-65b1-4a95-b9ed-d3a751a0ccb4",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:52:51.876Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        },
+        {
+          "id": "134fb495-0e0f-419e-a212-3e436c5d14c5",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:52:51.877Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

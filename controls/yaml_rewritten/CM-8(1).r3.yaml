@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-8(1).r3"
+controls:
+  - id: "CM-8(1).r3"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      Update the inventory of system components when component installations occur, when component removals occur, and when system updates occur.
+    collectors:
+      - getModelRegistryEntry
+      - getCloudTrailEvents

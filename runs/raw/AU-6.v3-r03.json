@@ -1,0 +1,115 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:39:21.472Z",
+  "results": [
+    {
+      "controlId": "AU-6.v3",
+      "controlIntent": "a. Examine and analyze system audit records [Assignment: organization-defined frequency] for indications of [Assignment: organization-defined inappropriate or unusual activity] and the potential impact of the inappropriate or unusual activity; b. Communicate findings to [Assignment: organization-defined personnel or roles]; and c. Adjust the level of audit record review, analysis, and reporting within the system when there is a change in risk based on law enforcement information, intelligence information, or other credible sources of information.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "AU-6.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Evidence from both collectors reveals multiple, compounding failures against all three sub-requirements of AU-6.v3:\n\n**Part (a) — Audit record examination and analysis:**\n- The sole monitoring schedule (`churn-predictor-data-quality`, DataQuality type) has a `lastRunStatus` of \"Failed\" because data capture is disabled. This means no meaningful audit data is being collected or analyzed. No ModelQuality, ModelBias, or ModelExplainability schedules exist, leaving large blind spots in behavioral monitoring.\n- CloudTrail records contain two clear indicators of inappropriate activity: (1) `CreateEndpoint` was executed on 2025-12-01 at 11:00Z — **2 hours before** the registry approval at 09:00Z (i.e., deployed before approval), and (2) `UpdateEndpoint` on 2026-03-15 (a hotfix) has **no corresponding registry entry**. Neither anomaly shows any evidence of having been detected or reviewed.\n\n**Part (b) — Communication of findings:**\n- There is no evidence of any alerting, ticketing, or notification mechanism that would communicate these audit anomalies to defined personnel or roles. The change-control violations in CloudTrail appear to have gone unreported.\n\n**Part (c) — Adjusting audit level based on risk:**\n- There is no evidence that the audit scope, frequency, or depth was adjusted in response to the identified risk signals (unauthorized deployments, missing registry entries). The single monitor that exists is broken and has not been remediated.\n\nIn summary, audit records are not being successfully collected (data capture disabled), existing anomalies in CloudTrail are not being analyzed or acted upon, and there is no evidence of findings communication or risk-adaptive audit adjustment.",
+        "evidenceCited": [
+          "bd8e7414-5ff3-4994-a711-dc8b732fbcc0",
+          "6c272827-caf7-4dd0-9b24-7a0fd6c9d9e7",
+          "12ba2624-44d6-4f9f-a773-d40b30478510"
+        ],
+        "gaps": [
+          "No evidence of an alerting or notification system (e.g., CloudWatch Alarms, SNS topics, SIEM integration) tied to audit anomalies — human attestation needed to confirm or deny existence",
+          "No evidence of a defined review cadence or responsible personnel/roles for audit record analysis",
+          "No ModelQuality, ModelBias, or ModelExplainability monitor schedules exist — coverage gaps cannot be explained without human attestation",
+          "No evidence of a process for adjusting audit intensity in response to law enforcement, intelligence, or other risk signals",
+          "Root cause and remediation status of the failed DataQuality monitor run is unknown — requires human investigation"
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "bd8e7414-5ff3-4994-a711-dc8b732fbcc0",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:39:00.318Z"
+        },
+        {
+          "id": "6c272827-caf7-4dd0-9b24-7a0fd6c9d9e7",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:39:00.318Z"
+        },
+        {
+          "id": "12ba2624-44d6-4f9f-a773-d40b30478510",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T08:39:00.318Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "bd8e7414-5ff3-4994-a711-dc8b732fbcc0",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:39:00.318Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "6c272827-caf7-4dd0-9b24-7a0fd6c9d9e7",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:39:00.318Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        },
+        {
+          "id": "12ba2624-44d6-4f9f-a773-d40b30478510",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T08:39:00.318Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

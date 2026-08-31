@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-3.v4"
+controls:
+  - id: "AC-3.v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Approved authorizations for logical access to information and system resources are enforced in accordance with applicable access control policies.
+    collectors:
+      - getEndpointExecutionRole

@@ -1,0 +1,101 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:20:11.605Z",
+  "results": [
+    {
+      "controlId": "CM-6.v4",
+      "controlIntent": "a. Configuration settings for components employed within the system are established and documented to reflect the most restrictive mode consistent with operational requirements using [Assignment: organization-defined common secure configurations]; b. The configuration settings are implemented; c. Any deviations from established configuration settings for [Assignment: organization-defined system components] are identified, documented, and approved based on [Assignment: organization-defined operational requirements]; and d. Changes to the configuration settings are monitored and controlled in accordance with organizational policies and procedures.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-6.v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "CM-6.v4 requires that configuration settings reflect the most restrictive mode consistent with operational requirements, that settings are implemented, deviations are identified/approved, and changes are monitored. Combining all three evidence sources reveals multiple gaps against a secure baseline:\n\n1. **No VPC deployment** (evidence 5ff9aef1): `vpcId` is null, `vpcSubnetIds` and `securityGroupIds` are empty. The endpoint is not deployed within a VPC, meaning there is no network perimeter control — a fundamental secure-configuration requirement for production ML endpoints.\n\n2. **Network isolation disabled** (evidence 227ddcad & 5ff9aef1): `enableNetworkIsolation: false` in both endpoint config and network config. The endpoint can make arbitrary outbound network calls, violating least-privilege network posture.\n\n3. **Data capture disabled** (evidence 227ddcad): `dataCaptureEnabled: false` and `capturePercentage: 0`. Without data capture, there is no mechanism to monitor inference inputs/outputs for drift, anomalies, or unauthorized use — directly undermining CM-6.v4(d) (monitoring configuration and behavior).\n\n4. **No volume-level KMS encryption** (evidence 073cf3ee): `volumeKmsKeyId: null`. The endpoint's attached storage volume is not encrypted with any KMS key, violating encryption-at-rest requirements for a secure configuration baseline.\n\n5. **AWS-managed key only, no customer-managed key** (evidence 073cf3ee): Artifact encryption uses `arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker` with `keyManager: AWS`. While encryption is present for artifacts, the organization does not control the key lifecycle (rotation, revocation, access policy), which falls short of a customer-managed key (CMK) baseline typically required under restrictive configurations.\n\nNo evidence was found of a documented secure configuration baseline, an approval process for deviations, or change-monitoring controls. The combination of missing VPC, disabled network isolation, absent data capture, and incomplete encryption constitutes a clear failure to implement the most restrictive mode consistent with operational requirements.",
+        "evidenceCited": [
+          "227ddcad-9d10-4709-b851-8a15306c1028",
+          "5ff9aef1-62a8-496f-bc13-c4e1b4b140f7",
+          "073cf3ee-d5a9-40d6-96ab-f3204cf6200b"
+        ],
+        "gaps": [
+          "No evidence of a documented secure configuration baseline (e.g., SSP, configuration management plan, or approved hardening standard) against which deviations can be measured.",
+          "No evidence of a deviation approval process or change control records for any configuration settings.",
+          "No evidence of configuration drift monitoring (e.g., AWS Config rules, SageMaker Model Monitor, or equivalent) that would satisfy CM-6.v4(d).",
+          "Customer-managed KMS key (CMK) policy and rotation schedule not retrievable — human attestation needed to confirm whether AWS-managed key meets organizational policy.",
+          "Instance type selection rationale not documented — cannot confirm ml.m5.large was chosen per an approved baseline rather than ad hoc."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "227ddcad-9d10-4709-b851-8a15306c1028",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T09:19:49.509Z"
+        },
+        {
+          "id": "5ff9aef1-62a8-496f-bc13-c4e1b4b140f7",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T09:19:49.509Z"
+        },
+        {
+          "id": "073cf3ee-d5a9-40d6-96ab-f3204cf6200b",
+          "source": "sagemaker:kms:config",
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e",
+          "retrievedAt": "2026-08-30T09:19:49.509Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 3,
+      "collectorsCalled": 3,
+      "collectorsCited": 3,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "227ddcad-9d10-4709-b851-8a15306c1028",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T09:19:49.509Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        },
+        {
+          "id": "5ff9aef1-62a8-496f-bc13-c4e1b4b140f7",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T09:19:49.509Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        },
+        {
+          "id": "073cf3ee-d5a9-40d6-96ab-f3204cf6200b",
+          "source": "sagemaker:kms:config",
+          "retrievedAt": "2026-08-30T09:19:49.509Z",
+          "payload": {
+            "volumeKmsKeyId": null,
+            "artifactKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker",
+            "keyEnabled": true,
+            "keyManager": "AWS"
+          },
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

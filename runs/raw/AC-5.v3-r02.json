@@ -1,0 +1,77 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:38:26.178Z",
+  "results": [
+    {
+      "controlId": "AC-5.v3",
+      "controlIntent": "Separation of duties is supported by: a. Identifying and documenting [Assignment: organization-defined duties of individuals requiring separation]; and b. Defining system access authorizations to support that separation.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-5.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "AC-5 requires that system access authorizations be defined to support separation of duties. The evidence retrieved shows the endpoint's execution role (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) is configured with two wildcard policies: (1) s3:* on all resources, and (2) sagemaker:* on all resources. This grants a single role the ability to perform every duty across the ML lifecycle — data ingestion, model training, deployment, endpoint management, and cross-account S3 access — with no functional boundaries enforced. The role name \"Generic\" further confirms it was not designed around duty-specific access. This configuration directly contradicts AC-5(b), which requires access authorizations to be scoped to support separation of duties. There is no evidence of distinct roles for distinct duties (e.g., a training role vs. an inference role vs. a data-access role), and the overly broad permissions noted in the policy metadata confirm that least-privilege and duty separation principles have not been applied.",
+        "evidenceCited": [
+          "a4133822-aba5-4570-bf74-da5b569c6a35"
+        ],
+        "gaps": [
+          "No documentation of identified duties requiring separation (AC-5a) was available through the collector tools — human attestation of any organizational SoD policy documents would be needed to fully assess part (a) of the control.",
+          "No evidence of additional roles (e.g., separate training, deployment, or monitoring roles) was retrievable — a broader IAM inventory would clarify whether SoD is enforced at the organizational level even if not at this endpoint's role."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "a4133822-aba5-4570-bf74-da5b569c6a35",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:38:08.642Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "a4133822-aba5-4570-bf74-da5b569c6a35",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:38:08.642Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

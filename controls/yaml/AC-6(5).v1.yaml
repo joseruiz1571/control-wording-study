@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-6(5).v1"
+controls:
+  - id: "AC-6(5).v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Privileged accounts on the system are restricted to [Assignment: organization-defined personnel or roles].
+    collectors:
+      - getEndpointExecutionRole

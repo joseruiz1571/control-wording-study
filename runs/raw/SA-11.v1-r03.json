@@ -1,0 +1,64 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:03:02.027Z",
+  "results": [
+    {
+      "controlId": "SA-11.v1",
+      "controlIntent": "At all post-design stages of the system development life cycle, require the developer of the system, system component, or system service to: a. Develop and implement a plan for ongoing security and privacy control assessments; b. Perform [Selection (one or more): unit; integration; system; regression] testing/evaluation [Assignment: organization-defined frequency] at [Assignment: organization-defined depth and coverage]; c. Produce evidence of the execution of the assessment plan and the results of the testing and evaluation; d. Implement a verifiable flaw remediation process; and e. Correct flaws identified during testing and evaluation.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-11.v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SA-11.v1 requires: (a) a documented plan for ongoing security/privacy control assessments, (b) periodic testing at defined depth/coverage, (c) evidence of assessment execution and results, (d) a verifiable flaw remediation process, and (e) correction of identified flaws. The evidence retrieved reveals the following deficiencies:\n\n1. **Monitoring coverage is severely incomplete**: Only a single DataQuality schedule exists. There are no ModelQuality, ModelBias, or ModelExplainability schedules, meaning the vast majority of post-deployment assessment types required for a substantive ongoing assessment program are absent.\n\n2. **The sole monitor is non-functional**: The DataQuality schedule's last run (2026-06-02) failed with the reason \"No capture data found — data capture is disabled.\" Because data capture is disabled on the endpoint, the monitor cannot collect or evaluate any data, rendering it effectively inoperative.\n\n3. **No evidence of an assessment plan**: There is no retrieved artifact documenting a plan for ongoing security or privacy control assessments (SA-11.a).\n\n4. **No evidence of testing/evaluation execution or results**: No unit, integration, system, or regression test records were found (SA-11.b/c).\n\n5. **No evidence of a flaw remediation process**: The failed monitor run has not been remediated (data capture remains disabled), and no remediation workflow or tracking artifact was found (SA-11.d/e).\n\nIn aggregate, the configuration is not substantive: the only monitoring schedule in place is broken and covers only one dimension of model quality, with no corrective action taken. The control is not satisfied.",
+        "evidenceCited": [
+          "53b3465a-a81a-4ff8-a146-4101ca5af934"
+        ],
+        "gaps": [
+          "Assessment plan document (SA-11.a) — not retrievable via available tools",
+          "Unit/integration/system/regression test records and results (SA-11.b/c) — no collector available for CI/CD or test pipeline artifacts",
+          "ModelQuality, ModelBias, and ModelExplainability monitoring schedules — absent from environment",
+          "Flaw remediation process documentation or ticketing records (SA-11.d/e) — no collector available",
+          "Data capture configuration status for the endpoint — not directly retrievable but inferred from monitor failure reason",
+          "Evidence that the failed DataQuality monitor run has been investigated or remediated"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "53b3465a-a81a-4ff8-a146-4101ca5af934",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:02:45.438Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "53b3465a-a81a-4ff8-a146-4101ca5af934",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:02:45.438Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

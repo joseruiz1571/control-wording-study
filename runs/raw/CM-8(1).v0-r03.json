@@ -1,0 +1,112 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:28:40.745Z",
+  "results": [
+    {
+      "controlId": "CM-8(1).v0",
+      "controlIntent": "Update the inventory of system components as part of component installations, removals, and system updates.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "CM-8(1).v0",
+        "status": "partially-satisfied",
+        "confidence": "high",
+        "rationale": "CM-8(1) requires that the system component inventory be updated as part of component installations, removals, and system updates. Evidence from two sources reveals a mixed picture:\n\n**Satisfied — Initial Deployment:** The model registry entry (a81a4990) shows model package v1 was approved at 2025-12-01T09:00:00Z. The CreateEndpoint CloudTrail event (9a1a05b3) shows the endpoint was deployed at 2025-12-01T11:00:00Z — two hours *after* registry approval. This correct temporal ordering demonstrates that the inventory (registry) was updated before the component was installed into production, satisfying the control for the initial deployment.\n\n**Not Satisfied — Hotfix Update:** The UpdateEndpoint CloudTrail event (b533ef10) shows a hotfix deployment on 2026-03-15T14:22:00Z using config `churn-predictor-v1-hotfix`. No corresponding model registry entry exists for this update. This means the component inventory was not updated to reflect this system change, directly violating CM-8(1)'s requirement to update the inventory as part of system updates.\n\nIn summary: the initial deployment followed proper inventory-update discipline, but the subsequent hotfix bypassed the registry entirely, leaving the inventory stale and out of sync with the deployed component state.",
+        "evidenceCited": [
+          "a81a4990-6411-4de7-855b-cca51da06b06",
+          "9a1a05b3-0f62-4feb-afb1-15f608467747",
+          "b533ef10-3044-4e12-8c49-d98a18f3e3c0"
+        ],
+        "gaps": [
+          "No registry entry or version bump exists for the 2026-03-15 hotfix deployment — human attestation needed to determine whether an out-of-band approval process was followed or if this was a fully undocumented change.",
+          "No evidence of automated enforcement (e.g., IAM policy or SageMaker pipeline gate) that would prevent endpoint updates without a corresponding registry entry — process controls may be purely manual.",
+          "No removal/decommission events were available to assess whether inventory is updated on component removals as well as installations."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "a81a4990-6411-4de7-855b-cca51da06b06",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:28:22.469Z"
+        },
+        {
+          "id": "9a1a05b3-0f62-4feb-afb1-15f608467747",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:28:22.469Z"
+        },
+        {
+          "id": "b533ef10-3044-4e12-8c49-d98a18f3e3c0",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:28:22.469Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "a81a4990-6411-4de7-855b-cca51da06b06",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:28:22.469Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "9a1a05b3-0f62-4feb-afb1-15f608467747",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:28:22.469Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "b533ef10-3044-4e12-8c49-d98a18f3e3c0",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:28:22.469Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,93 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:16:04.381Z",
+  "results": [
+    {
+      "controlId": "AU-12.v4",
+      "controlIntent": "a. Provide audit record generation capability for the event types the system is capable of auditing as defined in AU-2a on [Assignment: organization-defined system components]; b. Allow [Assignment: organization-defined personnel or roles] to choose which event types specific components of the system log; and c. Generate audit records for the event types defined in AU-2c that include the audit record content defined in AU-3.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-12.v4",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CloudTrail is generating audit records for key SageMaker endpoint lifecycle events (CreateEndpoint, UpdateEndpoint), capturing event name, timestamp, user identity (IAM username), and request parameters. This satisfies the basic AU-12a requirement for audit record generation capability and partially satisfies AU-12c's content requirements per AU-3.\n\nHowever, several substantive deficiencies undermine full conformance:\n\n1. **Change-control event gap (AU-12c sufficiency):** Evidence item c8c08eeb shows the endpoint was created at 2025-12-01T11:00:00Z — 2 hours *before* the corresponding model registry approval event. The registry approval event itself is not present in the CloudTrail trail, indicating that model registry approval events are either not being captured or not being correlated. A complete audit record set must include the approval events that authorize deployments.\n\n2. **Missing registry entry for hotfix (AU-12a/c):** Evidence item 1b4a4962 shows an UpdateEndpoint event for a hotfix deployment with no corresponding registry entry found. This means the audit trail is incomplete — it records the deployment action but lacks the required authorization/approval record, making it impossible to reconstruct a complete, auditable change history.\n\n3. **Incomplete AU-3 content:** The retrieved records lack source IP addresses, outcome/result status codes, and object identifiers beyond endpoint names. There is no evidence that authorized personnel have configured which specific event types are logged (AU-12b).\n\n4. **No evidence of logging configuration governance:** There is no evidence that organization-defined personnel have formally selected or reviewed the event types being audited, as required by AU-12b.\n\nIn summary, while basic endpoint lifecycle events are being recorded, the audit configuration is not substantively sufficient: critical authorization events (registry approvals) are absent, a hotfix bypassed the registry entirely with no audit trail of approval, and AU-3 content fields are incomplete.",
+        "evidenceCited": [
+          "c8c08eeb-ef3b-4ca5-813f-7a76b25e71ff",
+          "1b4a4962-532b-4823-ac97-e767b513b1fe"
+        ],
+        "gaps": [
+          "Model registry approval events are not present in the CloudTrail trail — it is unclear whether they are being logged at all, or simply not returned by this collector.",
+          "No evidence of AU-12b compliance: documentation or configuration showing that authorized personnel have formally designated which event types are logged.",
+          "Source IP addresses, outcome/result codes, and full AU-3 content fields are absent from the retrieved records.",
+          "No evidence of a CloudTrail trail configuration (e.g., which services/event selectors are enabled) to confirm the scope of audit coverage.",
+          "Human attestation needed to confirm whether the hotfix deployment (1b4a4962) was verbally or out-of-band approved, and whether any compensating controls exist."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "c8c08eeb-ef3b-4ca5-813f-7a76b25e71ff",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:15:39.317Z"
+        },
+        {
+          "id": "1b4a4962-532b-4823-ac97-e767b513b1fe",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:15:39.317Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "c8c08eeb-ef3b-4ca5-813f-7a76b25e71ff",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:15:39.317Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "1b4a4962-532b-4823-ac97-e767b513b1fe",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:15:39.317Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

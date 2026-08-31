@@ -1,0 +1,12 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-6.v1"
+controls:
+  - id: "CM-6.v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      a. Establish and document configuration settings for components employed within the system, reflecting the most restrictive mode consistent with operational requirements, using [Assignment: organization-defined common secure configurations]; b. Implement the configuration settings; c. Identify, document, and approve any deviations from established configuration settings for [Assignment: organization-defined system components] based on [Assignment: organization-defined operational requirements]; and d. Monitor and control changes to the configuration settings in accordance with organizational policies and procedures.
+    collectors:
+      - getEndpointConfig
+      - getEndpointNetworkConfig
+      - getKMSConfig

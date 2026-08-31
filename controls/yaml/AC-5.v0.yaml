@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-5.v0"
+controls:
+  - id: "AC-5.v0"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      a. Identify and document [Assignment: organization-defined duties of individuals requiring separation]; and b. Define system access authorizations to support separation of duties.
+    collectors:
+      - getEndpointExecutionRole

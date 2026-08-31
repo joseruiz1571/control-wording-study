@@ -1,0 +1,85 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:34:47.941Z",
+  "results": [
+    {
+      "controlId": "CM-8.v1",
+      "controlIntent": "a. Develop and document a system-component inventory that: 1. Accurately reflects the system; 2. Includes all components within the system; 3. Does not include duplicate accounting of components or components assigned to any other system; 4. Is at the level of granularity deemed necessary for tracking and reporting; and 5. Includes the following information to achieve system component accountability: [Assignment: organization-defined information deemed necessary to achieve effective system component accountability]; and b. Review and update the system component inventory [Assignment: organization-defined frequency].\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-8.v1",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CM-8 requires a documented system-component inventory that accurately reflects the system, includes all components at sufficient granularity, avoids duplicate accounting, and is reviewed/updated at a defined frequency.\n\n**What is present (supporting conformance):**\n- The model registry entry (evidence `6bff96e7-c768-47bc-b33c-6b56388849f9`) captures key inventory attributes: model package group name (`churn-predictor`), version (`1`), approval status (`Approved`), approval timestamp (`2025-12-01T09:00:00Z`), creation time (`2025-11-30T18:00:00Z`), and a unique ARN (`arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1`). This provides a traceable, versioned record of the model component.\n- The endpoint configuration (evidence `5cfe5d46-79bc-48a9-a160-f7d7f2bf3615`) documents the runtime component: endpoint name (`churn-predictor-endpoint`), status (`InService`), and compute resource (`ml.m5.large`). Together with the registry entry, these two records form a partial inventory spanning the model artifact and its deployed infrastructure.\n\n**What is missing or deficient (gaps):**\n1. **Data capture is disabled** (`dataCaptureEnabled: false`, `capturePercentage: 0`, `captureDestination: null`). Without data capture, there is no automated mechanism to track inference traffic or monitor component usage, which weakens ongoing inventory accuracy and accountability.\n2. **Network isolation is disabled** (`enableNetworkIsolation: false`). This means the endpoint can communicate externally, and any external dependencies (e.g., third-party libraries, data sources) are not isolated or inventoried.\n3. **No evidence of a formal inventory document or CMDB entry** — the registry and endpoint config are operational records, but there is no evidence of a dedicated, organization-maintained system component inventory document that explicitly lists all components (e.g., container images, model artifacts, VPC/networking components, IAM roles, S3 buckets) at the required level of granularity.\n4. **No evidence of a defined review/update frequency** (CM-8b) — there is no policy, schedule, or audit log showing periodic inventory reviews.\n5. **Incomplete component coverage** — the available tools only surface the model registry and endpoint config. Supporting components (container image, training data lineage, IAM roles, networking resources) are not captured in the retrieved evidence.",
+        "evidenceCited": [
+          "6bff96e7-c768-47bc-b33c-6b56388849f9",
+          "5cfe5d46-79bc-48a9-a160-f7d7f2bf3615"
+        ],
+        "gaps": [
+          "No formal system component inventory document or CMDB entry was found — operational records alone do not satisfy CM-8's documentation requirement.",
+          "No evidence of an organization-defined inventory review/update frequency or schedule (CM-8b).",
+          "Data capture is disabled, removing automated tracking of inference-layer component activity.",
+          "Network isolation is disabled; external dependencies of the endpoint are not inventoried.",
+          "Supporting components (container/Docker image, training data lineage, IAM roles, S3 artifact buckets, VPC/subnet/security-group resources) were not surfaced by available collectors and cannot be confirmed as inventoried.",
+          "Human attestation needed to confirm whether a broader CMDB or asset management system tracks these components outside of SageMaker native tooling."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "6bff96e7-c768-47bc-b33c-6b56388849f9",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T09:34:25.700Z"
+        },
+        {
+          "id": "5cfe5d46-79bc-48a9-a160-f7d7f2bf3615",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T09:34:25.700Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "6bff96e7-c768-47bc-b33c-6b56388849f9",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T09:34:25.700Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "5cfe5d46-79bc-48a9-a160-f7d7f2bf3615",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T09:34:25.700Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,85 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:58:59.072Z",
+  "results": [
+    {
+      "controlId": "CM-2.r2",
+      "controlIntent": "a. A current baseline configuration of the system is developed; that baseline configuration is documented; and that baseline configuration is maintained under configuration control; and b. The baseline configuration of the system is reviewed and updated: 1. [Assignment: organization-defined frequency]; 2. When [Assignment: organization-defined circumstances] require a review and update; and 3. When system components are installed or upgraded.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-2.r2",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "The evidence shows that a baseline configuration for \"churn-predictor-v1\" is partially documented: the model registry entry (d834da77) records the model package version (v1), approval status (\"Approved\"), approval timestamp (2025-12-01T09:00:00Z), creation time, and ARN — satisfying the \"documented\" and \"under configuration control\" aspects of CM-2.r2(a) at a basic level. The endpoint configuration (a926e7a5) records the instance type (ml.m5.large), network isolation flag, and data-capture settings, providing a snapshot of the deployment baseline.\n\nHowever, several critical gaps prevent a \"satisfied\" verdict:\n\n1. **No evidence of periodic review or update cycles (CM-2.r2.b.1):** Only version 1 of the model package exists. There is no evidence of a defined review frequency or any prior baseline updates, suggesting the baseline has never been revisited since initial deployment.\n\n2. **No defined triggering circumstances (CM-2.r2.b.2):** No policy or mechanism is documented for when circumstances (e.g., data drift, regulatory change) would trigger a baseline review.\n\n3. **Data capture is disabled (CM-2.r2.b.3):** With `dataCaptureEnabled: false` and `capturePercentage: 0`, there is no live traffic monitoring in place. This eliminates a key signal that would normally trigger a baseline review when model behavior drifts or system components change.\n\n4. **No upgrade tracking:** There is no evidence that component installation or upgrade events are tracked and linked to baseline review obligations.\n\nIn summary, the static baseline is documented in the registry, but the dynamic requirements — periodic review, circumstance-triggered updates, and upgrade-driven reviews — are not evidenced.",
+        "evidenceCited": [
+          "d834da77-0b11-4e1a-a876-d19840f0599a",
+          "a926e7a5-8e17-46d9-95b0-a6c644e85937"
+        ],
+        "gaps": [
+          "No evidence of a defined baseline review frequency or schedule (CM-2.r2.b.1)",
+          "No evidence of defined circumstances that trigger a baseline review or update (CM-2.r2.b.2)",
+          "Data capture is disabled, removing a key mechanism for detecting when a baseline review should be triggered by model/data drift",
+          "Only one model version exists — no history of baseline updates to demonstrate an active review cycle",
+          "No change management policy or upgrade-tracking process is documented in the available evidence",
+          "Human attestation needed: Is there an out-of-band (e.g., ITSM, wiki, runbook) process governing CM-2 review cycles for this model?"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "d834da77-0b11-4e1a-a876-d19840f0599a",
+          "source": "sagemaker:model-registry:entry",
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249",
+          "retrievedAt": "2026-08-30T18:58:35.722Z"
+        },
+        {
+          "id": "a926e7a5-8e17-46d9-95b0-a6c644e85937",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T18:58:35.723Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "d834da77-0b11-4e1a-a876-d19840f0599a",
+          "source": "sagemaker:model-registry:entry",
+          "retrievedAt": "2026-08-30T18:58:35.722Z",
+          "payload": {
+            "modelPackageGroupName": "churn-predictor",
+            "modelPackageVersion": 1,
+            "modelApprovalStatus": "Approved",
+            "approvalTime": "2025-12-01T09:00:00Z",
+            "creationTime": "2025-11-30T18:00:00Z",
+            "modelPackageArn": "arn:aws:sagemaker:us-east-1:123456789012:model-package/churn-predictor/1"
+          },
+          "sha256": "7677fdf339489560d9cdb3965c0d0e8387e30e9f9b2918fee9cc3841869f6249"
+        },
+        {
+          "id": "a926e7a5-8e17-46d9-95b0-a6c644e85937",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T18:58:35.723Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

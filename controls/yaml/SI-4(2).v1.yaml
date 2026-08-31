@@ -1,0 +1,10 @@
+version: "0.1.0"
+description: "Control-wording study variant SI-4(2).v1"
+controls:
+  - id: "SI-4(2).v1"
+    framework: "SP 800-53 Rev 5"
+    pattern: sufficiency
+    intent: >
+      Use automated tools and mechanisms to support near real-time analysis of events.
+    collectors:
+      - getModelMonitorSchedules

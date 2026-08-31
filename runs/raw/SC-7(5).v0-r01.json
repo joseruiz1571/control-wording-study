@@ -1,0 +1,59 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:18:47.230Z",
+  "results": [
+    {
+      "controlId": "SC-7(5).v0",
+      "controlIntent": "Deny network communications traffic by default and allow network communications traffic by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-7(5).v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SC-7(5) requires that network communications traffic be denied by default and allowed only by exception at managed interfaces. The evidence retrieved for the \"churn-predictor-endpoint\" shows a complete absence of deny-by-default network controls:\n\n1. **No VPC deployment** (`vpcId: null`): The endpoint is not placed inside a Virtual Private Cloud, meaning it is not subject to VPC-level boundary controls (route tables, NACLs, VPC security groups) that would enforce deny-by-default posture.\n\n2. **No subnets configured** (`vpcSubnetIds: []`): Without subnet placement, there are no Network Access Control Lists (NACLs) or subnet-level routing restrictions in effect.\n\n3. **No security groups attached** (`securityGroupIds: []`): Security groups are the primary mechanism for deny-by-default, allow-by-exception traffic control on AWS managed interfaces. The absence of any security group means no explicit allow rules exist and, more critically, no managed interface boundary is enforced.\n\n4. **Network isolation disabled** (`enableNetworkIsolation: false`): SageMaker's network isolation feature, which prevents the endpoint container from making any outbound network calls, is explicitly turned off.\n\nCollectively, these findings indicate that the endpoint has no substantive deny-by-default network boundary in place. Traffic is not controlled at a managed interface, and there is no allow-by-exception mechanism. This directly contradicts the intent of SC-7(5).",
+        "evidenceCited": [
+          "ba74c4a4-ef9a-4148-a7ad-a2d0271707c2"
+        ],
+        "gaps": [
+          "Security group ingress/egress rule details (not applicable here since no SGs are attached)",
+          "VPC Network ACL rules (not applicable since no VPC is configured)",
+          "Whether any upstream API Gateway or load balancer enforces deny-by-default rules in front of this endpoint — this would require additional collector tools not available in this session",
+          "Organizational policy or SCP that might restrict traffic at the account level — requires human attestation or additional tooling"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "ba74c4a4-ef9a-4148-a7ad-a2d0271707c2",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T10:18:33.738Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "ba74c4a4-ef9a-4148-a7ad-a2d0271707c2",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T10:18:33.738Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

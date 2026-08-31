@@ -1,0 +1,114 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:29:43.976Z",
+  "results": [
+    {
+      "controlId": "AU-6(3).v1",
+      "controlIntent": "Correlate and analyze audit records across different repositories to gain organization-wide situational awareness.\n",
+      "pattern": "correlation",
+      "judgment": {
+        "controlId": "AU-6(3).v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "AU-6(3).v1 requires that audit records from different repositories be correlated and analyzed to provide organization-wide situational awareness. Evidence from two sources reveals multiple, compounding failures:\n\n1. **Temporal ordering / cross-source correlation failure (CloudTrail):** The CreateEndpoint event (2025-12-01T11:00:00Z) occurred 2 hours BEFORE the model registry approval, indicating that deployment and registry audit streams are not being correlated in real time — or at all. A functioning AU-6(3) control would have detected and blocked or flagged this out-of-order sequence. The UpdateEndpoint hotfix (2026-03-15T14:22:00Z) has no corresponding registry entry whatsoever, meaning an entire audit source is absent for that change.\n\n2. **Runtime audit stream is broken (Model Monitor):** The sole configured monitor (DataQuality) has a lastRunStatus of 'Failed' because data capture is disabled. This means no runtime inference data is being captured, so there is no monitoring audit stream to correlate with CloudTrail or registry records. The absence of ModelQuality, ModelBias, and ModelExplainability schedules further eliminates potential audit sources.\n\n3. **Incomplete audit repository coverage:** With only one of four monitor types configured, and that one failing, the organization lacks the multi-repository audit data necessary for meaningful cross-source correlation. There is no evidence of any SIEM, log aggregation, or automated correlation mechanism that would tie CloudTrail events, registry approvals, and monitoring outputs together.\n\nIn summary, the audit records that do exist (CloudTrail) are not being correlated with registry approval records (temporal ordering violations went undetected), and the monitoring audit stream is entirely absent due to disabled data capture. The control is not satisfied.",
+        "evidenceCited": [
+          "394ac684-58a6-4b53-affa-7863faf8a2da",
+          "14b112b7-81a3-4dbf-b9eb-047f78b34e5e",
+          "c81f3255-ed14-443c-9d87-7e896b0c0221"
+        ],
+        "gaps": [
+          "No evidence of a SIEM, log aggregation platform, or automated correlation tool (e.g., AWS Security Hub, Splunk, OpenSearch) that would join CloudTrail, registry, and monitoring audit streams — human attestation required to confirm whether such tooling exists outside the assessed environment.",
+          "Model registry approval records were not directly retrievable; the change-control violation is inferred from CloudTrail event notes rather than a direct registry audit log comparison.",
+          "ModelQuality, ModelBias, and ModelExplainability monitor schedules are entirely absent — it is unknown whether they were intentionally omitted or simply not yet configured.",
+          "Data capture configuration for the endpoint was not directly inspected; the failure reason from the monitor schedule implies it is disabled, but direct confirmation of the endpoint data capture setting was not retrieved."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "394ac684-58a6-4b53-affa-7863faf8a2da",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:29:20.425Z"
+        },
+        {
+          "id": "14b112b7-81a3-4dbf-b9eb-047f78b34e5e",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:29:20.425Z"
+        },
+        {
+          "id": "c81f3255-ed14-443c-9d87-7e896b0c0221",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T08:29:20.425Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "394ac684-58a6-4b53-affa-7863faf8a2da",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:29:20.425Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "14b112b7-81a3-4dbf-b9eb-047f78b34e5e",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:29:20.425Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        },
+        {
+          "id": "c81f3255-ed14-443c-9d87-7e896b0c0221",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T08:29:20.425Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

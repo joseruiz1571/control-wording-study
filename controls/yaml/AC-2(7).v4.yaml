@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-2(7).v4"
+controls:
+  - id: "AC-2(7).v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      (a) Establish and administer privileged user accounts following [Selection: a role-based access scheme; an attribute-based access scheme]; (b) Keep privileged role or attribute assignments under monitoring; (c) Keep changes to roles or attributes under monitoring; and (d) Withdraw access when those privileged role or attribute assignments are no longer appropriate.
+    collectors:
+      - getEndpointExecutionRole
+      - getCloudTrailEvents

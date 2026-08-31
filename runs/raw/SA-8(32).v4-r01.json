@@ -1,0 +1,36 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:13:18.477Z",
+  "results": [
+    {
+      "controlId": "SA-8(32).v4",
+      "controlIntent": "In [Assignment: organization-defined systems or system components], implement the security design principle of sufficient documentation.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-8(32).v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The control SA-8(32).v4 requires implementation of the security design principle of **sufficient documentation** for the assessed system or system component. The primary evidence artifact for this control is the model card, which should capture intended use, limitations, risk ratings, and evaluation details for the ML model \"churn-predictor-v1\" (endpoint: \"churn-predictor-endpoint\"). The `getModelCard` collector returned **null**, indicating that no model card exists whatsoever for this model. With zero documentation present, the control is clearly not satisfied — there is no substantive documentation to evaluate for sufficiency, let alone documentation that meets the threshold of adequacy required by the principle of sufficient documentation.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 — the getModelCard collector returned null. A model card documenting intended use, limitations, risk rating, and evaluation details is required to satisfy this control.",
+          "Human attestation would be needed to confirm whether any offline/external documentation (e.g., design documents, architecture records, risk assessments) exists outside the model registry that could partially satisfy the sufficient documentation requirement.",
+          "Evidence of any system-level security documentation (e.g., SSP, data flow diagrams, threat models) associated with the churn-predictor-endpoint was not retrievable via available collectors."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

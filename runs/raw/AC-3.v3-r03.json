@@ -1,0 +1,79 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:33:34.411Z",
+  "results": [
+    {
+      "controlId": "AC-3.v3",
+      "controlIntent": "In accordance with applicable access control policies, enforce approved authorizations for logical access to information and system resources.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-3.v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The IAM execution role attached to the \"churn-predictor-endpoint\" (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) has two critically over-permissive policies that fail to enforce approved, least-privilege authorizations as required by AC-3:\n\n1. **OverlyBroadS3 policy**: Grants `s3:*` (all S3 actions) on `*` (all resources). This means the endpoint execution role can read, write, delete, and modify any S3 bucket in the account — including buckets unrelated to the churn-predictor model. The policy note explicitly flags that \"training bucket writes and cross-account access not scoped,\" indicating that write access to training data and potential cross-account access are not restricted. This violates the principle of least privilege and fails to enforce approved authorizations limited to what the endpoint actually needs.\n\n2. **SageMakerFull policy**: Grants `sagemaker:*` on `*` (all resources). An inference endpoint has no legitimate need for full SageMaker administrative permissions (e.g., creating/deleting other endpoints, training jobs, model registries). This wildcard permission allows the endpoint role to act on any SageMaker resource in the account, far exceeding what is necessary for serving predictions.\n\nTogether, these policies represent a substantive failure to enforce logical access controls. The configuration is not scoped to the specific S3 paths (e.g., model artifacts, input/output buckets) or SageMaker resources required by this endpoint. Any compromise of this endpoint could result in lateral movement across S3 and SageMaker resources account-wide.",
+        "evidenceCited": [
+          "b75c0b36-39dc-4461-8d04-8491e6278c37"
+        ],
+        "gaps": [
+          "Network-level access controls (VPC configuration, security groups, endpoint policies) were not assessed — additional collectors for these would provide a more complete picture.",
+          "Resource-based policies on S3 buckets that might further restrict access were not retrieved.",
+          "Whether a Service Control Policy (SCP) at the AWS Organizations level compensates for the overly broad role permissions was not assessed.",
+          "Human attestation of the intended access scope for this endpoint would help confirm whether any of these broad permissions are operationally justified."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "b75c0b36-39dc-4461-8d04-8491e6278c37",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:33:21.490Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "b75c0b36-39dc-4461-8d04-8491e6278c37",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:33:21.490Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

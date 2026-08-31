@@ -1,0 +1,62 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:42:02.707Z",
+  "results": [
+    {
+      "controlId": "SI-4(2).v3",
+      "controlIntent": "Put automated tools and mechanisms in place to support near real-time analysis of events.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-4(2).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-4(2).v3 requires automated tools and mechanisms to support **near real-time analysis of events**. The evidence reveals multiple critical deficiencies:\n\n1. **No near real-time monitoring**: The sole monitoring schedule (`churn-predictor-data-quality`) runs on a weekly cron (`cron(0 6 ? * MON *)`). A weekly cadence is fundamentally incompatible with \"near real-time\" analysis of events.\n\n2. **Monitoring is non-functional**: The last run status is `Failed` with the reason \"No capture data found — data capture is disabled.\" The endpoint is not capturing inference data, so even the weekly schedule produces no usable output.\n\n3. **Severely limited coverage**: Only a single `DataQuality` monitor exists. There are no `ModelQuality`, `ModelBias`, or `ModelExplainability` schedules, leaving the vast majority of model behavior unmonitored.\n\nTaken together, the monitoring configuration is both operationally broken and architecturally insufficient to satisfy the intent of near real-time automated event analysis.",
+        "evidenceCited": [
+          "33af2c84-4db5-4a0e-bdb9-fba1aa0c579c"
+        ],
+        "gaps": [
+          "Data capture configuration for the endpoint (must be enabled for any monitoring to function)",
+          "Near real-time alerting mechanisms (e.g., CloudWatch alarms, EventBridge rules) tied to model inference events",
+          "ModelQuality, ModelBias, and ModelExplainability monitoring schedules",
+          "Any compensating controls (e.g., streaming anomaly detection, real-time dashboards) that might partially satisfy near real-time requirements"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "33af2c84-4db5-4a0e-bdb9-fba1aa0c579c",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:41:49.011Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "33af2c84-4db5-4a0e-bdb9-fba1aa0c579c",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:41:49.011Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

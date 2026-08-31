@@ -1,0 +1,100 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:15:20.995Z",
+  "results": [
+    {
+      "controlId": "CM-6.v0",
+      "controlIntent": "a. Establish and document configuration settings for components employed within the system that reflect the most restrictive mode consistent with operational requirements using [Assignment: organization-defined common secure configurations]; b. Implement the configuration settings; c. Identify, document, and approve any deviations from established configuration settings for [Assignment: organization-defined system components] based on [Assignment: organization-defined operational requirements]; and d. Monitor and control changes to the configuration settings in accordance with organizational policies and procedures.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-6.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "CM-6 requires establishing and implementing the most restrictive configuration settings consistent with operational requirements, and monitoring/controlling changes to those settings. Evidence from three collectors reveals multiple gaps:\n\n1. **Network isolation not enforced (CM-6a/b):** The endpoint has no VPC association (vpcId: null, vpcSubnetIds: [], securityGroupIds: []), and enableNetworkIsolation is false on both the endpoint config and network config. This represents the least restrictive network posture — contrary to CM-6's requirement for the most restrictive mode.\n\n2. **Data capture disabled (CM-6d):** dataCaptureEnabled is false with capturePercentage: 0 and no captureDestination. Without data capture, there is no mechanism to monitor inference inputs/outputs, making it impossible to detect or control configuration-level behavioral changes over time.\n\n3. **Encryption not fully hardened (CM-6a/b):** volumeKmsKeyId is null, meaning endpoint volumes are not encrypted. The artifact KMS key uses an AWS-managed key (keyManager: AWS) rather than a customer-managed key (CMK), which limits organizational control over key lifecycle and access policies — inconsistent with a most-restrictive encryption posture.\n\nTaken together, the endpoint lacks network hardening, has no monitoring capability, and has incomplete encryption — all of which are configuration settings that should reflect the most restrictive mode under CM-6.",
+        "evidenceCited": [
+          "d0b0be76-adf3-4423-98a2-dc0ff328b4cb",
+          "01341d38-44b0-4fc7-8fab-f39767b9a361",
+          "ea4d67a9-d167-41c2-80ef-f5be7f91cb99"
+        ],
+        "gaps": [
+          "No policy documentation available to compare against organization-defined secure configuration baselines (CM-6a requires documented baselines)",
+          "No change management logs or audit trails to assess CM-6c (approved deviations) and CM-6d (monitoring of changes)",
+          "No evidence of whether operational requirements formally justify the absence of VPC, network isolation, or data capture (i.e., no approved deviation records)",
+          "Customer-managed KMS key policy details not available to assess key access controls"
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "d0b0be76-adf3-4423-98a2-dc0ff328b4cb",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T09:15:01.600Z"
+        },
+        {
+          "id": "01341d38-44b0-4fc7-8fab-f39767b9a361",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T09:15:01.600Z"
+        },
+        {
+          "id": "ea4d67a9-d167-41c2-80ef-f5be7f91cb99",
+          "source": "sagemaker:kms:config",
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e",
+          "retrievedAt": "2026-08-30T09:15:01.600Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 3,
+      "collectorsCalled": 3,
+      "collectorsCited": 3,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "d0b0be76-adf3-4423-98a2-dc0ff328b4cb",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T09:15:01.600Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        },
+        {
+          "id": "01341d38-44b0-4fc7-8fab-f39767b9a361",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T09:15:01.600Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        },
+        {
+          "id": "ea4d67a9-d167-41c2-80ef-f5be7f91cb99",
+          "source": "sagemaker:kms:config",
+          "retrievedAt": "2026-08-30T09:15:01.600Z",
+          "payload": {
+            "volumeKmsKeyId": null,
+            "artifactKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/aws/sagemaker",
+            "keyEnabled": true,
+            "keyManager": "AWS"
+          },
+          "sha256": "9dc243778e64096781ee78df200a7a0a0992d6435378472b785282f1ad2f2a2e"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

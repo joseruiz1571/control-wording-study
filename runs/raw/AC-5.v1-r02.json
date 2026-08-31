@@ -1,0 +1,76 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:36:25.042Z",
+  "results": [
+    {
+      "controlId": "AC-5.v1",
+      "controlIntent": "a. Document and identify [Assignment: organization-defined duties of individuals requiring separation]; and b. Define system access authorizations that support separation of duties.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-5.v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "AC-5 requires that (a) duties requiring separation are documented and identified, and (b) system access authorizations are defined to *support* separation of duties — meaning each role/principal should have only the access needed for its specific function, not the ability to perform all functions.\n\nThe evidence retrieved shows the endpoint's IAM execution role (`SageMakerExecutionRole-Generic`) has two critically over-permissive policies:\n\n1. **OverlyBroadS3** (`s3:*` on `*`): The execution role can read, write, delete, and manage any S3 bucket across the account (and potentially cross-account). A proper separation of duties would restrict the inference endpoint to only *reading* the specific model artifact bucket, not writing to training buckets or accessing unrelated data stores. The policy note explicitly flags \"training bucket writes and cross-account access not scoped.\"\n\n2. **SageMakerFull** (`sagemaker:*` on `*`): The execution role can perform *all* SageMaker actions — including creating/deleting endpoints, training jobs, model registrations, and modifying other models. This collapses the boundary between the **inference** role and the **training/administration** roles. A properly separated design would restrict the inference endpoint to only the SageMaker actions needed at runtime (e.g., `sagemaker:InvokeEndpoint`), while training, deployment, and model management would be performed by separate, distinct roles.\n\nTogether, these policies mean a single role can train models, deploy them, invoke them, and manage all related S3 data — eliminating any meaningful separation of duties. There is no evidence of documented duty separation or scoped access authorizations that would enforce it.",
+        "evidenceCited": [
+          "d5a1b285-4cf8-447f-b442-b700042a8cfe"
+        ],
+        "gaps": [
+          "No IAM policy documentation or organizational role matrix was available to assess whether duties are formally documented (AC-5a). Only the execution role was retrievable — separate roles for model trainers, data scientists, and ML engineers were not inspected. Human attestation would be needed to confirm whether a separation-of-duties policy exists at the organizational level even if not enforced technically."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "d5a1b285-4cf8-447f-b442-b700042a8cfe",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:36:10.935Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "d5a1b285-4cf8-447f-b442-b700042a8cfe",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:36:10.935Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant SI-6.v2"
+controls:
+  - id: "SI-6.v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      a. Verify the correct operation of [Assignment: organization-defined security and privacy functions]; b. Carry out verification of the functions specified in SI-6a [Selection (one or more): [Assignment: organization-defined system transitional states]; upon command by user with appropriate privilege; [Assignment: organization-defined frequency]]; c. Alert [Assignment: organization-defined personnel or roles] when security and privacy verification tests fail; and d. When anomalies are discovered, [Selection (one or more): Shut the system down; Restart the system; [Assignment: organization-defined alternative action(s)]].
+    collectors:
+      - getModelMonitorSchedules
+      - getDataCaptureConfig

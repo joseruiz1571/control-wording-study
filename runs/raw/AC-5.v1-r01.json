@@ -1,0 +1,78 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:36:08.229Z",
+  "results": [
+    {
+      "controlId": "AC-5.v1",
+      "controlIntent": "a. Document and identify [Assignment: organization-defined duties of individuals requiring separation]; and b. Define system access authorizations that support separation of duties.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-5.v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "AC-5 requires that (a) duties requiring separation are documented and identified, and (b) system access authorizations are defined to *support* separation of duties — meaning roles should be scoped to only the permissions needed for their specific function, preventing any single role from performing conflicting operations (e.g., training, deploying, and accessing production data simultaneously).\n\nThe evidence retrieved shows the endpoint's execution role (`SageMakerExecutionRole-Generic`) has two critically over-permissive policies:\n\n1. **OverlyBroadS3** (`s3:*` on `*`): Grants unrestricted S3 access across all buckets and all actions (read, write, delete, ACL changes, etc.). The policy note explicitly flags that \"training bucket writes and cross-account access not scoped.\" This means the inference endpoint role can write to training buckets and access cross-account resources — conflating the duties of a training pipeline role with an inference role, violating separation of duties.\n\n2. **SageMakerFull** (`sagemaker:*` on `*`): Grants full SageMakerAPI access, meaning the inference endpoint role can also create/modify/delete training jobs, models, endpoints, pipelines, and other resources. A properly separated role for inference should only need narrow permissions (e.g., `sagemaker:InvokeEndpoint`, specific model artifact reads).\n\nTogether, these policies collapse multiple distinct duty categories — model training, model deployment, inference execution, and data management — into a single role with no access boundaries. This is the antithesis of separation of duties. There is no evidence of documented duty separation or scoped access authorizations that would enforce it.",
+        "evidenceCited": [
+          "129ca0ce-2677-467f-a180-eda31ec80b33"
+        ],
+        "gaps": [
+          "No documentation of defined duties requiring separation (e.g., a RACI matrix or role-responsibility policy) was available via the collector tools — human attestation would be needed to confirm whether such documentation exists outside AWS.",
+          "No evidence of additional IAM boundaries (SCPs, permission boundaries, resource-based policies) that might compensate for the broad role permissions was retrievable.",
+          "No evidence of separate roles for model training vs. deployment vs. inference was available — only the single execution role was returned."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "129ca0ce-2677-467f-a180-eda31ec80b33",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:35:54.299Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "129ca0ce-2677-467f-a180-eda31ec80b33",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:35:54.299Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

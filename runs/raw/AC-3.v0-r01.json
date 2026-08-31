@@ -1,0 +1,78 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:30:23.485Z",
+  "results": [
+    {
+      "controlId": "AC-3.v0",
+      "controlIntent": "Enforce approved authorizations for logical access to information and system resources in accordance with applicable access control policies.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-3.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The IAM execution role attached to the \"churn-predictor-endpoint\" (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) has two critically over-permissive policies that violate the principle of least privilege required by AC-3:\n\n1. **OverlyBroadS3 policy**: Grants `s3:*` (all S3 actions) on `*` (all resources). This is explicitly flagged as overly broad, permitting write access to training buckets and potential cross-account access that is not scoped to the specific S3 buckets or prefixes the endpoint legitimately needs. Approved authorizations should restrict access to only the specific S3 resources required for inference.\n\n2. **SageMakerFull policy**: Grants `sagemaker:*` (all SageMaker actions) on `*` (all resources). An inference endpoint should only need a narrow set of SageMaker permissions (e.g., `sagemaker:InvokeEndpoint`), not full administrative control over all SageMaker resources across the account.\n\nAC-3 requires that access to information and system resources be enforced in accordance with applicable access control policies — meaning authorizations must be scoped to what is actually approved and necessary. Neither policy meets this standard. The configuration is not substantively restrictive enough to constitute enforcement of approved authorizations; it instead grants near-unrestricted access to both S3 and SageMaker services.",
+        "evidenceCited": [
+          "c5808282-7008-4a90-be75-ee4dcdb011b4"
+        ],
+        "gaps": [
+          "Network-level access controls (VPC configuration, security groups, endpoint policies) were not assessed — additional tools would be needed to evaluate those layers.",
+          "Resource-based policies on S3 buckets were not retrieved — bucket policies could partially compensate for the overly broad role, but this cannot be confirmed without additional evidence.",
+          "SageMaker endpoint invocation authorization (e.g., resource-based policies, IAM policies for callers) was not assessed."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "c5808282-7008-4a90-be75-ee4dcdb011b4",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:30:09.843Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "c5808282-7008-4a90-be75-ee4dcdb011b4",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:30:09.843Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

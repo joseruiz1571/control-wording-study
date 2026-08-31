@@ -1,0 +1,91 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T18:55:16.632Z",
+  "results": [
+    {
+      "controlId": "AU-8.r3",
+      "controlIntent": "a. Use internal system clocks to produce time stamps for audit records; and b. Record, for audit records, those time stamps meeting [Assignment: organization-defined granularity of time measurement] that satisfy one or more of the following: use Coordinated Universal Time; have a fixed local time offset from Coordinated Universal Time; include the local time offset as part of the time stamp.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-8.r3",
+        "status": "satisfied",
+        "confidence": "high",
+        "rationale": "Both CloudTrail audit records retrieved for the churn-predictor-endpoint use timestamps in ISO 8601 format with UTC (Zulu, \"Z\" suffix): CreateEndpoint at 2025-12-01T11:00:00Z (evidence aee44a6b) and UpdateEndpoint at 2026-03-15T14:22:00Z (evidence c83e4e20). AWS CloudTrail inherently uses internal AWS system clocks (satisfying AU-8.r3a) and records all event times in Coordinated Universal Time at second-level granularity (satisfying AU-8.r3b). The timestamps are substantive — they are unambiguous, UTC-anchored, and granular to the second — meeting the control's adequacy standard. No evidence of non-UTC or missing timestamps was found in the retrieved records.",
+        "evidenceCited": [
+          "aee44a6b-8ab8-464c-b364-75561805092b",
+          "c83e4e20-7abc-49c9-9a46-1ede95c4e015"
+        ],
+        "gaps": [
+          "Organization-defined granularity requirement (e.g., millisecond vs. second) was not explicitly documented in retrieved evidence — human attestation of the organization's defined granularity standard would strengthen this assessment.",
+          "Only two CloudTrail events were retrieved; a broader sample across all endpoint lifecycle events (e.g., DeleteEndpoint, model registry approvals) would provide more comprehensive coverage.",
+          "No direct evidence of NTP/time-sync configuration for the underlying infrastructure was retrieved — AWS manages this internally, but explicit documentation would be ideal for a full audit."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "aee44a6b-8ab8-464c-b364-75561805092b",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T18:55:00.696Z"
+        },
+        {
+          "id": "c83e4e20-7abc-49c9-9a46-1ede95c4e015",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T18:55:00.696Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "aee44a6b-8ab8-464c-b364-75561805092b",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T18:55:00.696Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "c83e4e20-7abc-49c9-9a46-1ede95c4e015",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T18:55:00.696Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

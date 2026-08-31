@@ -1,0 +1,57 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:23:32.059Z",
+  "results": [
+    {
+      "controlId": "SI-12.v1",
+      "controlIntent": "Information within the system and information output from the system is managed and retained in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The data capture configuration for the \"churn-predictor-endpoint\" shows that data capture is explicitly disabled (dataCaptureEnabled: false), the capture percentage is set to 0%, and no destination S3 path is configured (captureDestination: null). \n\nSI-12.v1 requires that information within and output from the system is managed and retained in accordance with applicable laws, directives, and operational requirements. For an ML inference endpoint, this means inference inputs and outputs must be captured and stored to support auditability, drift monitoring, quality monitoring, and compliance with data retention obligations. With data capture fully disabled, no inference data is being recorded or retained at all — making it impossible to demonstrate compliance with any retention policy, support post-hoc audits, or enable downstream monitoring controls. This configuration is substantively insufficient and does not satisfy the control.",
+        "evidenceCited": [
+          "dc5429b2-19e1-4d0c-ab00-22392e571902"
+        ],
+        "gaps": [
+          "Data retention policy documentation (applicable laws, regulations, or organizational policies specifying required retention periods) was not available via the collector tools — human attestation would be needed to confirm the specific retention requirements this endpoint should meet.",
+          "S3 bucket lifecycle policies or any alternative logging/retention mechanisms (e.g., CloudWatch Logs, external audit systems) that might partially compensate for disabled data capture were not assessable with the available tools.",
+          "Whether a formal risk acceptance or waiver exists for disabling data capture on this endpoint requires human attestation."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "dc5429b2-19e1-4d0c-ab00-22392e571902",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:23:21.412Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "dc5429b2-19e1-4d0c-ab00-22392e571902",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:23:21.412Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant AC-6(10).v4"
+controls:
+  - id: "AC-6(10).v4"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      Do not allow non-privileged users to execute privileged functions.
+    collectors:
+      - getEndpointExecutionRole
+      - getCloudTrailEvents

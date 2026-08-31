@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant AU-6.v2"
+controls:
+  - id: "AU-6.v2"
+    framework: "SP 800-53 Rev 5"
+    pattern: synthesis
+    intent: >
+      a. At [Assignment: organization-defined frequency], review and analyze system audit records for indications of [Assignment: organization-defined inappropriate or unusual activity] and the potential impact of the inappropriate or unusual activity; b. Report findings to [Assignment: organization-defined personnel or roles]; and c. When there is a change in risk based on law enforcement information, intelligence information, or other credible sources of information, adjust the level of audit record review, analysis, and reporting within the system.
+    collectors:
+      - getCloudTrailEvents
+      - getModelMonitorSchedules

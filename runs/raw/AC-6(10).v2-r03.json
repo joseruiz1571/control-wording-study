@@ -1,0 +1,130 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:43:14.487Z",
+  "results": [
+    {
+      "controlId": "AC-6(10).v2",
+      "controlIntent": "Non-privileged users are not permitted to execute privileged functions.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "AC-6(10).v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Two independent evidence streams both confirm that non-privileged users are executing privileged functions, violating AC-6(10).v2.\n\n**IAM Role Evidence (8e888291-ba4d-41f2-99db-5aa267fa4e9d):**\nThe SageMaker execution role attached to the endpoint carries two wildcard policies:\n- `s3:*` on `*` — grants unrestricted S3 read/write/delete across all buckets and accounts. Privileged write/delete operations on arbitrary buckets are not scoped to the minimum necessary for inference.\n- `sagemaker:*` on `*` — grants full SageMaker control-plane privileges (create, update, delete any endpoint, model, pipeline, etc.), which are administrative/privileged functions that should not be available to non-privileged principals.\n\n**CloudTrail Evidence (39adbdce-2b4e-42f2-bb6a-23e2ca9379a9 and 540ecd87-3bfb-4f69-a6f4-4092a30e628c):**\n- IAM user `data-scientist-jdoe` (a non-privileged data scientist) successfully executed `CreateEndpoint` on 2025-12-01 at 11:00 UTC — two hours *before* the model registry approval at 09:00 UTC, meaning a privileged deployment action was performed without the required authorization gate.\n- The same user executed `UpdateEndpoint` on 2026-03-15 with a hotfix config that has no corresponding model registry entry, again bypassing change-control and performing a privileged infrastructure modification without authorization.\n\n**Synthesis:** The overly broad IAM policies directly enable the observed behavior: because `sagemaker:*` is granted without resource or condition constraints, `data-scientist-jdoe` can invoke privileged SageMaker control-plane operations at will. The CloudTrail record confirms this capability is being exercised — including pre-approval and unregistered deployments. This is a clear violation of the principle that non-privileged users must not be permitted to execute privileged functions.",
+        "evidenceCited": [
+          "8e888291-ba4d-41f2-99db-5aa267fa4e9d",
+          "39adbdce-2b4e-42f2-bb6a-23e2ca9379a9",
+          "540ecd87-3bfb-4f69-a6f4-4092a30e628c"
+        ],
+        "gaps": [
+          "No IAM policy for the data-scientist-jdoe user/group was retrieved directly — the overly broad permissions are inferred from the execution role, but the user's own IAM permissions were not separately enumerated.",
+          "No SageMaker Model Registry approval record was retrieved to confirm the exact approval timestamp cited in the CloudTrail note; human attestation of the approval workflow would strengthen this finding.",
+          "No Service Control Policies (SCPs) or permission boundaries were retrieved that might restrict the execution role or user — their absence or presence could affect the severity of the finding."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "8e888291-ba4d-41f2-99db-5aa267fa4e9d",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:42:53.210Z"
+        },
+        {
+          "id": "39adbdce-2b4e-42f2-bb6a-23e2ca9379a9",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T07:42:53.210Z"
+        },
+        {
+          "id": "540ecd87-3bfb-4f69-a6f4-4092a30e628c",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T07:42:53.210Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "8e888291-ba4d-41f2-99db-5aa267fa4e9d",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:42:53.210Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        },
+        {
+          "id": "39adbdce-2b4e-42f2-bb6a-23e2ca9379a9",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:42:53.210Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "540ecd87-3bfb-4f69-a6f4-4092a30e628c",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T07:42:53.210Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

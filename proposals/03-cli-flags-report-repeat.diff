@@ -1,0 +1,206 @@
+--- a/src/cli/index.ts
++++ b/src/cli/index.ts
+@@ -15,7 +15,7 @@
+ mlassure — agentic AI-control assurance
+ 
+ Usage:
+-  mlassure assess --controls <path> --target <path> [--live] [--oscal <path>] [--narrative <path>] [--bundle <dir>]
++  mlassure assess --controls <path> --target <path> [--live] [--oscal <path>] [--narrative <path>] [--bundle <dir>] [--report <path>] [--model <id>] [--temperature <n>] [--repeat <n>]
+   mlassure verify-bundle <dir>
+   mlassure --help
+ 
+@@ -30,6 +30,10 @@
+   --oscal <path>       Write OSCAL Assessment Results JSON to <path> (implies --live)
+   --narrative <path>   Write the Markdown assurance narrative to <path> (implies --live)
+   --bundle <dir>       Write a tamper-evident custody bundle to a fresh <dir> (implies --live)
++  --report <path>      Write AssessmentReport JSON (same object as bundle report.json) to <path> (implies --live)
++  --model <id>         LLM model alias (default: MLASSURE_MODEL or claude-sonnet-4-6)
++  --temperature <n>    LLM temperature in [0, 1]; 0 is valid (default: 0.1)
++  --repeat <n>         Run the assessment N times (integer >= 1). Output paths get a -rNN suffix when N > 1
+   --help, -h           Show this help text
+ `.trim();
+ 
+@@ -43,7 +47,17 @@
+ 
+ type ParsedArgs = { flags: Record<string, string>; positionals: string[] };
+ 
+-const VALUE_FLAGS = new Set(["controls", "target", "oscal", "narrative", "bundle"]);
++const VALUE_FLAGS = new Set([
++  "controls",
++  "target",
++  "oscal",
++  "narrative",
++  "bundle",
++  "report",
++  "model",
++  "temperature",
++  "repeat",
++]);
+ const BOOLEAN_FLAGS = new Set(["live", "help"]);
+ 
+ /**
+@@ -88,6 +102,46 @@
+   return { flags, positionals };
+ }
+ 
++
++function parseTemperature(raw: string | undefined): number | undefined {
++  if (raw === undefined) return undefined;
++  const n = Number(raw);
++  // 0 is a required study setting — do not use `||` which would treat it as missing.
++  if (!Number.isFinite(n) || n < 0 || n > 1) {
++    console.error(`Error: --temperature must be a number in [0, 1] (got ${JSON.stringify(raw)})`);
++    console.error(USAGE);
++    process.exit(1);
++  }
++  return n;
++}
++
++function parseRepeat(raw: string | undefined): number {
++  if (raw === undefined) return 1;
++  const n = Number(raw);
++  if (!Number.isInteger(n) || n < 1) {
++    console.error(`Error: --repeat must be an integer >= 1 (got ${JSON.stringify(raw)})`);
++    console.error(USAGE);
++    process.exit(1);
++  }
++  return n;
++}
++
++/**
++ * When --repeat N>1, suffix an output path so each replica writes a fresh
++ * file/dir (the bundle writer refuses non-empty directories).
++ * `out/report.json` → `out/report-r02.json`; `out/bundle` → `out/bundle-r02`.
++ */
++function replicaPath(path: string, replica: number, repeats: number): string {
++  if (repeats <= 1) return path;
++  const suffix = `-r${String(replica).padStart(2, "0")}`;
++  const dot = path.lastIndexOf(".");
++  const slash = path.lastIndexOf("/");
++  if (dot > slash && dot !== -1) {
++    return `${path.slice(0, dot)}${suffix}${path.slice(dot)}`;
++  }
++  return `${path}${suffix}`;
++}
++
+ async function runScaffoldOnly(
+   controlsPath: string,
+   targetPath: string
+@@ -110,23 +164,54 @@
+   console.log(`\nRun with --live to invoke the agent loop.\n`);
+ }
+ 
++type LiveOptions = {
++  oscalPath?: string;
++  narrativePath?: string;
++  bundleDir?: string;
++  reportPath?: string;
++  model?: string;
++  temperature?: number;
++  replica?: number;
++  repeats?: number;
++};
++
+ async function runLive(
+   controlsPath: string,
+   targetPath: string,
+-  oscalPath?: string,
+-  narrativePath?: string,
+-  bundleDir?: string
++  opts: LiveOptions = {}
+ ): Promise<void> {
+   const controlSet = await loadControlSet(controlsPath);
+   const targetJson = JSON.parse(readFileSync(targetPath, "utf-8")) as AssessmentTarget;
+   const provider = new FixtureProvider(targetPath);
+-  const llm = new AnthropicProvider();
++  const llm = new AnthropicProvider({
++    ...(opts.model !== undefined ? { model: opts.model } : {}),
++    ...(opts.temperature !== undefined ? { temperature: opts.temperature } : {}),
++  });
+ 
+   console.log(
+     `\nmlassure — running assessment\n  Target:   ${targetJson.modelName}\n  Controls: ${controlSet.controls.length}\n`
+   );
+ 
+   const report = await runAssessment(controlSet, targetJson, provider, llm);
++  // Study-required fields that live on the CLI-owned provider, not LlmProvider:
++  report.llmModel = llm.model;
++  report.llmTemperature = llm.temperature;
++  if ((opts.repeats ?? 1) > 1 && opts.replica !== undefined) report.replica = opts.replica;
++
++  const repeats = opts.repeats ?? 1;
++  const replica = opts.replica ?? 1;
++  const oscalPath = opts.oscalPath
++    ? replicaPath(opts.oscalPath, replica, repeats)
++    : undefined;
++  const narrativePath = opts.narrativePath
++    ? replicaPath(opts.narrativePath, replica, repeats)
++    : undefined;
++  const bundleDir = opts.bundleDir
++    ? replicaPath(opts.bundleDir, replica, repeats)
++    : undefined;
++  const reportPath = opts.reportPath
++    ? replicaPath(opts.reportPath, replica, repeats)
++    : undefined;
+ 
+   console.log(`\n${"─".repeat(72)}`);
+   console.log(`  mlassure Assessment Report`);
+@@ -199,6 +284,17 @@
+     }
+   }
+ 
++  if (reportPath) {
++    try {
++      writeFileSync(reportPath, JSON.stringify(report, null, 2), "utf-8");
++      console.log(`  AssessmentReport JSON written to ${reportPath}\n`);
++    } catch (err) {
++      throw new Error(
++        `Failed to write AssessmentReport JSON to ${reportPath}: ${err instanceof Error ? err.message : String(err)}`
++      );
++    }
++  }
++
+   if (bundleDir) {
+     try {
+       const manifest = writeEvidenceBundle(report, bundleDir, {
+@@ -280,11 +376,35 @@
+     const oscalPath = flags["oscal"] ? resolve(flags["oscal"]) : undefined;
+     const narrativePath = flags["narrative"] ? resolve(flags["narrative"]) : undefined;
+     const bundleDir = flags["bundle"] ? resolve(flags["bundle"]) : undefined;
+-
+-    // --oscal, --narrative, and --bundle each require a real assessment run,
+-    // so any of them implies --live.
+-    if (flags["live"] || oscalPath || narrativePath || bundleDir) {
+-      await runLive(absControls, absTarget, oscalPath, narrativePath, bundleDir);
++    const reportPath = flags["report"] ? resolve(flags["report"]) : undefined;
++    const model = flags["model"];
++    const temperature = parseTemperature(flags["temperature"]);
++    const repeats = parseRepeat(flags["repeat"]);
++
++    // --oscal/--narrative/--bundle/--report/--model/--temperature/--repeat
++    // each require a real assessment run, so any of them implies --live.
++    const live =
++      Boolean(flags["live"]) ||
++      Boolean(oscalPath) ||
++      Boolean(narrativePath) ||
++      Boolean(bundleDir) ||
++      Boolean(reportPath) ||
++      model !== undefined ||
++      temperature !== undefined ||
++      flags["repeat"] !== undefined;
++    if (live) {
++      for (let replica = 1; replica <= repeats; replica++) {
++        await runLive(absControls, absTarget, {
++          oscalPath,
++          narrativePath,
++          bundleDir,
++          reportPath,
++          model,
++          temperature,
++          replica,
++          repeats,
++        });
++      }
+     } else {
+       await runScaffoldOnly(absControls, absTarget);
+     }

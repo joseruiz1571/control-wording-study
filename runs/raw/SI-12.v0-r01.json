@@ -1,0 +1,56 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:22:43.581Z",
+  "results": [
+    {
+      "controlId": "SI-12.v0",
+      "controlIntent": "Manage and retain information within the system and information output from the system in accordance with applicable laws, executive orders, directives, regulations, policies, standards, guidelines and operational requirements.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SI-12.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "Control SI-12.v0 requires that information within the system and information output from the system be managed and retained in accordance with applicable laws, directives, and operational requirements. For an ML inference endpoint, a foundational mechanism for this is data capture — recording inference inputs and outputs so they can be retained, audited, and monitored.\n\nThe evidence retrieved for endpoint \"churn-predictor-endpoint\" shows that data capture is **completely disabled**:\n- `dataCaptureEnabled`: false\n- `capturePercentage`: 0\n- `captureDestination`: null\n\nWith data capture turned off and no destination S3 path configured, inference inputs and outputs are not being recorded or retained at all. This means the system has no mechanism to preserve information output from the model, making it impossible to satisfy retention obligations under SI-12. There is no substantive configuration in place — the configuration is effectively a null state.",
+        "evidenceCited": [
+          "4acd9ffa-9c41-4722-b4cb-e53c49a0a10c"
+        ],
+        "gaps": [
+          "Data capture is fully disabled with no destination configured — no inference input/output retention is occurring. Human attestation would be needed to determine whether an alternative out-of-band retention mechanism (e.g., application-layer logging, upstream data pipeline capture) exists that compensates for the absence of SageMaker data capture.",
+          "Applicable organizational retention policies or legal/regulatory requirements specific to this model's use case were not available for review, which would be needed to fully assess the adequacy of any compensating controls."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "4acd9ffa-9c41-4722-b4cb-e53c49a0a10c",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:22:33.290Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "4acd9ffa-9c41-4722-b4cb-e53c49a0a10c",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:22:33.290Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

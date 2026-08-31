@@ -1,0 +1,11 @@
+version: "0.1.0"
+description: "Control-wording study variant CM-3.v3"
+controls:
+  - id: "CM-3.v3"
+    framework: "SP 800-53 Rev 5"
+    pattern: correlation
+    intent: >
+      a. Determine and document the types of changes to the system that are configuration-controlled; b. With explicit consideration for security and privacy impact analyses, review proposed configuration-controlled changes to the system and approve or disapprove such changes; c. Document the system's associated configuration change decisions; d. Implement approved configuration-controlled changes to the system; e. For [Assignment: organization-defined time period], retain records of configuration-controlled changes to the system; f. Monitor and review activities associated with configuration-controlled changes to the system; and g. Through [Assignment: organization-defined configuration change control element] that convenes [Selection (one or more): [Assignment: organization-defined frequency]; when [Assignment: organization-defined configuration change conditions]], coordinate and provide oversight for configuration change control activities.
+    collectors:
+      - getCloudTrailEvents
+      - getModelRegistryEntry

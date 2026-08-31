@@ -1,0 +1,36 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:10:50.314Z",
+  "results": [
+    {
+      "controlId": "SA-8(32).v0",
+      "controlIntent": "Implement the security design principle of sufficient documentation in [Assignment: organization-defined systems or system components].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SA-8(32).v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The getModelCard collector was invoked for model \"churn-predictor-v1\" / endpoint \"churn-predictor-endpoint\" and returned null — meaning no model card exists. A model card is the primary documentation artifact for an ML model and would normally capture intended use, limitations, risk rating, and evaluation details. Without any model card, the security design principle of sufficient documentation (SA-8(32)) is not met. There is no substantive documentation to assess for adequacy; the documentation is entirely absent.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card was found for churn-predictor-v1. A model card documenting intended use, limitations, risk rating, and evaluation details must be created and maintained.",
+          "Human attestation is needed to confirm whether documentation exists in any other system (e.g., Confluence, SharePoint, internal wiki) outside the model registry.",
+          "Evidence of any supplementary design or architecture documentation (e.g., system security plan sections, data flow diagrams, threat models) covering this model/endpoint was not retrievable via available collectors."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

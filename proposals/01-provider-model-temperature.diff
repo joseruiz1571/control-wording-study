@@ -1,0 +1,39 @@
+--- a/src/llm/anthropic-provider.ts
++++ b/src/llm/anthropic-provider.ts
+@@ -9,11 +9,16 @@
+ export type AnthropicProviderOptions = {
+   apiKey?: string;
+   model?: string;
++  /** Default temperature for complete() when the caller does not pass one. 0 is valid. */
++  temperature?: number;
+ };
+ 
+ export class AnthropicProvider implements LlmProvider {
+   private readonly client: Anthropic;
+-  private readonly model: string;
++  /** Alias or snapshot id requested for this run — logged by the CLI. */
++  readonly model: string;
++  /** Instance default; `params.temperature ?? this.temperature` so 0 is not swallowed. */
++  readonly temperature: number;
+ 
+   constructor(options: AnthropicProviderOptions = {}) {
+     const apiKey = options.apiKey ?? process.env["ANTHROPIC_API_KEY"];
+@@ -23,14 +28,16 @@
+       );
+     }
+     this.client = new Anthropic({ apiKey });
+-    this.model = options.model ?? "claude-sonnet-4-6";
++    // MLASSURE_MODEL is documented in .env.example but was previously unread.
++    this.model = options.model ?? process.env["MLASSURE_MODEL"] ?? "claude-sonnet-4-6";
++    this.temperature = options.temperature ?? 0.1;
+   }
+ 
+   async complete(params: LlmCompletionParams): Promise<LlmCompletionResult> {
+     const response = await this.client.messages.create({
+       model: this.model,
+       max_tokens: params.maxTokens ?? 4096,
+-      temperature: params.temperature ?? 0.1,
++      temperature: params.temperature ?? this.temperature,
+       system: params.systemPrompt,
+       // Cast through unknown — our LlmMessage is structurally compatible with
+       // Anthropic.MessageParam but TS can't verify the union overlap without

@@ -1,0 +1,78 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:46:04.377Z",
+  "results": [
+    {
+      "controlId": "AC-6(5).v0",
+      "controlIntent": "Restrict privileged accounts on the system to [Assignment: organization-defined personnel or roles].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(5).v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "AC-6(5) requires that privileged access be restricted to only the personnel or roles that specifically need it — i.e., least-privilege enforcement on privileged accounts. The IAM execution role attached to the \"churn-predictor-endpoint\" (arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic) demonstrates two critical violations:\n\n1. **Overly broad S3 access (OverlyBroadS3 policy):** The role is granted `s3:*` on `*` (all resources). This means the endpoint execution role can read, write, delete, and manage any S3 bucket in the account — including buckets unrelated to this model. The policy note explicitly flags that \"training bucket writes and cross-account access not scoped.\" A least-privilege configuration would restrict actions to only the specific operations needed (e.g., `s3:GetObject`) on only the specific bucket(s) used by this model.\n\n2. **Overly broad SageMaker access (SageMakerFull policy):** The role is granted `sagemaker:*` on `*` (all resources). This gives the endpoint execution role full administrative control over all SageMaker resources in the account — including the ability to create, modify, or delete other models, endpoints, training jobs, and pipelines. This is a significant privilege escalation risk and is far beyond what an inference endpoint requires.\n\nNeither policy scopes actions or resources to the minimum necessary for the endpoint to function. The role name (\"SageMakerExecutionRole-Generic\") further suggests this is a shared, generic role not tailored to this specific model's requirements. There is no evidence of organization-defined personnel or role restrictions being applied in a substantive way.",
+        "evidenceCited": [
+          "0228c46e-db4f-4ba9-a979-97634eb3505b"
+        ],
+        "gaps": [
+          "No information available on whether organization-defined privileged role assignments are documented in a policy or RBAC matrix outside of AWS IAM — human attestation would be needed to confirm whether any compensating controls exist at the organizational level.",
+          "No evidence of SCPs (Service Control Policies) or permission boundaries that might further restrict this role at the AWS Organizations level.",
+          "No audit logs reviewed to determine whether the broad permissions have actually been exercised inappropriately."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "0228c46e-db4f-4ba9-a979-97634eb3505b",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:45:51.011Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "0228c46e-db4f-4ba9-a979-97634eb3505b",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:45:51.011Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

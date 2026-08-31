@@ -1,0 +1,43 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:42:48.219Z",
+  "results": [
+    {
+      "controlId": "RA-3.v4",
+      "controlIntent": "a. Conduct a risk assessment, including: 1. Identifying threats to and vulnerabilities in the system; 2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and 3. Determining the likelihood and impact of adverse effects on individuals arising from processing of personally identifiable information; b. Integrate risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments; c. Document the results of the risk assessment in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]]; d. Review the risk assessment results [Assignment: organization-defined frequency]; e. Disseminate the risk assessment results to [Assignment: organization-defined personnel or roles]; and f. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "RA-3.v4",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The only available evidence collector — getModelCard — returned null, indicating that no model card exists for \"churn-predictor-v1\" / \"churn-predictor-endpoint\". \n\nSP 800-53 Rev 5 RA-3 requires, at minimum:\n- (a) A conducted risk assessment identifying threats, vulnerabilities, likelihood/magnitude of harm, and PII-related adverse effects;\n- (c) Documentation of risk assessment results in a security/privacy plan, risk assessment report, or equivalent artifact;\n- (d) Periodic review of risk assessment results;\n- (e) Dissemination of results to defined personnel/roles; and\n- (f) Updates when significant changes occur.\n\nThe absence of a model card means there is no documented evidence that any of these activities have been performed. There is no record of identified threats or vulnerabilities, no likelihood/impact determinations, no documented review cadence, no dissemination plan, and no update policy. All sub-requirements of RA-3 are therefore unmet.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists — the getModelCard collector returned null, so there is no documented risk assessment artifact for this model/endpoint.",
+          "Threat and vulnerability identification (RA-3.a.1) — no evidence of identified threats or vulnerabilities.",
+          "Likelihood and magnitude of harm determination (RA-3.a.2) — no evidence of impact analysis.",
+          "PII adverse-effects analysis (RA-3.a.3) — no evidence of privacy risk assessment.",
+          "Integration with org/mission-level risk management (RA-3.b) — no evidence of integration.",
+          "Documented risk assessment results (RA-3.c) — no security plan, risk assessment report, or equivalent document found.",
+          "Review frequency and records (RA-3.d) — no evidence of periodic review.",
+          "Dissemination to defined personnel/roles (RA-3.e) — no evidence of dissemination.",
+          "Update policy and history (RA-3.f) — no evidence of update cadence or triggers.",
+          "Human attestation would be needed to confirm whether any risk assessment activities exist outside the model card (e.g., in a separate GRC system, SharePoint, or security plan)."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

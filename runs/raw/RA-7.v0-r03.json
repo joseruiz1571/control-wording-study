@@ -1,0 +1,114 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:44:16.843Z",
+  "results": [
+    {
+      "controlId": "RA-7.v0",
+      "controlIntent": "Respond to findings from security and privacy assessments, monitoring, and audits in accordance with organizational risk tolerance.\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "RA-7.v0",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "RA-7 requires that findings from security/privacy assessments, monitoring, and audits are responded to in accordance with organizational risk tolerance. Evidence from both collectors reveals multiple unresolved findings with no observable response:\n\n1. **Monitoring failure left unaddressed**: The sole monitoring schedule (`churn-predictor-data-quality`, evidence `bad7b924`) has a last run status of **Failed** due to data capture being disabled. This is an active, unresolved finding — there is no evidence in CloudTrail or elsewhere that the team took corrective action (e.g., re-enabling data capture, investigating the root cause, or escalating the issue).\n\n2. **Change-control violation at initial deployment**: CloudTrail event `5b2ecc18` shows the endpoint was created on 2025-12-01 at 11:00 UTC, **two hours before** the model registry approval at 09:00 UTC (per the event note). This is a documented finding indicating a process bypass, yet no remediation or corrective action is visible in the evidence.\n\n3. **Unauthorized hotfix deployment**: CloudTrail event `e494e992` shows an `UpdateEndpoint` action on 2026-03-15 with no corresponding registry entry — another change-control finding with no evidence of a response or post-incident review.\n\n4. **Monitoring coverage gaps**: Only a single DataQuality schedule exists; there is no ModelQuality, ModelBias, or ModelExplainability monitoring, limiting the organization's ability to detect and respond to a broader set of risk signals.\n\nTaken together, the evidence shows a pattern of findings (monitoring failures, change-control bypasses) that have not been responded to, which directly contradicts the intent of RA-7.",
+        "evidenceCited": [
+          "bad7b924-bee0-448c-a3ff-feccf79c19aa",
+          "5b2ecc18-fab9-496e-99b8-547984dd4975",
+          "e494e992-a463-41f4-9cec-ef23b4c30426"
+        ],
+        "gaps": [
+          "No incident tickets, JIRA issues, or remediation records are accessible via the available collectors — human attestation needed to confirm whether offline response processes exist.",
+          "No evidence of organizational risk tolerance thresholds or SLA policies for finding remediation, which would be needed to assess proportionality of response.",
+          "No ModelQuality, ModelBias, or ModelExplainability monitoring schedules exist, so findings from those dimensions cannot be assessed.",
+          "CloudTrail coverage may be incomplete — additional events (e.g., registry approval timestamps, data capture configuration changes) would strengthen the analysis."
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "bad7b924-bee0-448c-a3ff-feccf79c19aa",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T09:43:56.460Z"
+        },
+        {
+          "id": "5b2ecc18-fab9-496e-99b8-547984dd4975",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T09:43:56.461Z"
+        },
+        {
+          "id": "e494e992-a463-41f4-9cec-ef23b4c30426",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T09:43:56.461Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "bad7b924-bee0-448c-a3ff-feccf79c19aa",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T09:43:56.460Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        },
+        {
+          "id": "5b2ecc18-fab9-496e-99b8-547984dd4975",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:43:56.461Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "e494e992-a463-41f4-9cec-ef23b4c30426",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T09:43:56.461Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

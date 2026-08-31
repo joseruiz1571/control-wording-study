@@ -1,0 +1,43 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:40:45.391Z",
+  "results": [
+    {
+      "controlId": "RA-3.v2",
+      "controlIntent": "a. Perform a risk assessment that includes: 1. Identifying threats to and vulnerabilities in the system; 2. Determining the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system, the information it processes, stores, or transmits, and any related information; and 3. Determining the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information; b. Integrate risk assessment results and risk management decisions from the organization and mission or business process perspectives with system-level risk assessments; c. Record risk assessment results in [Selection: security and privacy plans; risk assessment report; [Assignment: organization-defined document]]; d. Review risk assessment results [Assignment: organization-defined frequency]; e. Disseminate risk assessment results to [Assignment: organization-defined personnel or roles]; and f. Update the risk assessment [Assignment: organization-defined frequency] or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "RA-3.v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The only available evidence collector — getModelCard — returned null, indicating that no model card exists for \"churn-predictor-v1\" / \"churn-predictor-endpoint\". \n\nControl RA-3.v2 requires a substantive risk assessment that covers:\n(a) Identification of threats and vulnerabilities, likelihood and magnitude of harm, and PII-related adverse effects on individuals;\n(b) Integration of risk assessment results with organizational and mission/business-process risk management decisions;\n(c) Recording of risk assessment results in a security/privacy plan, risk assessment report, or equivalent document;\n(d) Periodic review of risk assessment results;\n(e) Dissemination of results to defined personnel/roles; and\n(f) Updating the risk assessment on a defined frequency or upon significant changes.\n\nWithout a model card or any equivalent risk documentation, there is no evidence that any of these sub-requirements have been addressed. The absence of a model card means there is no recorded risk assessment, no documented threat/vulnerability analysis, no likelihood or impact determinations, no PII-impact analysis, no review cadence, no dissemination plan, and no update schedule. All six sub-requirements of RA-3 are therefore unmet.",
+        "evidenceCited": [],
+        "gaps": [
+          "No model card exists for churn-predictor-v1 — the getModelCard collector returned null, so there is no recorded risk assessment document of any kind.",
+          "Threat and vulnerability identification (RA-3.a.1) — not documented.",
+          "Likelihood and magnitude of harm analysis (RA-3.a.2) — not documented.",
+          "PII adverse-effect likelihood and impact analysis (RA-3.a.3) — not documented.",
+          "Integration of system-level risk assessment with organizational/mission risk management (RA-3.b) — not documented.",
+          "Risk assessment results recorded in a security/privacy plan or risk assessment report (RA-3.c) — no such document found.",
+          "Review frequency and evidence of periodic review (RA-3.d) — not documented.",
+          "Dissemination of results to defined personnel or roles (RA-3.e) — not documented.",
+          "Update frequency and trigger conditions for reassessment (RA-3.f) — not documented.",
+          "Human attestation would be needed to confirm whether any offline/out-of-band risk assessment documentation exists outside the model card system."
+        ]
+      },
+      "evidenceCount": 0,
+      "iterations": 2,
+      "citedEvidence": [],
+      "evidenceCoverage": 0,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 0,
+      "coverageConfidence": "low",
+      "retrievedEvidence": []
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

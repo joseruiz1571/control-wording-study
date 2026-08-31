@@ -1,0 +1,93 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T08:26:07.552Z",
+  "results": [
+    {
+      "controlId": "AU-3.v3",
+      "controlIntent": "Ensure audit records include information that establishes all of the following: a. What type of event occurred; b. When the event occurred; c. Where the event occurred; d. Source of the event; e. Outcome of the event; and f. Identity of any individuals, subjects, or objects/entities associated with the event.\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AU-3.v3",
+        "status": "partially-satisfied",
+        "confidence": "medium",
+        "rationale": "CloudTrail events were retrieved for two key lifecycle actions on the churn-predictor-endpoint (CreateEndpoint on 2025-12-01 and UpdateEndpoint on 2026-03-15). Mapping the captured fields to the six AU-3 required elements:\n\n(a) WHAT — SATISFIED: eventName clearly identifies the event type (CreateEndpoint, UpdateEndpoint).\n(b) WHEN — SATISFIED: eventTime is present and precise (ISO-8601 timestamps) for both events.\n(c) WHERE — PARTIALLY SATISFIED: The endpointName and endpointConfigName identify the resource, but the returned payload does not include the AWS region, account ID, or resource ARN, which are typically needed to fully establish \"where\" the event occurred.\n(d) SOURCE — PARTIALLY SATISFIED: The userIdentity block identifies the initiating IAM user, but no source IP address, user agent, or invoking service/role chain is present in the retrieved payload, leaving the source of the event incompletely documented.\n(e) OUTCOME — NOT SATISFIED: Neither event record contains responseElements, an errorCode, or any success/failure indicator. It is impossible to determine from these records whether the endpoint operations succeeded or failed.\n(f) IDENTITY — SATISFIED: The IAM username (data-scientist-jdoe) is captured for both events.\n\nThree of six required elements are fully satisfied; two are only partially satisfied; and one (outcome) is entirely absent from the audit records. This constitutes a partial conformance finding. Additionally, the embedded notes reveal that the CreateEndpoint event preceded registry approval by two hours, and the UpdateEndpoint hotfix has no registry entry — these are compounding change-control gaps that further undermine the completeness and integrity of the audit trail.",
+        "evidenceCited": [
+          "568932bd-9f3a-4872-a81b-7397b4f22383",
+          "ad0729f2-fae8-4d17-a894-8c086aabb8fb"
+        ],
+        "gaps": [
+          "Outcome/result of each event (responseElements, errorCode, HTTP status) is absent from both CloudTrail records — cannot determine success or failure of CreateEndpoint or UpdateEndpoint operations.",
+          "Source IP address and user-agent string are not present in the retrieved payload — source of event is incompletely established.",
+          "AWS region, account ID, and resource ARN are not captured in the returned evidence — 'where' the event occurred is only partially established.",
+          "Registry approval record for the CreateEndpoint action (expected before 2025-12-01T09:00Z) was not retrievable — human attestation or registry tool access needed to confirm change-control compliance.",
+          "No registry entry exists for the 2026-03-15 hotfix UpdateEndpoint — requires human review or registry tool to confirm whether an exemption was granted."
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "568932bd-9f3a-4872-a81b-7397b4f22383",
+          "source": "cloudtrail:events",
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62",
+          "retrievedAt": "2026-08-30T08:25:45.461Z"
+        },
+        {
+          "id": "ad0729f2-fae8-4d17-a894-8c086aabb8fb",
+          "source": "cloudtrail:events",
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b",
+          "retrievedAt": "2026-08-30T08:25:45.461Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "568932bd-9f3a-4872-a81b-7397b4f22383",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:25:45.461Z",
+          "payload": {
+            "eventName": "CreateEndpoint",
+            "eventTime": "2025-12-01T11:00:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-config"
+            },
+            "note": "Deployed 2h BEFORE registry approval at 09:00 — change control not satisfied"
+          },
+          "sha256": "ccabb8f81f7506baafc574b975876632108e0657bce165cad99e4565f353ce62"
+        },
+        {
+          "id": "ad0729f2-fae8-4d17-a894-8c086aabb8fb",
+          "source": "cloudtrail:events",
+          "retrievedAt": "2026-08-30T08:25:45.461Z",
+          "payload": {
+            "eventName": "UpdateEndpoint",
+            "eventTime": "2026-03-15T14:22:00Z",
+            "userIdentity": {
+              "type": "IAMUser",
+              "userName": "data-scientist-jdoe"
+            },
+            "requestParameters": {
+              "endpointName": "churn-predictor-endpoint",
+              "endpointConfigName": "churn-predictor-v1-hotfix"
+            },
+            "note": "Hotfix deploy — no corresponding registry entry found"
+          },
+          "sha256": "5514dfc8e6470a036509dd2c307581ac4da2b05eb00a867df1f7d3da687fe61b"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

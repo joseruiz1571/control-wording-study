@@ -1,0 +1,59 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:20:08.183Z",
+  "results": [
+    {
+      "controlId": "SC-7(5).v1",
+      "controlIntent": "By default, deny network communications traffic and allow network communications traffic by exception [Selection (one or more): at managed interfaces; for [Assignment: organization-defined systems]].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "SC-7(5).v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "SC-7(5) requires a deny-by-default posture for network communications, allowing traffic only by explicit exception at managed interfaces. The evidence retrieved for the \"churn-predictor-endpoint\" shows a complete absence of boundary protection controls:\n\n1. **No VPC**: `vpcId` is null, meaning the endpoint is not deployed inside a Virtual Private Cloud. Without a VPC, there is no network perimeter to enforce deny-by-default rules.\n2. **No Subnets**: `vpcSubnetIds` is empty — no subnet-level routing or ACL controls are in place.\n3. **No Security Groups**: `securityGroupIds` is empty — there are no stateful firewall rules to restrict inbound or outbound traffic by exception.\n4. **Network Isolation Disabled**: `enableNetworkIsolation` is `false` — the SageMaker-level network isolation feature, which would prevent the endpoint from making outbound internet calls, is explicitly turned off.\n\nCollectively, these findings indicate that the endpoint operates with no managed network boundary, no deny-by-default rule set, and no mechanism to allow traffic only by exception. This directly contradicts the intent of SC-7(5).",
+        "evidenceCited": [
+          "85890051-b03a-43f2-832e-1aab227b2929"
+        ],
+        "gaps": [
+          "Security group ingress/egress rule details (not retrievable without a security group being attached)",
+          "VPC Network ACL configurations (not applicable — no VPC present)",
+          "AWS Network Firewall or WAF policies that might exist at an account/organization level outside the endpoint configuration",
+          "Human attestation of any compensating controls (e.g., PrivateLink, organization-level SCPs) that might partially enforce deny-by-default at a higher layer"
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "85890051-b03a-43f2-832e-1aab227b2929",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T10:19:55.777Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "85890051-b03a-43f2-832e-1aab227b2929",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T10:19:55.777Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

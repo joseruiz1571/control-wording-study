@@ -1,0 +1,119 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T09:23:36.871Z",
+  "results": [
+    {
+      "controlId": "CM-7(1).v1",
+      "controlIntent": "(a) At [Assignment: organization-defined frequency], review the system to identify unnecessary and/or nonsecure functions, ports, protocols, software, and services; and (b) Disable or remove [Assignment: organization-defined functions, ports, protocols, software, and services within the system deemed to be unnecessary and/or nonsecure].\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "CM-7(1).v1",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "CM-7(1) requires the organization to (a) periodically review the system to identify unnecessary or nonsecure functions, ports, protocols, software, and services, and (b) disable or remove those deemed unnecessary or nonsecure. Evidence from all three collectors reveals multiple violations:\n\n1. **Network Isolation Disabled** (evidence 485db5ef, 29fd80ed): `enableNetworkIsolation` is `false` in both the endpoint config and the network config. The endpoint is permitted to make arbitrary outbound network calls, meaning unnecessary and potentially nonsecure network channels are not disabled.\n\n2. **No VPC Deployment** (evidence 29fd80ed): `vpcId` is null, with no subnets or security groups attached. Without VPC placement, there is no mechanism to restrict which ports, protocols, or external services the endpoint can reach. This directly violates the requirement to disable nonsecure or unnecessary network paths.\n\n3. **Overly Broad IAM Permissions — S3** (evidence 9d07b259): The execution role grants `s3:*` on `*` (all resources). This includes unnecessary and potentially nonsecure actions such as `s3:DeleteObject`, `s3:PutBucketPolicy`, and cross-account access. Least-privilege scoping — a key mechanism for disabling unnecessary functions — has not been applied.\n\n4. **Overly Broad IAM Permissions — SageMaker** (evidence 9d07b259): The execution role grants `sagemaker:*` on `*`, permitting all SageMaker operations (e.g., creating training jobs, deleting models, modifying other endpoints). These are unnecessary functions for an inference endpoint and should be disabled per CM-7(1)(b).\n\n5. **Data Capture Disabled** (evidence 485db5ef): `dataCaptureEnabled` is `false`, meaning there is no monitoring of inference traffic. While not a direct CM-7(1) violation, it eliminates the ability to detect misuse of the enabled (and overly broad) services, undermining the periodic review requirement of CM-7(1)(a).\n\nTaken together, the endpoint has not had unnecessary functions, ports, protocols, or services identified and disabled. No evidence of a periodic review process was found.",
+        "evidenceCited": [
+          "485db5ef-0195-4532-8353-712f7e3d6ac6",
+          "9d07b259-c316-441f-ada1-d687bbbe3838",
+          "29fd80ed-9d80-4115-99b6-deedf59c1269"
+        ],
+        "gaps": [
+          "No evidence of a documented periodic review process (CM-7(1)(a) frequency and review records) — this would require human attestation or access to a GRC/ticketing system",
+          "No evidence of a security group rule set to confirm which ports/protocols are explicitly blocked — moot here since no VPC/SGs exist, but a future remediation assessment would need this",
+          "No evidence of whether a waiver or exception was formally approved for the broad IAM policies or disabled network isolation"
+        ]
+      },
+      "evidenceCount": 3,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "485db5ef-0195-4532-8353-712f7e3d6ac6",
+          "source": "sagemaker:endpoint:config",
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a",
+          "retrievedAt": "2026-08-30T09:23:15.932Z"
+        },
+        {
+          "id": "9d07b259-c316-441f-ada1-d687bbbe3838",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T09:23:15.932Z"
+        },
+        {
+          "id": "29fd80ed-9d80-4115-99b6-deedf59c1269",
+          "source": "sagemaker:endpoint:network",
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532",
+          "retrievedAt": "2026-08-30T09:23:15.932Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 3,
+      "collectorsCalled": 3,
+      "collectorsCited": 3,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "485db5ef-0195-4532-8353-712f7e3d6ac6",
+          "source": "sagemaker:endpoint:config",
+          "retrievedAt": "2026-08-30T09:23:15.932Z",
+          "payload": {
+            "endpointName": "churn-predictor-endpoint",
+            "endpointStatus": "InService",
+            "instanceType": "ml.m5.large",
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null,
+            "enableNetworkIsolation": false
+          },
+          "sha256": "97e6f38a38ca1f09c90945aa6eab4fcd4356949f3b29c73d790cbd078a1de69a"
+        },
+        {
+          "id": "9d07b259-c316-441f-ada1-d687bbbe3838",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T09:23:15.932Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        },
+        {
+          "id": "29fd80ed-9d80-4115-99b6-deedf59c1269",
+          "source": "sagemaker:endpoint:network",
+          "retrievedAt": "2026-08-30T09:23:15.932Z",
+          "payload": {
+            "vpcId": null,
+            "vpcSubnetIds": [],
+            "securityGroupIds": [],
+            "enableNetworkIsolation": false
+          },
+          "sha256": "7facf1ea368df5b35d767df5a5b1b67e1e54090ff977edd8c7e336eec7609532"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

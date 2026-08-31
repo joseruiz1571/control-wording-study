@@ -1,0 +1,78 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T07:48:57.370Z",
+  "results": [
+    {
+      "controlId": "AC-6(5).v3",
+      "controlIntent": "Confine privileged accounts on the system to [Assignment: organization-defined personnel or roles].\n",
+      "pattern": "sufficiency",
+      "judgment": {
+        "controlId": "AC-6(5).v3",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "AC-6(5) requires that privileged access be confined to specifically defined personnel or roles, with privileges scoped to only what is necessary. The evidence retrieved for the \"churn-predictor-endpoint\" reveals two critical violations:\n\n1. **Overly broad S3 permissions**: The attached policy \"OverlyBroadS3\" grants `s3:*` (all S3 actions) on `*` (all resources). This is explicitly flagged in the evidence as overly broad, allowing training bucket writes and cross-account access that are not scoped to the specific buckets or operations required by this endpoint. A least-privilege configuration would restrict S3 access to specific buckets and only the necessary actions (e.g., `s3:GetObject` on the model artifact bucket).\n\n2. **Overly broad SageMaker permissions**: The attached policy \"SageMakerFull\" grants `sagemaker:*` on `*` (all resources). This gives the endpoint execution role full administrative control over all SageMaker resources in the account — far exceeding what an inference endpoint requires. A least-privilege configuration would restrict this to only the specific SageMaker actions needed for inference (e.g., `sagemaker:InvokeEndpoint`) on the specific endpoint resource.\n\nTogether, these policies grant the execution role effectively privileged, account-wide access to both S3 and SageMaker, with no scoping to defined resources, roles, or personnel. This directly violates the intent of AC-6(5) to confine privileged accounts to organization-defined personnel or roles with appropriately scoped permissions.",
+        "evidenceCited": [
+          "b459d9aa-b4c8-4c2f-8716-85ff5b494694"
+        ],
+        "gaps": [
+          "No organizational policy document was available defining which personnel or roles are authorized to hold privileged access — this would be needed to fully assess whether the role assignment itself (who can assume this role) is properly confined.",
+          "No IAM trust policy was retrieved to assess which principals (users, services, or roles) are permitted to assume this execution role.",
+          "No Service Control Policies (SCPs) or permission boundaries were available that might compensate for the overly broad inline policies."
+        ]
+      },
+      "evidenceCount": 1,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "b459d9aa-b4c8-4c2f-8716-85ff5b494694",
+          "source": "sagemaker:iam:execution-role",
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd",
+          "retrievedAt": "2026-08-30T07:48:44.460Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 1,
+      "collectorsCalled": 1,
+      "collectorsCited": 1,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "b459d9aa-b4c8-4c2f-8716-85ff5b494694",
+          "source": "sagemaker:iam:execution-role",
+          "retrievedAt": "2026-08-30T07:48:44.460Z",
+          "payload": {
+            "roleArn": "arn:aws:iam::123456789012:role/SageMakerExecutionRole-Generic",
+            "policies": [
+              {
+                "policyName": "OverlyBroadS3",
+                "effect": "Allow",
+                "actions": [
+                  "s3:*"
+                ],
+                "resources": [
+                  "*"
+                ],
+                "note": "Overly broad — training bucket writes and cross-account access not scoped"
+              },
+              {
+                "policyName": "SageMakerFull",
+                "effect": "Allow",
+                "actions": [
+                  "sagemaker:*"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "sha256": "705554da5117784a6e29cb866aec20890f94264e647d004e6c52ccd1b4f482cd"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

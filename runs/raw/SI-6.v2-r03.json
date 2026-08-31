@@ -1,0 +1,81 @@
+{
+  "targetName": "churn-predictor-v1",
+  "endpointName": "churn-predictor-endpoint",
+  "controlSetVersion": "0.1.0",
+  "runAt": "2026-08-30T10:51:46.813Z",
+  "results": [
+    {
+      "controlId": "SI-6.v2",
+      "controlIntent": "a. Verify the correct operation of [Assignment: organization-defined security and privacy functions]; b. Carry out verification of the functions specified in SI-6a [Selection (one or more): [Assignment: organization-defined system transitional states]; upon command by user with appropriate privilege; [Assignment: organization-defined frequency]]; c. Alert [Assignment: organization-defined personnel or roles] when security and privacy verification tests fail; and d. When anomalies are discovered, [Selection (one or more): Shut the system down; Restart the system; [Assignment: organization-defined alternative action(s)]].\n",
+      "pattern": "synthesis",
+      "judgment": {
+        "controlId": "SI-6.v2",
+        "status": "not-satisfied",
+        "confidence": "high",
+        "rationale": "The evidence reveals multiple critical failures against all four sub-requirements of SI-6.v2:\n\n(a) **Verify correct operation**: The sole monitoring schedule (DataQuality) is actively failing — its last run on 2026-06-02 failed with \"No capture data found — data capture is disabled.\" No ModelQuality, ModelBias, or ModelExplainability monitors exist. Security and privacy functions are not being verified.\n\n(b) **Carry out verification at defined frequency**: Although a weekly cron schedule exists, it is non-functional because data capture is disabled (dataCaptureEnabled: false, capturePercentage: 0, captureDestination: null). Verification is not actually being carried out.\n\n(c) **Alert personnel on failure**: No alerting configuration (e.g., SNS topics, CloudWatch alarms tied to monitor failures) is evidenced. The monitor is failing silently.\n\n(d) **Anomaly response**: No evidence of any defined response action (shutdown, restart, or alternative) upon discovery of anomalies.\n\nThe root cause is that data capture is completely disabled, which breaks the entire monitoring chain. The system has no functioning mechanism to verify security/privacy functions, alert on failures, or respond to anomalies.",
+        "evidenceCited": [
+          "816ec908-b511-4426-bdc6-96972eacabce",
+          "50486ea9-4308-4b73-ba7e-9f0568c515b6"
+        ],
+        "gaps": [
+          "No evidence of alerting/notification configuration (e.g., SNS, CloudWatch alarms) tied to monitor failures — human attestation needed to confirm whether out-of-band alerting exists",
+          "No evidence of anomaly response runbooks or automated remediation (shutdown/restart policies) — requires human attestation",
+          "ModelQuality, ModelBias, and ModelExplainability monitors are entirely absent — unclear if these are intentionally out of scope or simply not configured",
+          "No evidence of privileged-user-initiated verification capability (SI-6b 'upon command by user with appropriate privilege')",
+          "Baseline creation timestamps are absent — unclear if baselines were ever established for any monitor type"
+        ]
+      },
+      "evidenceCount": 2,
+      "iterations": 2,
+      "citedEvidence": [
+        {
+          "id": "816ec908-b511-4426-bdc6-96972eacabce",
+          "source": "sagemaker:model-monitor:schedules",
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594",
+          "retrievedAt": "2026-08-30T10:51:28.922Z"
+        },
+        {
+          "id": "50486ea9-4308-4b73-ba7e-9f0568c515b6",
+          "source": "sagemaker:endpoint:data-capture",
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3",
+          "retrievedAt": "2026-08-30T10:51:28.922Z"
+        }
+      ],
+      "evidenceCoverage": 1,
+      "collectorsTagged": 2,
+      "collectorsCalled": 2,
+      "collectorsCited": 2,
+      "coverageConfidence": "high",
+      "retrievedEvidence": [
+        {
+          "id": "816ec908-b511-4426-bdc6-96972eacabce",
+          "source": "sagemaker:model-monitor:schedules",
+          "retrievedAt": "2026-08-30T10:51:28.922Z",
+          "payload": {
+            "monitoringScheduleName": "churn-predictor-data-quality",
+            "monitorType": "DataQuality",
+            "scheduleStatus": "Scheduled",
+            "scheduleExpression": "cron(0 6 ? * MON *)",
+            "lastRunStatus": "Failed",
+            "lastRunTime": "2026-06-02T06:00:00Z",
+            "failureReason": "No capture data found — data capture is disabled"
+          },
+          "sha256": "4dcb03460d13dc1598686cfb4b59f5a1bafcd5ce5fac4175b95ae5d058f8e594"
+        },
+        {
+          "id": "50486ea9-4308-4b73-ba7e-9f0568c515b6",
+          "source": "sagemaker:endpoint:data-capture",
+          "retrievedAt": "2026-08-30T10:51:28.922Z",
+          "payload": {
+            "dataCaptureEnabled": false,
+            "capturePercentage": 0,
+            "captureDestination": null
+          },
+          "sha256": "422769a68e4dc285d621d80c26209fa4a2920a37834c7aa46cd47180fa4914d3"
+        }
+      ]
+    }
+  ],
+  "llmModel": "claude-sonnet-4-6",
+  "llmTemperature": 0
+}

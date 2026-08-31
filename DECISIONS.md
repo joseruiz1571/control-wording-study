@@ -184,3 +184,7 @@ Jose marked control_set_rewritten.reviewed.csv: 47 yes, 3 unsure (AC-6(9).r4, AU
 ## 2026-08-30 — Phase 6 packaging
 
 Paper written (`paper/draft.md`). The hypothesis claim in the target abstract (qualifier controls flip most; specific flip least) was not supported, so the paper reports the reverse table and does not claim the qualifier hypothesis was confirmed. Private-repo packaging: `README.md`, `LICENSE` (CC-BY-4.0 for study artifacts; NIST control text is US government work), `.gitignore`, and `analysis/score.py` extended to recompute Phase 5 Y/X2 from frozen logs. No public push in this step.
+
+## 2026-08-30 — Phase 6 private repo
+
+Jose approved a private archive. Created https://github.com/joseruiz1571/control-wording-study (visibility PRIVATE) and pushed `main`. Not public. Paper 2496 words. Reproduce: `python3 analysis/score.py`. mlassure patches still unpushed on the mlassure clone.

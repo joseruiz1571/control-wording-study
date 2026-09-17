@@ -3,7 +3,7 @@
 Jose Ruiz-Vazquez  
 August 2026
 
-*Study draft. Not a journal submission. Nothing in this document has been published. This copy is a private study archive.*
+*Methods-preprint style study draft. Public study archive. Not a journal article.*
 
 ## Abstract
 
@@ -123,7 +123,7 @@ Limitations are binding. One fixture, one model, forty controls. SI-4.v1 is a ho
 
 ## Data availability
 
-Variants, YAML, frozen evidence, jsonl logs, scoring scripts, and this draft live in this repository. Tables are rebuilt from the frozen logs with `python3 analysis/score.py` from the repository root (Python 3.10+, standard library only). That command re-verifies the evidence hash and recomputes X, Y, X2, and noise; it does not call an LLM and does not run mlassure. Live re-assessment needs a patched mlassure clone and an Anthropic API key; it is out of scope for the table rebuild. Official NIST control text is a U.S. government work. Other study artifacts are offered under CC-BY-4.0. This copy is a private study archive; nothing has been published.
+Variants, YAML, frozen evidence, jsonl logs, scoring scripts, and this draft live in this repository. Tables are rebuilt from the frozen logs with `python3 analysis/score.py` from the repository root (Python 3.10+, standard library only). That command re-verifies the evidence hash and recomputes X, Y, X2, and noise; it does not call an LLM and does not run mlassure. Live re-assessment needs a patched mlassure clone and an Anthropic API key; it is out of scope for the table rebuild. Official NIST control text is a U.S. government work. Other study artifacts are offered under CC-BY-4.0. This repository is a public study archive in methods-preprint style; it is not a journal article.
 
 ## References
 

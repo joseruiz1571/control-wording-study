@@ -188,3 +188,7 @@ Paper written (`paper/draft.md`). The hypothesis claim in the target abstract (q
 ## 2026-08-30 — Phase 6 private repo
 
 Jose approved a private archive. Created https://github.com/joseruiz1571/control-wording-study (visibility PRIVATE) and pushed `main`. Not public. Paper 2496 words. Reproduce: `python3 analysis/score.py`. mlassure patches still unpushed on the mlassure clone.
+
+## 2026-09-17 — Public release approved
+
+Jose Ruiz-Vazquez approved public prep and flipping https://github.com/joseruiz1571/control-wording-study to public. README and paper framing updated for a public study archive; PDF report (`paper/control-wording-variance-report.pdf` + `paper/build_report_pdf.py`) included. Visibility flipped after that prep. `writing/` remains excluded from the repository tree (untracked / not committed).

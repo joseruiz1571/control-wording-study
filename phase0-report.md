@@ -2,7 +2,7 @@
 
 ## What I did
 
-Cloned `joseruiz1571/mltrack` and `joseruiz1571/mlassure` into `/workspace/src` over public HTTPS (`gh` token for joseruiz1571 is invalid; clones still succeeded). Read READMEs, CLIs, control loader, fixture provider, agent/runner, LLM provider, and mltrack card/sample-data/export paths; did not run live assessments or spend API budget. Recorded SHAs, wrote orientation notes, and drafted the smallest unapplied mlassure diffs so a run can log control ID, intent text, retrieved evidence, model, temperature (including 0), 5-way verdict, citations, and optional repeats. Did not modify either clone, did not push, did not create a GitHub repo.
+Cloned `joseruiz1571/mltrack` and `joseruiz1571/mlassure` into a local `/workspace/src` checkout over public HTTPS (authenticated `gh` was unavailable at the time; public clones still succeeded). Read READMEs, CLIs, control loader, fixture provider, agent/runner, LLM provider, and mltrack card/sample-data/export paths; did not run live assessments or spend API budget. Recorded SHAs, wrote orientation notes, and drafted the smallest unapplied mlassure diffs so a run can log control ID, intent text, retrieved evidence, model, temperature (including 0), 5-way verdict, citations, and optional repeats. Did not modify either clone, did not push, did not create a GitHub repo.
 
 ## Artifacts
 

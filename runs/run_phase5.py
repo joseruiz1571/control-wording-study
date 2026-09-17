@@ -14,8 +14,12 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = Path("/workspace/control-wording-study")
-MLASSURE = Path("/workspace/src/mlassure")
+# Study repo root (this file lives in runs/).
+ROOT = Path(__file__).resolve().parents[1]
+# Local mlassure checkout: MLASSURE_ROOT env, else sibling ../src/mlassure lab layout.
+MLASSURE = Path(
+    os.environ.get("MLASSURE_ROOT", str(ROOT.parent / "src" / "mlassure"))
+).expanduser().resolve()
 TARGET = ROOT / "evidence" / "model-stale.json"
 YAML_DIR = ROOT / "controls" / "yaml_rewritten"
 RAW = ROOT / "runs" / "raw"
@@ -120,7 +124,7 @@ def run_one(variant_id: str, replica: int) -> dict:
 def main() -> int:
     load_env()
     if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("ANTHROPIC_API_KEY missing. Put it in /workspace/src/mlassure/.env", file=sys.stderr)
+        print("ANTHROPIC_API_KEY missing. Set it in the environment or in a local mlassure/.env (MLASSURE_ROOT).", file=sys.stderr)
         return 2
     allow_path = ROOT / "runs" / "phase5_allowlist.json"
     allow = set(json.loads(allow_path.read_text(encoding="utf-8")))

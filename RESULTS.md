@@ -140,7 +140,7 @@ Most 5-way flips are `not-satisfied` ↔ `partially-satisfied` (and one `split`)
 
 ## What the numbers say
 
-On this frozen stale-model fixture, with temperature 0 and `claude-sonnet-4-6`, **10 of 40 controls change 5-way majority verdict when the official statement is paraphrased** (10/40 = 25.0%). Replica disagreement is material: **32/200 = 16.0%** of variants are not unanimous even at temperature 0. Collapsing to OSCAL's fail-closed 3-way drops wording variance to **2/40 = 5.0%**. The qualifier-present vs specific table is complete: specific wording flipped more (8/23 = 34.8%) than qualifier-present (2/17 = 11.8%). That is a description of these 40 controls, not a confirmation or rejection of the hypothesis beyond the table.
+On this frozen stale-model fixture, with temperature 0 and `claude-sonnet-4-6`, **10 of 40 controls change 5-way majority verdict when the official statement is paraphrased** (10/40 = 25.0%). Replica disagreement is material: **32/200 = 16.0%** of variants are not unanimous even at temperature 0. Collapsing to OSCAL's fail-closed 3-way drops wording variance to **2/40 = 5.0%**. The qualifier-present vs specific table is complete: specific wording flipped more (8/23 = 34.8%) than qualifier-present (2/17 = 11.8%). That is a description of these 40 controls. The qualifier hypothesis is **not supported**; the reverse table is the result.
 
 ## Phase 5 (rewritten 10; scored from `runs/phase5.jsonl`)
 

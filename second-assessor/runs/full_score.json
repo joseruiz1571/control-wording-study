@@ -1,0 +1,838 @@
+{
+  "file": "second-assessor/runs/full.jsonl",
+  "sha256": "b453476fbe7f0633f3260a62a99ee70241a80c59b68c65a1a4e471171d1de4d7",
+  "n_ok": 1000,
+  "models": [
+    "jev-1.13.0"
+  ],
+  "X": "6/40",
+  "jev_flips": [
+    "AC-6(5)",
+    "AC-6(9)",
+    "AU-6",
+    "AU-12(1)",
+    "SA-4(8)",
+    "SI-12"
+  ],
+  "sonnet_flips": [
+    "AC-6(9)",
+    "AU-8",
+    "CM-2",
+    "CM-3",
+    "CM-3(1)",
+    "CM-3(2)",
+    "CM-8(1)",
+    "SA-10",
+    "SA-4(8)",
+    "SI-2"
+  ],
+  "overlap": [
+    "AC-6(9)",
+    "SA-4(8)"
+  ],
+  "noise": "14/200",
+  "noisy": [
+    "AC-6(5).v0",
+    "AC-6(5).v3",
+    "AC-6(9).v0",
+    "AC-6(9).v3",
+    "AU-6.v0",
+    "AU-6.v2",
+    "AU-6.v3",
+    "AU-6.v4",
+    "CM-8.v2",
+    "CM-8.v3",
+    "CM-8.v4",
+    "SA-4(8).v4",
+    "SI-12.v2",
+    "SI-2(2).v3"
+  ],
+  "census": {
+    "not-satisfied": 604,
+    "insufficient-evidence": 277,
+    "partially-satisfied": 107,
+    "satisfied": 12
+  },
+  "single_replica_flips": [
+    6,
+    7,
+    6,
+    6,
+    8
+  ],
+  "cell_agreement": "126/199",
+  "v0_agreement": "24/40",
+  "pairs": {
+    "not-satisfied -> not-satisfied": 112,
+    "not-satisfied -> insufficient-evidence": 33,
+    "satisfied -> partially-satisfied": 1,
+    "partially-satisfied -> satisfied": 2,
+    "partially-satisfied -> partially-satisfied": 14,
+    "not-satisfied -> partially-satisfied": 6,
+    "partially-satisfied -> insufficient-evidence": 20,
+    "satisfied -> insufficient-evidence": 2,
+    "split -> insufficient-evidence": 1,
+    "partially-satisfied -> not-satisfied": 8
+  },
+  "vocab_flips": {
+    "mixed": [
+      13,
+      2
+    ],
+    "specific": [
+      23,
+      3
+    ],
+    "vague-qualifier": [
+      4,
+      1
+    ]
+  },
+  "all_IE_controls": 8,
+  "committed_cut": {
+    "controls": 32,
+    "jev_flips": 6,
+    "sonnet_flips_same_set": 8
+  },
+  "margin": {
+    "flipped_controls": 0.1997333333333333,
+    "stable_controls": 0.6273411764705883,
+    "noisy_variants": 0.06871428571428573,
+    "unanimous_variants": 0.6004193548387106
+  },
+  "lowest_margin_controls": [
+    "AU-6 0.04 FLIP",
+    "CM-8 0.11",
+    "AC-6(9) 0.14 FLIP",
+    "AC-6(5) 0.18 FLIP",
+    "SA-4(8) 0.23 FLIP",
+    "SI-2(2) 0.23",
+    "AU-12(1) 0.24 FLIP",
+    "AU-3 0.27",
+    "CM-6 0.30",
+    "CA-7 0.31",
+    "AC-5 0.32",
+    "CM-2 0.37"
+  ],
+  "table": {
+    "AC-3": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AC-2(7)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AC-5": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AC-6": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AC-6(5)": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "not-satisfied",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": true,
+      "sonnetFlip": false
+    },
+    "AC-6(7)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AC-6(9)": {
+      "jev": {
+        "v0": "partially-satisfied",
+        "v1": "satisfied",
+        "v2": "satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "sonnet": {
+        "v0": "satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flip": true,
+      "sonnetFlip": true
+    },
+    "AC-6(10)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AU-2": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AU-3": {
+      "jev": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AU-6": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "insufficient-evidence",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": true,
+      "sonnetFlip": false
+    },
+    "AU-6(3)": {
+      "jev": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AU-8": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "satisfied",
+        "v3": "satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": true
+    },
+    "AU-12": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "AU-12(1)": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "partially-satisfied"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flip": true,
+      "sonnetFlip": false
+    },
+    "CM-2": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "split"
+      },
+      "flip": false,
+      "sonnetFlip": true
+    },
+    "CM-3": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": true
+    },
+    "CM-3(1)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": true
+    },
+    "CM-3(2)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": true
+    },
+    "CM-6": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "CM-7(1)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "CM-8": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "CM-8(1)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": true
+    },
+    "RA-3": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "RA-7": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SA-10": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": true
+    },
+    "SA-10(5)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SA-8(32)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SA-4(8)": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": true,
+      "sonnetFlip": true
+    },
+    "SA-11": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SI-2": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": true
+    },
+    "SI-2(2)": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "insufficient-evidence",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SI-4": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SI-4(2)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SI-6": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SI-7": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SI-12": {
+      "jev": {
+        "v0": "insufficient-evidence",
+        "v1": "insufficient-evidence",
+        "v2": "not-satisfied",
+        "v3": "insufficient-evidence",
+        "v4": "insufficient-evidence"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": true,
+      "sonnetFlip": false
+    },
+    "SC-28(1)": {
+      "jev": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "sonnet": {
+        "v0": "partially-satisfied",
+        "v1": "partially-satisfied",
+        "v2": "partially-satisfied",
+        "v3": "partially-satisfied",
+        "v4": "partially-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "SC-7(5)": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    },
+    "CA-7": {
+      "jev": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "sonnet": {
+        "v0": "not-satisfied",
+        "v1": "not-satisfied",
+        "v2": "not-satisfied",
+        "v3": "not-satisfied",
+        "v4": "not-satisfied"
+      },
+      "flip": false,
+      "sonnetFlip": false
+    }
+  }
+}

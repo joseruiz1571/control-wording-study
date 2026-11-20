@@ -1,6 +1,6 @@
 Unapplied unified diffs against `mlassure` at `c9cda3a3f8bd87051d7b31f99c7ddf36db7acfcc`.
 
-These patches were never pushed upstream. From a checkout of that SHA, apply relative to this repository:
+These patches were never merged upstream. They are also published as the mlassure branch `study/logging-patches`. From a checkout of that SHA, apply relative to this repository:
 
 ```
 git apply path/to/control-wording-study/proposals/01-provider-model-temperature.diff

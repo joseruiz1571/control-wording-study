@@ -24,12 +24,12 @@ Live re-runs need patched mlassure and an Anthropic API key. They are out of sco
 
 Recorded runners (not something a stranger can run without a key and a patched clone): `runs/run_phase3.py` and `runs/run_phase5.py`.
 
-- Tool: mlassure (`github.com/joseruiz1571/mlassure`) with local logging patches 01–05 on branch `study/logging-patches`, base SHA `c9cda3a`. Patches were not pushed upstream; the `proposals/*.diff` files in this repo were never applied on the public mlassure default branch.
+- Tool: mlassure (`github.com/joseruiz1571/mlassure`) with logging patches 01–05, base SHA `c9cda3a` (tag `v0.3.0`). The study ran on a local clone. On 2026-11-20 the same patches were published as branch [`study/logging-patches`](https://github.com/joseruiz1571/mlassure/tree/study/logging-patches), rebuilt by applying the `proposals/*.diff` files in order to `v0.3.0`. They were never merged into the public mlassure default branch.
 - Command shape: `mlassure assess --controls <yaml> --target evidence/model-stale.json --live --temperature 0 --model claude-sonnet-4-6 --report <raw.json>`.
 - YAML: `controls/yaml/` (Phase 3, 200 variants) and `controls/yaml_rewritten/` (Phase 5, rewritten 10).
 - Wording = `ControlItem.intent`. Verdicts are 5-way.
 
-mlassure patches lived in a local mlassure clone during the study and are archived here as `proposals/*.diff`. They were never pushed upstream.
+mlassure patches lived in a local mlassure clone during the study and are archived here as `proposals/*.diff`. They are also available as the `study/logging-patches` branch, and were never merged upstream.
 
 ## Layout
 
@@ -41,7 +41,7 @@ controls/yaml_rewritten/  Phase 5 rewritten YAML
 evidence/          frozen model-stale.json, HASH.txt
 paper/             draft.md, control-wording-variance-report.pdf, build_report_pdf.py
 phase5/            RULES.md
-proposals/         mlassure logging patches 01–05 (.diff); never pushed upstream
+proposals/         mlassure logging patches 01–05 (.diff); never merged upstream
 runs/              phase3.jsonl, phase5.jsonl, runners, raw reports
 RESULTS.md         scored tables (X, Y, X2, noise)
 DECISIONS.md       protocol log
@@ -54,4 +54,4 @@ LICENSE            CC-BY-4.0 for study artifacts; NIST text is US government wor
 
 ## Public archive note
 
-This tree is the public study archive for the reported measurement. mlassure logging patches remain unpushed upstream except as the diffs under `proposals/`.
+This tree is the public study archive for the reported measurement. mlassure logging patches are not merged upstream; they live as the diffs under `proposals/` and as the mlassure branch `study/logging-patches`.

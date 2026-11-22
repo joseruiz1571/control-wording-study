@@ -2,6 +2,10 @@
 
 When an LLM assesses whether an AI system meets a NIST SP 800-53 control, does the *wording* of the control change the verdict? This archive measures that on one frozen evidence fixture, one model (`claude-sonnet-4-6`, temperature 0), and 40 official Rev 5 statements each with four meaning-preserving paraphrases.
 
+**In plain words.** Reword a control without changing what it asks, and one control in four got a different verdict. Rewriting the ten that moved with a fixed vocabulary left three still moving. A second assessor on the same strings moved too, on different controls: see [`second-assessor/`](second-assessor/README.md).
+
+**Status.** Frozen archive, tagged `v1.0.0`. The tables and logs here do not change. Later studies get their own directory or repository.
+
 Primary result: **X = 10/40 = 25.0%** of controls change 5-way majority verdict when only vocabulary and sentence structure change. The study expected qualifier-present controls to flip more than specific controls; they did not (qualifier-present 2/17 = 11.8%; specific 8/23 = 34.8%; vague-qualifier 0/4). The qualifier hypothesis is **not supported**. A vocabulary-control rewrite of the ten controls that had flipped cut their flip rate from 10/10 to 3/10 (**Y = 70%** reduction). Secondary **X2 = 3/40 = 7.5%**. Model noise: Phase 3 **16.0%** of variants not unanimous; Phase 5 rewritten set **40.4%**.
 
 This repository is a **public study archive** in methods-preprint style. It is not a journal article. Tables and logs are frozen; treat them as a reproducibility package for the reported numbers, not as a live assessment service.
@@ -31,6 +35,10 @@ Recorded runners (not something a stranger can run without a key and a patched c
 
 mlassure patches lived in a local mlassure clone during the study and are archived here as `proposals/*.diff`. They are also available as the `study/logging-patches` branch, and were never merged upstream.
 
+## Sequel: a second assessor
+
+[`second-assessor/`](second-assessor/README.md) runs the same 200 control strings and the same frozen evidence through a different kind of assessor. Its flip rate is 6/40, and only two of the controls it flips are ones the first assessor flipped. That note also records a first run that was wrong and how it was caught.
+
 ## Layout
 
 ```
@@ -43,6 +51,7 @@ paper/             draft.md, control-wording-variance-report.pdf, build_report_p
 phase5/            RULES.md
 proposals/         mlassure logging patches 01–05 (.diff); never merged upstream
 runs/              phase3.jsonl, phase5.jsonl, runners, raw reports
+second-assessor/   sequel: a second assessor (Jev) on the same 200 strings, with its own README and RESULTS
 RESULTS.md         scored tables (X, Y, X2, noise)
 DECISIONS.md       protocol log
 LICENSE            CC-BY-4.0 for study artifacts; NIST text is US government work
